@@ -1,0 +1,62 @@
+/* pages/mine/mine.wxss */
+
+/* 头像卡 */
+.me {
+  display: flex; align-items: center;
+  padding: 32rpx; margin-bottom: 24rpx;
+}
+.me-avatar {
+  width: 100rpx; height: 100rpx; border-radius: 50%;
+  flex-shrink: 0; background: var(--accent-soft);
+  padding: 10rpx; box-sizing: border-box;
+}
+.me-info { flex: 1; margin-left: 24rpx; }
+.me-name { font-size: 32rpx; font-weight: 700; color: var(--ink); }
+.me-sub { margin-top: 6rpx; font-size: 24rpx; color: var(--ink-3); }
+.me-arrow { font-size: 44rpx; color: var(--ink-3); }
+
+/* 战绩 */
+.stats {
+  display: flex; align-items: center;
+  background: #fff; border-radius: 24rpx;
+  padding: 36rpx 0; margin-bottom: 24rpx;
+}
+.stat { flex: 1; text-align: center; }
+.stat-num {
+  font-size: 44rpx; font-weight: 700; color: var(--ink);
+}
+.stat-money { color: var(--accent-deep); }
+.stat-label { margin-top: 6rpx; font-size: 22rpx; color: var(--ink-2); }
+.stat-div {
+  width: 1rpx; height: 60rpx; background: var(--line);
+}
+
+/* 通用卡 */
+.card { background: #fff; border-radius: 24rpx; padding: 8rpx 32rpx; margin-bottom: 24rpx; }
+.sec-title { font-size: 26rpx; color: var(--ink-2); padding: 24rpx 0 8rpx; }
+
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 28rpx 0; border-bottom: 1rpx solid var(--line);
+}
+.row:last-child { border-bottom: none; }
+.row-label { font-size: 28rpx; color: var(--ink); }
+.row-danger .row-label { color: var(--danger); }
+.row-arrow { font-size: 36rpx; color: var(--ink-3); }
+
+/* 时长 pills */
+.dur-row { display: flex; flex-wrap: wrap; margin: -8rpx 0 16rpx; }
+.dur-pill {
+  margin: 8rpx; padding: 12rpx 24rpx; border-radius: 999rpx;
+  background: #F5F2EC; color: var(--ink-2); font-size: 24rpx;
+  border: 1rpx solid transparent;
+}
+.dur-active {
+  background: var(--accent-soft); color: var(--accent-deep);
+  border-color: var(--accent); font-weight: 600;
+}
+
+.footer {
+  margin-top: 40rpx; text-align: center;
+  font-size: 22rpx; color: var(--ink-3);
+}

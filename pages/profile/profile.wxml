@@ -1,0 +1,44 @@
+<!--pages/profile/profile.wxml-->
+<view class="page">
+
+  <!-- 头像预览 -->
+  <view class="card avatar-card">
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image wx:if="{{avatar}}" class="avatar" src="{{avatar}}" mode="aspectFill"></image>
+      <image wx:else class="avatar avatar-default" src="/images/logo.png" mode="aspectFit"></image>
+    </button>
+    <view class="avatar-tip">点上方头像可用微信头像</view>
+    <view class="btn btn-ghost album-btn" bindtap="chooseFromAlbum">从相册选一张</view>
+  </view>
+
+  <!-- 性别 -->
+  <view class="card">
+    <view class="field-label">我是</view>
+    <view class="dur-row">
+      <view wx:for="{{genders}}" wx:key="key"
+            class="dur-pill {{gender === item.key ? 'dur-active' : ''}}"
+            data-g="{{item.key}}" bindtap="pickGender">{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 昵称 -->
+  <view class="card">
+    <view class="field-label">昵称 <text class="opt">（最多 20 字）</text></view>
+    <input class="field-input nickname-input" type="nickname"
+           placeholder="点这里可用微信昵称，或从下面挑一个"
+           value="{{nickname}}" maxlength="20" bindinput="onNicknameInput" />
+
+    <view class="field-label preset-label">挑一个现成的</view>
+    <view class="dur-row">
+      <view wx:for="{{presets}}" wx:key="*this"
+            class="dur-pill {{nickname === item ? 'dur-active' : ''}}"
+            data-name="{{item}}" bindtap="pickPreset">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="actions">
+    <view class="btn btn-ghost" bindtap="onClear">清空</view>
+    <view class="btn btn-primary" bindtap="onSave">保存</view>
+  </view>
+
+</view>

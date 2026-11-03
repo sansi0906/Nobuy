@@ -1,0 +1,35 @@
+<!--pages/add/add.wxml-->
+<view class="page">
+
+  <view class="card">
+    <view class="field-label">物品名称</view>
+    <input class="field-input" placeholder="例如：机械键盘" maxlength="30"
+           value="{{name}}" bindinput="onNameInput" />
+
+    <view class="divider"></view>
+
+    <view class="field-label">价格 <text class="opt">（可选，用来算省了多少）</text></view>
+    <input class="field-input" type="digit" placeholder="0.00"
+           value="{{price}}" bindinput="onPriceInput" />
+
+    <view class="divider"></view>
+
+    <view class="field-label">备注 <text class="opt">（可选）</text></view>
+    <textarea class="field-textarea" placeholder="在哪看到、为什么想买…"
+              maxlength="100" value="{{remark}}" bindinput="onRemarkInput" auto-height />
+  </view>
+
+  <view class="card dur-card">
+    <view class="field-label">冷静多久再决定</view>
+    <view class="dur-row">
+      <view wx:for="{{durations}}" wx:key="hours" id="{{index}}"
+            class="dur-pill {{selected === index ? 'dur-active' : ''}}"
+            bindtap="pickDuration">{{item.label}}</view>
+    </view>
+  </view>
+
+  <view class="actions">
+    <view class="btn btn-ghost" bindtap="onCancel">取消</view>
+    <view class="btn btn-primary" bindtap="onSave">先记下来</view>
+  </view>
+</view>

@@ -1,0 +1,67 @@
+<!--pages/index/index.wxml-->
+<view class="page">
+
+  <view class="hero">
+    <view class="hero-row">
+      <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+      <view class="hero-text">
+        <view class="hero-title">是不是可以不买</view>
+        <view class="hero-sub">把想买的，先放一放。</view>
+      </view>
+    </view>
+    <view class="hero-hello" wx:if="{{profile.nickname}}">
+      嗨，{{profile.nickname}} · 继续保持冷静
+    </view>
+  </view>
+
+  <!-- 待决定 banner -->
+  <view class="pending" wx:if="{{pendingCount > 0 && tab === 'cooling'}}">
+    <view class="pending-dot"></view>
+    <view class="pending-text">有 {{pendingCount}} 件冷静期过了，等你做决定</view>
+  </view>
+
+  <!-- 三段切换 -->
+  <view class="seg">
+    <view wx:for="{{tabs}}" wx:key="key"
+          class="seg-item {{tab === item.key ? 'seg-active' : ''}}"
+          data-tab="{{item.key}}" bindtap="switchTab">
+      {{item.label}}
+      <text class="seg-count" wx:if="{{counts[item.key] > 0}}">{{counts[item.key]}}</text>
+    </view>
+  </view>
+
+  <!-- 冷静中 tab 顶部加记录按钮 -->
+  <view class="top-add" wx:if="{{tab === 'cooling'}}" bindtap="goAdd">
+    ＋ 记录一个想买的
+  </view>
+
+  <!-- 清单 -->
+  <view wx:if="{{list.length > 0}}">
+    <view class="card item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+      <view class="item-top">
+        <view class="item-name">{{item.name}}</view>
+        <view class="item-price" wx:if="{{item.price}}">¥{{item.price}}</view>
+      </view>
+      <view class="item-remark" wx:if="{{item.remark}}">{{item.remark}}</view>
+      <view class="cd-bar cd-bar-{{item.phase}}" wx:if="{{tab === 'cooling'}}">
+        <view class="cd-value">{{item.countdownText}}</view>
+        <view class="cd-cta" wx:if="{{item.phase === 'expired'}}">去决定 ›</view>
+      </view>
+      <view class="item-date" wx:if="{{tab !== 'cooling'}}">
+        {{item.state === 'skipped' ? '忍住了' : '没忍住'}} · {{item.createDate}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态（只有冷静中 tab 显示新增按钮） -->
+  <view class="empty" wx:else>
+    <image class="empty-logo" src="/images/logo.png" mode="aspectFit"></image>
+    <view class="empty-title">{{emptyTitle}}</view>
+    <view class="empty-sub" wx:if="{{tab === 'cooling'}}">把想买的先记下来，过段时间再看</view>
+    <view class="empty-sub" wx:else>暂无记录~</view>
+    <view class="btn btn-primary empty-btn" wx:if="{{tab === 'cooling'}}" bindtap="goAdd">+ 记录一个想买的</view>
+  </view>
+
+  <!-- FAB 只在冷静中显示 -->
+  <view class="fab" bindtap="goAdd" wx:if="{{tab === 'cooling'}}">＋</view>
+</view>

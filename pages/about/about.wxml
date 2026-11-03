@@ -1,0 +1,33 @@
+<!--pages/about/about.wxml-->
+<view class="page">
+
+  <view class="card brand">
+    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <view class="name">是不是可以不买</view>
+    <view class="slogan">一个冷静消费小工具</view>
+    <view class="desc">把想买的东西先记下来，设一段冷静期，时间到了再决定要不要买。</view>
+  </view>
+
+  <view class="card">
+    <view class="sec-title">数据说明</view>
+    <view class="sec-body">所有记录仅保存在你的手机本地，不会上传服务器；清除小程序缓存或删除小程序会丢失记录。</view>
+  </view>
+
+  <view class="card">
+    <view class="sec-title">不做的事</view>
+    <view class="sec-body">不卖商品、不导购、不跳转电商、不发优惠券。</view>
+  </view>
+
+  <view class="card dev-card">
+    <view class="dev-row">
+      <image class="dev-avatar" src="/images/logo.png" mode="aspectFit"></image>
+      <view class="dev-info">
+        <view class="dev-name">NoBuy 开发者</view>
+        <view class="dev-sub">个人开发者 · 有建议或问题？</view>
+      </view>
+    </view>
+    <button class="btn btn-primary contact-btn" open-type="contact" session-from="about">联系开发者</button>
+  </view>
+
+  <view class="footer">v1.0 · 本地存储版</view>
+</view>

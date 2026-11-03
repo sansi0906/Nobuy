@@ -1,0 +1,84 @@
+/* pages/profile/profile.wxss */
+
+.avatar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48rpx 32rpx;
+}
+.avatar-btn {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  line-height: normal;
+}
+.avatar-btn::after { border: none; }
+.avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: var(--accent-soft);
+}
+.avatar-placeholder,
+.avatar-default {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft);
+  padding: 16rpx;
+  box-sizing: border-box;
+}
+.avatar-tip {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: var(--ink-2);
+}
+.album-btn {
+  margin-top: 20rpx;
+  padding: 12rpx 32rpx;
+  font-size: 26rpx;
+}
+
+.card { margin-bottom: 24rpx; }
+.field-label {
+  font-size: 26rpx;
+  color: var(--ink-2);
+  margin-bottom: 16rpx;
+}
+.opt { color: var(--ink-3); font-size: 24rpx; }
+.preset-label { margin-top: 32rpx; }
+
+.field-input {
+  font-size: 30rpx;
+  color: var(--ink);
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.dur-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8rpx;
+}
+.dur-pill {
+  margin: 8rpx;
+  padding: 14rpx 28rpx;
+  border-radius: 999rpx;
+  background: #F5F2EC;
+  color: var(--ink-2);
+  font-size: 26rpx;
+  border: 1rpx solid transparent;
+}
+.dur-active {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.actions {
+  margin-top: 40rpx;
+  display: flex;
+  gap: 24rpx;
+}
+.actions .btn { flex: 1; }

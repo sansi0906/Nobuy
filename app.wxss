@@ -1,0 +1,74 @@
+/**app.wxss**/
+page {
+  /* 暖米底 + 陶土橙强调（和水滴 Logo 同色系），克制、佛系 */
+  --bg: #F4F0E8;
+  --card: #FFFFFF;
+  --ink: #3A3530;
+  --ink-2: #9A9088;
+  --ink-3: #C4BCB0;
+  --line: #EAE2D4;
+  --cooling-bg: #E4EBEF;
+  --cooling-text: #5E7A8C;
+  --done-bg: #E8EDE0;
+  --done-text: #6E8A64;
+  --accent: #C97B4A;
+  --accent-deep: #A86238;
+  --accent-soft: #F6E8DC;
+  --danger: #B06A5E;
+
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 32rpx 32rpx 60rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(120, 90, 60, 0.05);
+}
+
+.btn {
+  border-radius: 16rpx;
+  padding: 22rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+  border: none;
+  line-height: 1.4;
+}
+.btn::after { border: none; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:active { background: var(--accent-deep); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1rpx solid #E3CFC7;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  line-height: 1.6;
+}
+.tag-cooling { background: var(--cooling-bg); color: var(--cooling-text); }
+.tag-done    { background: var(--done-bg);    color: var(--done-text); }

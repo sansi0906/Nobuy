@@ -1,0 +1,22 @@
+<!--pages/trash/trash.wxml-->
+<view class="page">
+  <view class="tip" wx:if="{{list.length > 0}}">删掉的想法先放在这里，随时可以还原。</view>
+
+  <block wx:if="{{list.length > 0}}">
+    <view class="card item" wx:for="{{list}}" wx:key="id">
+      <view class="item-name">{{item.name}}</view>
+      <view class="item-price" wx:if="{{item.price}}">¥{{item.price}}</view>
+      <view class="item-time">移入于 {{item.trashedAtText}}</view>
+      <view class="actions">
+        <view class="btn btn-restore" data-id="{{item.id}}" bindtap="restore">还原</view>
+        <view class="btn btn-destroy" data-id="{{item.id}}" bindtap="destroy">彻底删除</view>
+      </view>
+    </view>
+  </block>
+
+  <view class="empty" wx:else>
+    <image class="empty-logo" src="/images/logo.png" mode="aspectFit"></image>
+    <view class="empty-title">回收站是空的</view>
+    <view class="empty-sub">删掉的想法会先放在这里</view>
+  </view>
+</view>

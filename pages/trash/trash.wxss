@@ -1,0 +1,43 @@
+/* pages/trash/trash.wxss */
+
+.tip {
+  font-size: 24rpx;
+  color: var(--ink-2);
+  padding: 0 8rpx 20rpx;
+}
+
+.item { margin-bottom: 20rpx; }
+.item-name {
+  font-size: 30rpx; font-weight: 600; color: var(--ink);
+}
+.item-remark {
+  margin-top: 8rpx; font-size: 26rpx; color: var(--ink-2);
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.item-time {
+  margin-top: 12rpx; font-size: 22rpx; color: var(--ink-3);
+}
+
+.actions {
+  margin-top: 24rpx;
+  display: flex;
+  gap: 20rpx;
+}
+.actions .btn { flex: 1; padding: 16rpx 0; font-size: 26rpx; }
+.btn-restore {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+.btn-destroy {
+  background: transparent;
+  color: var(--danger);
+  border: 1rpx solid #E3CFC7;
+}
+
+.empty {
+  margin-top: 160rpx;
+  display: flex; flex-direction: column; align-items: center;
+}
+.empty-logo { width: 160rpx; height: 180rpx; opacity: 0.5; }
+.empty-title { margin-top: 24rpx; font-size: 30rpx; font-weight: 600; color: var(--ink); }
+.empty-sub { margin-top: 8rpx; font-size: 24rpx; color: var(--ink-2); }

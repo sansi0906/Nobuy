@@ -1,0 +1,55 @@
+/* pages/detail/detail.wxss */
+
+.main { margin-bottom: 24rpx; }
+
+.tag-lg { font-size: 24rpx; padding: 6rpx 20rpx; }
+.tag-cooling   { background: var(--cooling-bg); color: var(--cooling-text); }
+.tag-skipped   { background: #EFEFEA; color: #6C6C64; }
+.tag-bought    { background: var(--done-bg); color: var(--done-text); }
+
+.d-name { margin-top: 24rpx; font-size: 44rpx; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.d-price { margin-top: 8rpx; font-size: 32rpx; font-weight: 600; color: var(--accent-deep); }
+.d-remark { margin-top: 16rpx; font-size: 28rpx; color: var(--ink-2); line-height: 1.6; }
+.d-edit-name {
+  margin-top: 24rpx; font-size: 40rpx; font-weight: 600; color: var(--ink);
+  border-bottom: 1rpx solid var(--line); padding-bottom: 12rpx;
+}
+.d-edit-remark { margin-top: 16rpx; font-size: 28rpx; color: var(--ink); min-height: 80rpx; width: 100%; }
+
+.cd-row { margin-top: 32rpx; padding: 22rpx 28rpx; border-radius: 16rpx; }
+.cd-row-counting { background: var(--cooling-bg); }
+.cd-row-expired  { background: var(--accent-soft); }
+.cd-text { font-size: 30rpx; font-weight: 600; }
+.cd-row-counting .cd-text { color: var(--cooling-text); }
+.cd-row-expired  .cd-text { color: var(--accent-deep); }
+
+.meta { margin-bottom: 32rpx; padding: 12rpx 32rpx; }
+.meta-row { display: flex; justify-content: space-between; padding: 20rpx 0; border-bottom: 1rpx solid var(--line); }
+.meta-row:last-child { border-bottom: none; }
+.meta-row .k { color: var(--ink-2); font-size: 26rpx; }
+.meta-row .v { color: var(--ink); font-size: 26rpx; }
+
+/* 决定按钮 */
+.decide-row {
+  display: flex; gap: 24rpx; margin-bottom: 16rpx;
+}
+.decide-row .btn { flex: 1; padding: 26rpx 0; font-size: 30rpx; }
+.btn-buy  { background: var(--done-bg);  color: var(--done-text); font-weight: 600; }
+.btn-nope { background: #EFEFEA; color: #5C5C54; font-weight: 600; }
+
+/* 次级按钮 */
+.btn-block { margin-bottom: 16rpx; }
+.sub { margin-bottom: 16rpx; }
+
+.actions { display: flex; gap: 24rpx; margin-bottom: 16rpx; }
+.actions .btn { flex: 1; }
+
+/* 返回 */
+.back-bar {
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--ink-2);
+  padding: 20rpx 0;
+}
+.back-bar:active { color: var(--ink); }
