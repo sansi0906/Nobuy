@@ -96,6 +96,13 @@
 .row-danger .row-arrow { color: var(--danger); }
 .row-arrow { font-size: 32rpx; color: var(--ink-3); }
 
+/* 备份说明：跟在「数据」卡下面，一行小字，不抢眼 */
+.card-tip {
+  margin: -10rpx 16rpx 24rpx;
+  font-size: 22rpx; line-height: 1.6;
+  color: var(--ink-3);
+}
+
 /* 客服入口：外观与其他行完全一致，用一层透明 button 承接 open-type */
 .row-tap { position: relative; }
 .row-hit {
@@ -164,4 +171,40 @@
 .footer {
   margin-top: 32rpx; text-align: center;
   font-size: 22rpx; color: var(--ink-3);
+}
+
+/* 备份 / 恢复选择层：底部抽屉，选项本身是真 tap，供 shareFileMessage / chooseMessageFile 用 */
+.bk-mask {
+  position: fixed; left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(34, 40, 44, 0.42);
+  display: flex; align-items: flex-end;
+  z-index: 100;
+  animation: fade-in var(--dur-2) var(--ease-out) both;
+}
+.bk-panel {
+  width: 100%;
+  background: var(--n-0);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 32rpx calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: var(--sh-2);
+  animation: sheet-up var(--dur-3) var(--ease-out) both;
+}
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.bk-head { padding: 36rpx 0 8rpx; }
+.bk-title { font-size: 32rpx; font-weight: 600; color: var(--ink); }
+.bk-sub { margin-top: 8rpx; font-size: 22rpx; line-height: 1.6; color: var(--ink-2); }
+.bk-opt {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 26rpx 0; border-bottom: 1rpx solid var(--line);
+}
+.bk-opt-label { font-size: 28rpx; color: var(--ink); }
+.bk-opt-desc { margin-top: 6rpx; font-size: 22rpx; color: var(--ink-3); }
+.bk-opt-arrow { font-size: 32rpx; color: var(--ink-3); }
+.bk-opt:active .bk-opt-label { color: var(--accent-deep); }
+.bk-cancel {
+  margin-top: 20rpx; padding: 24rpx 0 8rpx;
+  text-align: center; font-size: 28rpx; color: var(--ink-2);
 }

@@ -126,6 +126,39 @@ eq('资料恢复', store.getProfile().nickname, '小明');
 eq('空内容被拒', store.importBackup('').ok, false);
 eq('乱码被拒', store.importBackup('随便一句话').ok, false);
 
+console.log('备份：全部数据与校验');
+reset();
+store.add({ id: 'f1', name: '冷静中的', price: 300, state: 'cooling', createTime: now, endTime: now + 2 * DAY });
+store.add({ id: 'f2', name: '回收站的', price: 800, state: 'trashed', createTime: now, endTime: now, trashedAt: now });
+store.add({ id: 'f3', name: '已忍住的', price: 200, state: 'skipped', createTime: now, endTime: now, decidedAt: now });
+store.saveCategories(['数码', '自定义分类']);
+store.saveProfile({ nickname: '全量', avatar: 'wxfile://a.png' });
+wx.setStorageSync('onboardDone', true);
+const full = store.exportBackup();
+const parsed = store.parseBackup(full);
+ok('摘要解析成功', parsed.ok);
+eq('摘要总数', parsed.count, 3);
+eq('摘要冷静中', parsed.cooling, 1);
+eq('摘要回收站', parsed.trashed, 1);
+eq('摘要已决定', parsed.decided, 1);
+eq('摘要分类数', parsed.categoryCount, 2);
+reset();
+const fullImported = store.importBackup(full);
+eq('全量恢复成功', fullImported.ok, true);
+eq('清单条数', store.getAll().length, 3);
+eq('回收站还在', store.getById('f2').state, 'trashed');
+eq('分类恢复', store.getCategories(), ['数码', '自定义分类']);
+eq('头像恢复', store.getProfile().avatar, 'wxfile://a.png');
+eq('引导状态恢复', wx.getStorageSync('onboardDone'), true);
+ok('缺字段的记录被拒', !store.parseBackup('NOBUY1:{"wishList":[{"name":"no id"}]}').ok);
+ok('状态非法时回落 cooling', store.parseBackup('NOBUY1:{"wishList":[{"id":"z1","name":"z","state":"weird"}]}').data.wishList[0].state === 'cooling');
+ok('纯 JSON 也可读', store.parseBackup('{"wishList":[{"id":"z2","name":"z2"}]}').ok);
+eq('恢复是覆盖不是合并', (function () {
+  store.add({ id: 'old', name: '旧的' });
+  store.importBackup(full);
+  return store.getAll().map(it => it.id).sort();
+})(), ['f1', 'f2', 'f3']);
+
 // ================= 撤销快照 =================
 console.log('撤销：我没买');
 reset();

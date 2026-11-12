@@ -49,11 +49,21 @@
 
   <!-- 数据 -->
   <view class="card">
+    <view class="row" bindtap="exportBackup">
+      <view class="row-label">导出备份</view>
+      <view class="row-arrow">›</view>
+    </view>
+    <view class="row" bindtap="importBackup">
+      <view class="row-label">导入备份</view>
+      <view class="row-arrow">›</view>
+    </view>
     <view class="row row-danger" bindtap="clearAll">
       <view class="row-label">清空所有数据</view>
       <view class="row-arrow">›</view>
     </view>
   </view>
+
+  <view class="card-tip">备份包含清单、回收站、分类和个人资料，换手机用它带走；导入会覆盖当前数据。</view>
 
   <!-- 其他 -->
   <view class="card">
@@ -72,7 +82,25 @@
     </view>
   </view>
 
-  <view class="footer">v1.1.0 · 本地存储版</view>
+  <view class="footer">v1.2.0 · 本地存储版</view>
+
+  <!-- 备份 / 恢复选择层：页内自绘，保证转发文件、选文件由用户真点击触发 -->
+  <view class="bk-mask" wx:if="{{sheetVisible}}" bindtap="hideSheet">
+    <view class="bk-panel" catchtap="noop">
+      <view class="bk-head">
+        <view class="bk-title">{{sheetTitle}}</view>
+        <view class="bk-sub">{{sheetSub}}</view>
+      </view>
+      <view class="bk-opt" wx:for="{{sheetOptions}}" wx:key="key" data-key="{{item.key}}" bindtap="onSheetTap">
+        <view class="bk-opt-main">
+          <view class="bk-opt-label">{{item.label}}</view>
+          <view class="bk-opt-desc">{{item.desc}}</view>
+        </view>
+        <view class="bk-opt-arrow">›</view>
+      </view>
+      <view class="bk-cancel" bindtap="hideSheet">取消</view>
+    </view>
+  </view>
 
   <!-- 小程序码弹层 -->
   <view class="qr-mask" wx:if="{{qrVisible}}" bindtap="hideQr">

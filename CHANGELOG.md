@@ -198,3 +198,54 @@
 **同时清掉最后两处硬编码浅色**：`index.wxss` 结果条 `rgba(255,255,255,.55)`、`.seg` 轨道 `rgba(255,255,255,.6)`，全站页面样式再无写死白色。
 
 提交 `211030b`，体验版 `1.1.1` 已上传（374.4 KB）。
+
+---
+
+## 十、v1.2.0 导入导出（2026-11-12）
+
+用户此前把「备份码导出/恢复」「导出清单到剪贴板」列入不做，这次明确放开：「放开导入导出功能吧」，并确定备份覆盖**全部数据**。
+
+**形式**（用户只答了范围，形式由我按稳健性定的，可否决）：文件导出为主 + 备份码兜底。
+
+- 导出：`JSON` 文件写到 `wx.env.USER_DATA_PATH`，用 `wx.shareFileMessage` 转发到微信（发给文件传输助手即可长期保存）；不支持或转发失败时自动退回「复制备份码」。
+- 导入：`wx.chooseMessageFile` 从聊天记录选文件，或 `wx.getClipboardData` 直接读剪贴板里的备份码。
+- 备份内容：`wishList`（含回收站）+ `categories` + `userProfile` + `onboardDone`。文件是**纯 JSON**；备份码带 `NOBUY1:` 前缀。两种形态互为兼容，解析时都会先剥前缀。
+- 覆盖策略：**覆盖不合并**，弹窗先给出摘要（备份时间、总条数、冷静中/已决定/回收站、分类数）再要求二次确认，确认色用 `--s-danger`。
+- 校验：`parseBackup` 只读不写，逐条要求 `id`/`name`，缺失即整份拒绝（避免半坏数据写进去）；`state` 非法回落 `cooling`；分类按 `MAX_CATEGORIES` 截断。
+- 恢复后清 `lastSkipUndo`：撤销快照指向的旧记录已被整层替换，不清会留一条指向空 id 的撤销条。
+
+**入口**：`pages/mine/mine.wxml` 的「数据」卡，三行依次为 导出备份 / 导入备份 / 清空所有数据（危险行仍在最后），卡下加一行小字说明「备份包含清单、回收站、分类和个人资料……导入会覆盖当前数据」。页脚版本改 `v1.2.0 · 本地存储版`。
+
+**数据层**：`utils/storage.js` 的 `exportBackup` 增 `app`、`onboardDone` 字段，新增 `parseBackup` 并导出；`importBackup` 改为走 `parseBackup`。
+
+**测试**：`tools/test_storage.js` 新增 16 项（全量往返、摘要计数、分类/资料/引导状态恢复、缺字段拒绝、state 回落、纯 JSON 可读、覆盖不合并），**85 通过 / 0 失败**（原 69 项）。
+---
+
+## 十一、v1.2.0 合规与手势修正（2026-11-12）
+
+### 1. 入口从 `wx.showActionSheet` 改成页内底部抽屉
+
+`wx.shareFileMessage` 与 `wx.chooseMessageFile` 都要求**由用户点击直接触发**，社区有明确案例：放在异步回调里调会失败。原先的实现是「点行 → actionSheet → success 回调里调接口」，多了一层回调。现改为 `pages/mine/mine.wxml` 里的 `.bk-mask` + `.bk-panel` 自绘抽屉，每个选项是 `bindtap`，接口在同一调用栈里触发。
+
+- 数据：`sheetVisible` / `sheetMode` / `sheetTitle` / `sheetSub` / `sheetOptions`
+- 方法：`openSheet(mode)` / `hideSheet()` / `onSheetTap(e)`
+- 文案：导出两项「转发备份文件 / 复制备份码」，导入两项「从聊天记录选择文件 / 读取剪贴板里的备份码」，副标题说明两者等价
+- 样式：底部圆角抽屉 + `sheet-up` 动画 + `env(safe-area-inset-bottom)` 留白，全用 token（`--n-0` / `--ink` / `--ink-2` / `--ink-3` / `--line` / `--accent-deep` / `--sh-2`）
+
+### 2. mp 后台必须先声明「剪切板」，否则备份码那两条必然失败
+
+`wx.setClipboardData` 与 `wx.getClipboardData` 属于隐私接口。未在《小程序用户隐私保护指引》里声明，调用会直接失败并返回 `errno 112: api scope is not declared in the privacy agreement`——代码写得对也一样，真机看起来就像功能坏了。
+
+配置路径：**mp.weixin.qq.com → 设置 → 服务内容声明 → 用户隐私保护指引**，勾选「剪切板」/「读取你的剪切板」，用途按下面这段填：
+
+> 用于备份码的复制与恢复。用户主动点击「导出备份 → 复制备份码」时，把本机生成的备份文本写入剪贴板，便于用户自行保存；用户主动点击「导入备份 → 读取剪贴板里的备份码」时，读取剪贴板中的文本并解析成本地记录。剪贴板内容仅在本机解析，不上传、不共享给任何第三方，也不在非用户主动操作时读取。
+
+审核通过后才可调用，提交前先在后台确认状态为「已通过」。
+
+### 3. 收费与主体资质结论
+
+- `shareFileMessage`、`chooseMessageFile`、`setClipboardData`、`getClipboardData` 均免费，无调用费、无次数限制
+- 文件写在 `wx.env.USER_DATA_PATH`（用户本机沙箱），不经过微信服务器存储，不产生云开发费用
+- 个人主体可用，无企业资质要求；功能属工具类，不涉及支付与内容社区类目
+- 备份内容为用户自己的记录，导出为用户主动行为，全程无上传，不构成对外提供个人信息；但「转发」后文件会进入微信聊天记录，文案里已说明存哪儿
+**e2e 复核**：`tools/e2e.js` 首跑 56 通过 / 1 失败（第一条 `首页-渲染` 等 `.pending` 超时，是启动竞争），复跑 **63 通过 / 0 失败**。

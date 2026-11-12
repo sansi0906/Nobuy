@@ -378,35 +378,67 @@ function clearSkipUndo() {
   try { wx.removeStorageSync(UNDO_KEY); } catch (e) { /* 忽略 */ }
 }
 
-// ---- 备份码：纯本地文本，复制到剪贴板即可保存 ----
+// ---- 备份：纯本地文本（NOBUY1: 前缀），可转发成 .json 文件，也可复制粘贴 ----
 const BACKUP_PREFIX = 'NOBUY1:';
+const ONBOARD_KEY = 'onboardDone';
+const VALID_STATES = ['cooling', 'skipped', 'bought', 'trashed'];
 
 function exportBackup() {
   const payload = {
     v: 1,
     at: Date.now(),
+    app: 'nobuy',
     wishList: getAll(),
     categories: getCategories(),
-    profile: getProfile()
+    profile: getProfile(),
+    onboardDone: !!wx.getStorageSync(ONBOARD_KEY)
   };
   return BACKUP_PREFIX + JSON.stringify(payload);
 }
 
-function importBackup(text) {
+// 只解析不写入：导入前先拿摘要给用户看，避免点下去才发现是一份坏数据
+function parseBackup(text) {
   const raw = String(text || '').trim();
   if (!raw) return { ok: false, reason: 'empty' };
   const body = raw.indexOf(BACKUP_PREFIX) === 0 ? raw.slice(BACKUP_PREFIX.length) : raw;
   let data;
   try { data = JSON.parse(body); } catch (e) { return { ok: false, reason: 'format' }; }
-  if (!data || !Array.isArray(data.wishList)) return { ok: false, reason: 'format' };
-  if (!write(KEY, data.wishList)) return { ok: false, reason: 'quota' };
-  if (Array.isArray(data.categories) && data.categories.length > 0) {
-    write(CATEGORY_KEY, data.categories.slice(0, MAX_CATEGORIES));
+  if (!data || typeof data !== 'object' || !Array.isArray(data.wishList)) {
+    return { ok: false, reason: 'format' };
   }
+  const bad = data.wishList.filter(it => !it || typeof it !== 'object' || !it.id || !it.name);
+  if (bad.length > 0) return { ok: false, reason: 'items' };
+  const list = data.wishList.map(it => Object.assign({}, it, {
+    state: VALID_STATES.indexOf(it.state) >= 0 ? it.state : 'cooling'
+  }));
+  const categories = Array.isArray(data.categories)
+    ? data.categories.filter(c => typeof c === 'string' && c.trim()).slice(0, MAX_CATEGORIES)
+    : [];
+  return {
+    ok: true,
+    at: typeof data.at === 'number' ? data.at : 0,
+    count: list.length,
+    cooling: list.filter(it => it.state === 'cooling').length,
+    trashed: list.filter(it => it.state === 'trashed').length,
+    decided: list.filter(it => it.state === 'skipped' || it.state === 'bought').length,
+    categoryCount: categories.length,
+    data: { wishList: list, categories, profile: data.profile, onboardDone: !!data.onboardDone }
+  };
+}
+
+function importBackup(text) {
+  const parsed = parseBackup(text);
+  if (!parsed.ok) return parsed;
+  const { data } = parsed;
+  if (!write(KEY, data.wishList)) return { ok: false, reason: 'quota' };
+  if (data.categories && data.categories.length > 0) write(CATEGORY_KEY, data.categories);
   if (data.profile && typeof data.profile === 'object') {
     write(PROFILE_KEY, Object.assign({}, getProfile(), data.profile));
   }
-  return { ok: true, count: data.wishList.length };
+  if (data.onboardDone) write(ONBOARD_KEY, true);
+  // 旧数据被整层替换，撤销快照指向的记录已经不存在了，必须一起清掉
+  clearSkipUndo();
+  return { ok: true, count: parsed.count };
 }
 
 module.exports = {
@@ -416,7 +448,7 @@ module.exports = {
   formatCountdown, formatDateTime,
   getProfile, saveProfile,
   saveSkipUndo, takeSkipUndo, clearSkipUndo,
-  exportBackup, importBackup,
+  exportBackup, importBackup, parseBackup,
   getCategories, saveCategories, addCategory, renameCategory, deleteCategory, countByCategory,
   DEFAULT_CATEGORIES, FALLBACK_CATEGORY, MAX_CATEGORY_NAME, MAX_CATEGORIES,
   getStreak, getMonthStats, getAchievements, getAchievementGroups, ACHIEVEMENT_GROUPS,
