@@ -1,0 +1,24 @@
+[
+  {
+    "id": "demo_expired_1",
+    "name": "双飞燕键鼠套装",
+    "price": 148.88,
+    "qty": 1,
+    "remark": "京东，工作需要",
+    "category": "数码",
+    "state": "cooling",
+    "createTime": 1794147258955,
+    "endTime": 1794395658955
+  },
+  {
+    "id": "demo_counting_2",
+    "name": "降噪耳机",
+    "price": 699,
+    "qty": 1,
+    "remark": "通勤路上太吵",
+    "category": "数码",
+    "state": "cooling",
+    "createTime": 1794320058955,
+    "endTime": 1794597258955
+  }
+]

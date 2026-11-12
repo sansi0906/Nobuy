@@ -3,60 +3,165 @@
 /* 头像卡 */
 .me {
   display: flex; align-items: center;
-  padding: 32rpx; margin-bottom: 24rpx;
+  padding: 32rpx; margin-bottom: 24rpx
 }
 .me-avatar {
   width: 100rpx; height: 100rpx; border-radius: 50%;
   flex-shrink: 0; background: var(--accent-soft);
-  padding: 10rpx; box-sizing: border-box;
+  padding: 12rpx; box-sizing: border-box;
 }
-.me-info { flex: 1; margin-left: 24rpx; }
+.me-info { flex: 1; margin-left: 24rpx }
 .me-name { font-size: 32rpx; font-weight: 700; color: var(--ink); }
-.me-sub { margin-top: 6rpx; font-size: 24rpx; color: var(--ink-3); }
-.me-arrow { font-size: 44rpx; color: var(--ink-3); }
+.me-sub { margin-top: 8rpx; font-size: 24rpx; color: var(--ink-3); }
+.me-arrow { font-size: 40rpx; color: var(--ink-3); }
+
+/* 我的记录：一张卡里三段 */
+.record-card { padding: 24rpx 32rpx 24rpx; margin-bottom: 24rpx }
+.rec-title {
+  font-size: 24rpx; color: var(--ink-2); font-weight: 600;
+  padding-bottom: 24rpx
+}
 
 /* 战绩 */
 .stats {
   display: flex; align-items: center;
-  background: #fff; border-radius: 24rpx;
-  padding: 36rpx 0; margin-bottom: 24rpx;
+  padding: 12rpx 0 24rpx
 }
 .stat { flex: 1; text-align: center; }
 .stat-num {
-  font-size: 44rpx; font-weight: 700; color: var(--ink);
+  font-size: 40rpx; font-weight: 700; color: var(--ink);
 }
 .stat-money { color: var(--accent-deep); }
-.stat-label { margin-top: 6rpx; font-size: 22rpx; color: var(--ink-2); }
+.stat-label { margin-top: 8rpx; font-size: 22rpx; color: var(--ink-2); }
 .stat-div {
   width: 1rpx; height: 60rpx; background: var(--line);
 }
 
+/* 连续与成就 */
+.ach-head {
+  display: flex; align-items: center;
+  padding: 24rpx 0 24rpx;
+  border-top: 1rpx solid var(--line);
+}
+.ach-metric { flex: 1; min-width: 0; text-align: center; }
+.ach-metric-div { width: 1rpx; height: 72rpx; background: var(--line); flex-shrink: 0; }
+.ach-metric-num {
+  font-size: 40rpx; font-weight: 700; color: var(--ink); line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ach-metric-money { color: var(--accent-deep); }
+.ach-metric-unit { font-size: 24rpx; font-weight: 400; color: var(--ink-2); }
+.ach-metric-label { margin-top: 8rpx; font-size: 22rpx; color: var(--ink-2); }
+
+.ach-grid {
+  display: flex; flex-wrap: wrap;
+  margin: 24rpx -8rpx 0
+}
+.ach-more {
+  display: flex; align-items: center;
+  margin-top: 8rpx;
+  padding: 24rpx 0 8rpx;
+  border-top: 1rpx solid var(--line);
+}
+.ach-more-text { flex: 1; font-size: 28rpx; color: var(--accent-deep); font-weight: 600; }
+.ach-more-count { font-size: 24rpx; color: var(--ink-3); margin-right: 12rpx }
+.ach-more-arrow { font-size: 32rpx; color: var(--ink-3); }
+.ach {
+  width: calc(50% - 16rpx);
+  margin: 8rpx;
+  padding: 24rpx;
+  border-radius: 16rpx; box-sizing: border-box;
+}
+.ach-on { background: var(--accent-soft); }
+.ach-off { background: var(--n-25); }
+.ach-name { font-size: 24rpx; font-weight: 600; }
+.ach-on .ach-name { color: var(--accent-deep); }
+.ach-off .ach-name { color: var(--ink-3); }
+.ach-desc { margin-top: 8rpx; font-size: 22rpx; color: var(--ink-3); line-height: 1.5; }
+.ach-progress { margin-top: 12rpx; font-size: 22rpx; }
+.ach-on .ach-progress { color: var(--accent-deep); }
+.ach-off .ach-progress { color: var(--ink-2); }
+
 /* 通用卡 */
-.card { background: #fff; border-radius: 24rpx; padding: 8rpx 32rpx; margin-bottom: 24rpx; }
-.sec-title { font-size: 26rpx; color: var(--ink-2); padding: 24rpx 0 8rpx; }
+.card { background: var(--n-0); border-radius: 24rpx; padding: 8rpx 32rpx; margin-bottom: 24rpx }
+.sec-title { font-size: 24rpx; color: var(--ink-2); padding: 24rpx 0 8rpx }
 
 .row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 28rpx 0; border-bottom: 1rpx solid var(--line);
+  padding: 24rpx 0; border-bottom: 1rpx solid var(--line);
 }
 .row:last-child { border-bottom: none; }
 .row-label { font-size: 28rpx; color: var(--ink); }
-.row-danger .row-label { color: var(--danger); }
-.row-arrow { font-size: 36rpx; color: var(--ink-3); }
+.row-danger .row-label { color: var(--danger); font-weight: 600; }
+.row-danger .row-arrow { color: var(--danger); }
+.row-arrow { font-size: 32rpx; color: var(--ink-3); }
+
+/* 客服入口：外观与其他行完全一致，用一层透明 button 承接 open-type */
+.row-tap { position: relative; }
+.row-hit {
+  position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  margin: 0; padding: 0;
+  background: transparent;
+  opacity: 0;
+  border-radius: 0;
+}
+.row-hit::after { border: none; }
+
+/* 小程序码弹层 */
+.qr-mask {
+  position: fixed; left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(34, 40, 44, 0.42);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  animation: fade-in var(--dur-2) var(--ease-out) both;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.qr-card {
+  width: 560rpx;
+  background: var(--n-0);
+  border-radius: 24rpx;
+  padding: 40rpx 32rpx 32rpx;
+  display: flex; flex-direction: column; align-items: center;
+  box-shadow: var(--sh-2);
+  animation: pop-in var(--dur-3) var(--ease-out) both;
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(24rpx) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.qr-img {
+  width: 360rpx; height: 360rpx;
+  background: var(--n-25);
+  border-radius: 16rpx;
+}
+.qr-title {
+  margin-top: 24rpx;
+  font-size: 28rpx; font-weight: 600; color: var(--ink);
+}
+.qr-sub {
+  margin-top: 8rpx;
+  font-size: 24rpx; color: var(--ink-2);
+}
+.qr-tip {
+  margin-top: 16rpx;
+  font-size: 22rpx; color: var(--ink-3);
+}
 
 /* 时长 pills */
-.dur-row { display: flex; flex-wrap: wrap; margin: -8rpx 0 16rpx; }
+.dur-row { display: flex; flex-wrap: wrap; margin: -8rpx 0 16rpx }
 .dur-pill {
-  margin: 8rpx; padding: 12rpx 24rpx; border-radius: 999rpx;
-  background: #F5F2EC; color: var(--ink-2); font-size: 24rpx;
-  border: 1rpx solid transparent;
+  margin: 8rpx; padding: 12rpx 24rpx; border-radius: 999rpx; background: var(--n-25); color: var(--ink-2); font-size: 24rpx; border: 1rpx solid var(--n-100);
 }
 .dur-active {
   background: var(--accent-soft); color: var(--accent-deep);
-  border-color: var(--accent); font-weight: 600;
+  border-color: var(--a-100); font-weight: 600;
 }
 
 .footer {
-  margin-top: 40rpx; text-align: center;
+  margin-top: 32rpx; text-align: center;
   font-size: 22rpx; color: var(--ink-3);
 }

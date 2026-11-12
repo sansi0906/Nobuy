@@ -3,12 +3,12 @@
 
   <view class="head">
     <view class="head-name">{{item.name}}</view>
-    <view class="head-price" wx:if="{{item.price}}">¥{{item.price}}</view>
-    <view class="head-tip">买之前，花 30 秒过一遍这几个问题</view>
+    <view class="head-price" wx:if="{{item.price}}">¥{{priceText}}<text class="head-qty" wx:if="{{qty > 1}}"> × {{qty}}</text></view>
+    <view class="head-total" wx:if="{{hasTotal}}">合计 ¥{{totalText}}</view>
+    <view class="head-tip">买之前，先过一遍</view>
   </view>
 
   <view class="card" wx:for="{{questions}}" wx:key="q" wx:for-index="qi">
-    <view class="q-num">问题 {{qi + 1}}</view>
     <view class="q-text">{{item.q}}</view>
     <view class="opts">
       <view wx:for="{{item.options}}" wx:key="*this" wx:for-index="oi"

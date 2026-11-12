@@ -1,44 +1,60 @@
 <!--pages/profile/profile.wxml-->
 <view class="page">
 
-  <!-- 头像预览 -->
-  <view class="card avatar-card">
+  <!-- 预览：头像 + 昵称 -->
+  <view class="card hero">
     <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
       <image wx:if="{{avatar}}" class="avatar" src="{{avatar}}" mode="aspectFill"></image>
       <image wx:else class="avatar avatar-default" src="/images/logo.png" mode="aspectFit"></image>
     </button>
-    <view class="avatar-tip">点上方头像可用微信头像</view>
-    <view class="btn btn-ghost album-btn" bindtap="chooseFromAlbum">从相册选一张</view>
+
+    <view class="hero-name {{nickname ? '' : 'hero-name-empty'}}">{{nickname || '还没起昵称'}}</view>
+    <view class="hero-tip">「我的」页会这样显示你</view>
+
+    <view class="hero-actions">
+      <button class="mini-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">编辑</button>
+    </view>
   </view>
 
-  <!-- 性别 -->
+  <!-- 性别：决定下面的昵称推荐 -->
   <view class="card">
-    <view class="field-label">我是</view>
-    <view class="dur-row">
+    <view class="sec-head">
+      <view class="sec-title">我是</view>
+    </view>
+    <view class="pill-row">
       <view wx:for="{{genders}}" wx:key="key"
-            class="dur-pill {{gender === item.key ? 'dur-active' : ''}}"
+            class="pill {{gender === item.key ? 'pill-active' : ''}}"
             data-g="{{item.key}}" bindtap="pickGender">{{item.label}}</view>
     </view>
   </view>
 
   <!-- 昵称 -->
   <view class="card">
-    <view class="field-label">昵称 <text class="opt">（最多 20 字）</text></view>
-    <input class="field-input nickname-input" type="nickname"
-           placeholder="点这里可用微信昵称，或从下面挑一个"
-           value="{{nickname}}" maxlength="20" bindinput="onNicknameInput" />
+    <view class="sec-head">
+      <view class="sec-title">昵称</view>
+      <view class="sec-opt">可不填 · 最多 20 字</view>
+    </view>
 
-    <view class="field-label preset-label">挑一个现成的</view>
-    <view class="dur-row">
+    <view class="input-wrap">
+      <input class="field-input" type="nickname" maxlength="20"
+             placeholder="给自己起一个昵称" value="{{nickname}}"
+             bindinput="onNicknameInput" />
+      <view class="input-clear" wx:if="{{nickname}}" bindtap="onClearNickname">×</view>
+    </view>
+
+    <view class="divider">
+      <view class="divider-text">或挑一个现成的</view>
+    </view>
+
+    <view class="pill-row">
       <view wx:for="{{presets}}" wx:key="*this"
-            class="dur-pill {{nickname === item ? 'dur-active' : ''}}"
+            class="pill {{nickname === item ? 'pill-active' : ''}}"
             data-name="{{item}}" bindtap="pickPreset">{{item}}</view>
     </view>
   </view>
 
   <view class="actions">
-    <view class="btn btn-ghost" bindtap="onClear">清空</view>
-    <view class="btn btn-primary" bindtap="onSave">保存</view>
+    <view class="btn btn-primary btn-block" bindtap="onSave">保存</view>
   </view>
 
 </view>

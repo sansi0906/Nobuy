@@ -1,0 +1,119 @@
+/* pages/achievements/achievements.wxss  —— 印章体系 */
+
+/* 顶部进度 */
+.head { text-align: center; padding: 24rpx 0 0 }
+.head-num {
+  font-size: 56rpx; font-weight: 700;
+  color: var(--accent-deep);
+  line-height: 1.1;
+  letter-spacing: 1rpx;
+}
+.head-slash { font-size: 28rpx; font-weight: 400; color: var(--ink-3); }
+.head-label { margin-top: 8rpx; font-size: 24rpx; color: var(--ink-2); letter-spacing: 2rpx; }
+
+.head-bar {
+  width: 300rpx;
+  height: 6rpx;
+  margin: 24rpx auto 0;
+  background: var(--n-50);
+  border-radius: 999rpx; overflow: hidden;
+}
+.head-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--a-600), var(--a-700));
+  border-radius: 999rpx; transition: width .3s ease;
+}
+
+/* 两个大数字 */
+.metrics {
+  display: flex;
+  align-items: center;
+  background: var(--n-0);
+  border-radius: 24rpx; padding: 32rpx 0;
+  margin: 32rpx 0 24rpx
+}
+.metric { flex: 1; min-width: 0; text-align: center; }
+.metric-div { width: 1rpx; height: 68rpx; background: var(--line); flex-shrink: 0; }
+.metric-num {
+  font-size: 56rpx; font-weight: 700; color: var(--ink); line-height: 1.15;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.metric-money { color: var(--accent-deep); }
+.metric-unit { font-size: 24rpx; font-weight: 400; color: var(--ink-2); margin-left: 4rpx }
+.metric-label { margin-top: 12rpx; font-size: 22rpx; color: var(--ink-2); letter-spacing: 1rpx; }
+
+/* 分组 */
+.group {
+  background: var(--n-0);
+  border-radius: 24rpx; padding: 24rpx 16rpx 12rpx;
+  margin-bottom: 24rpx
+}
+.group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12rpx 8rpx
+}
+.group-title { display: flex; align-items: center; }
+.group-glyph {
+  width: 40rpx; height: 40rpx;
+  border-radius: 8rpx; background: var(--accent-soft);
+  color: var(--accent-deep);
+  font-size: 24rpx; text-align: center;
+  line-height: 40rpx;
+  margin-right: 16rpx;
+  letter-spacing: 0;
+}
+.group-name { font-size: 28rpx; font-weight: 600; color: var(--ink); letter-spacing: 2rpx; }
+.group-count { font-size: 22rpx; color: var(--ink-3); letter-spacing: 1rpx; }
+.group-note { margin: 4rpx 0 24rpx; font-size: 22rpx; color: var(--ink-3); line-height: 1.5; }
+
+/* 印章网格 */
+.coin-grid { display: flex; flex-wrap: wrap; }
+.seal {
+  width: 33.333%;
+  box-sizing: border-box;
+  padding: 24rpx 8rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.seal-body {
+  position: relative;
+  width: 116rpx;
+  height: 116rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.seal-img {
+  position: absolute;
+  left: 0; top: 0;
+  width: 116rpx;
+  height: 116rpx;
+}
+.seal-num {
+  position: relative;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--n-600);
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
+}
+.seal-num-2 { font-size: 32rpx; letter-spacing: 0.5rpx; }
+.seal-num-3 { font-size: 24rpx; letter-spacing: 0rpx; }
+.seal-num-4 { font-size: 22rpx; letter-spacing: 0rpx; }
+.seal-on .seal-num { color: var(--s-gold-deep); }
+
+.seal-unit {
+  margin-top: 12rpx;
+  font-size: 22rpx; color: var(--ink-2);
+}
+.seal-off .seal-unit { color: var(--ink-3); }
+
+.seal-state {
+  margin-top: 4rpx;
+  font-size: 22rpx; color: var(--n-400);
+  letter-spacing: 0.5rpx;
+}

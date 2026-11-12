@@ -1,0 +1,51 @@
+<!--pages/achievements/achievements.wxml-->
+<view class="page">
+
+  <!-- 顶部：点亮进度 -->
+  <view class="head">
+    <view class="head-num">{{unlockedCount}}<text class="head-slash">/{{total}}</text></view>
+    <view class="head-label">已点亮勋章</view>
+  </view>
+
+  <view class="head-bar">
+    <view class="head-bar-fill" style="width: {{headPercent}}%"></view>
+  </view>
+
+  <!-- 两个大数字 -->
+  <view class="metrics">
+    <view class="metric">
+      <view class="metric-num metric-money">¥{{savedText}}</view>
+      <view class="metric-label">累计省下</view>
+    </view>
+    <view class="metric-div"></view>
+    <view class="metric">
+      <view class="metric-num">{{streak.longest}}<text class="metric-unit">天</text></view>
+      <view class="metric-label">最长连续忍住</view>
+    </view>
+  </view>
+
+  <!-- 三维度印章 -->
+  <view wx:for="{{groups}}" wx:key="key" class="group">
+    <view class="group-head">
+      <view class="group-title">
+        <text class="group-glyph">{{item.glyph}}</text>
+        <text class="group-name">{{item.name}}</text>
+      </view>
+      <view class="group-count">{{item.unlockedCount}}/{{item.total}}</view>
+    </view>
+    <view class="group-note" wx:if="{{item.key === 'save'}}">只算填了价格的记录</view>
+    <view class="group-note" wx:if="{{item.key === 'streak'}}">按有「我没买」的日子计算</view>
+
+    <view class="coin-grid">
+      <view wx:for="{{item.display}}" wx:for-item="b" wx:key="id"
+            class="seal {{b.unlocked ? 'seal-on' : 'seal-off'}}">
+        <view class="seal-body">
+          <image class="seal-img" src="{{b.unlocked ? '/images/seal_on.png' : '/images/seal_off.png'}}" mode="aspectFit"></image>
+          <text class="seal-num {{b.numClass}}">{{b.coinText}}</text>
+        </view>
+        <text class="seal-unit">{{b.unitText}}</text>
+        <text class="seal-state" wx:if="{{b.progressText}}">{{b.progressText}}</text>
+      </view>
+    </view>
+  </view>
+</view>

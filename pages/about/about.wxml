@@ -5,29 +5,37 @@
     <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
     <view class="name">是不是可以不买</view>
     <view class="slogan">一个冷静消费小工具</view>
-    <view class="desc">把想买的东西先记下来，设一段冷静期，时间到了再决定要不要买。</view>
   </view>
 
   <view class="card">
-    <view class="sec-title">数据说明</view>
-    <view class="sec-body">所有记录仅保存在你的手机本地，不会上传服务器；清除小程序缓存或删除小程序会丢失记录。</view>
+    <view class="sec-title">关于本小程序</view>
+    <view class="sec-body">这是一个帮助你把「想买」和「要买」分开的小工具。把想买的东西先记下来，设一段冷静期；时间到了，再决定买还是不买。它不替你做判断，只把决定往后挪一段，让冲动先过去。</view>
   </view>
 
   <view class="card">
-    <view class="sec-title">不做的事</view>
-    <view class="sec-body">不卖商品、不导购、不跳转电商、不发优惠券。</view>
+    <view class="sec-title">主要功能</view>
+    <view class="item"><text class="item-no">01</text><text class="item-text">记录想买的东西，填写名称、价格、数量、分类和备注</text></view>
+    <view class="item"><text class="item-no">02</text><text class="item-text">为每条记录设置冷静期，24 小时至 15 天可选，到期提醒你做决定</text></view>
+    <view class="item"><text class="item-no">03</text><text class="item-text">记录「我没买」或「我买了」，买了的可选填一段复盘问答</text></view>
+    <view class="item"><text class="item-no">04</text><text class="item-text">按分类汇总看板、回收站、连续天数与勋章，全部基于本地记录统计</text></view>
   </view>
 
-  <view class="card dev-card">
-    <view class="dev-row">
-      <image class="dev-avatar" src="/images/logo.png" mode="aspectFit"></image>
-      <view class="dev-info">
-        <view class="dev-name">NoBuy 开发者</view>
-        <view class="dev-sub">个人开发者 · 有建议或问题？</view>
-      </view>
-    </view>
-    <button class="btn btn-primary contact-btn" open-type="contact" session-from="about">联系开发者</button>
+  <view class="card">
+    <view class="sec-title">数据与隐私</view>
+    <view class="sec-body">本小程序没有服务器，也没有账号体系。你填写的所有内容（名称、价格、备注、头像昵称）只保存在当前设备的本地缓存中，不会上传、不会同步、不会用于任何统计或推荐。</view>
+    <view class="sec-body">因此：清除小程序缓存、删除小程序或更换设备，记录都会随之消失且无法找回。重要内容请自行截图留存。</view>
   </view>
 
-  <view class="footer">v1.0 · 本地存储版</view>
+  <view class="card">
+    <view class="sec-title">我们不做什么</view>
+    <view class="sec-body">不售卖任何商品，不提供导购链接，不跳转电商平台，不接入支付，不投放广告，不做诱导分享，也不收集手机号、位置、通讯录等与功能无关的信息。</view>
+  </view>
+
+  <view class="card">
+    <view class="row"><view class="row-label">版本</view><view class="row-value">{{versionText}}</view></view>
+    <view class="row"><view class="row-label">运行环境</view><view class="row-value">{{envText}}</view></view>
+    <view class="row"><view class="row-label">数据存储</view><view class="row-value">仅本机</view></view>
+  </view>
+
+  <view class="footer">本工具仅辅助你记录与延后决策，不构成任何消费、投资建议。</view>
 </view>

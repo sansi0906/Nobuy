@@ -2,22 +2,34 @@
 <view class="page">
 
   <view class="hero">
-    <view class="hero-row">
-      <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <view class="hero-row" bindtap="goMine">
+      <image wx:if="{{profile.avatar}}" class="hero-avatar" src="{{profile.avatar}}" mode="aspectFill"></image>
+      <image wx:else class="hero-avatar hero-avatar-default" src="/images/logo.png" mode="aspectFit"></image>
       <view class="hero-text">
-        <view class="hero-title">是不是可以不买</view>
+        <view class="hero-name {{profile.nickname ? '' : 'hero-name-empty'}}">{{profile.nickname || '暂无昵称'}}</view>
         <view class="hero-sub">把想买的，先放一放。</view>
       </view>
-    </view>
-    <view class="hero-hello" wx:if="{{profile.nickname}}">
-      嗨，{{profile.nickname}} · 继续保持冷静
+      <view class="hero-arrow">›</view>
     </view>
   </view>
 
-  <!-- 待决定 banner -->
-  <view class="pending" wx:if="{{pendingCount > 0 && tab === 'cooling'}}">
+  <!-- 待决定 banner 优先，其余时候显示结果条，首屏只占一条 -->
+  <view class="pending" wx:if="{{pendingCount > 0 && tab === 'cooling'}}" bindtap="goPending">
     <view class="pending-dot"></view>
     <view class="pending-text">有 {{pendingCount}} 件冷静期过了，等你做决定</view>
+    <view class="pending-arrow">›</view>
+  </view>
+  <view class="result-bar" wx:elif="{{showResultBar}}" bindtap="goMine">
+    <view class="result-text">
+      <text wx:if="{{streak > 0}}" class="result-strong">连续 {{streak}} 天</text>
+      <text wx:if="{{streak > 0 && monthSkipped > 0}}" class="result-dot">·</text>
+      <text wx:if="{{monthSkipped > 0}}">本月忍住 {{monthSkipped}} 件</text>
+      <text wx:if="{{monthSavedText !== '0'}}">，省下 ¥{{monthSavedText}}</text>
+    </view>
+    <view class="result-right">
+      <text class="result-ach" wx:if="{{unlockedCount > 0}}">{{unlockedCount}}/{{totalAch}} 印</text>
+      <view class="result-arrow">›</view>
+    </view>
   </view>
 
   <!-- 三段切换 -->
@@ -30,25 +42,31 @@
     </view>
   </view>
 
-  <!-- 冷静中 tab 顶部加记录按钮 -->
-  <view class="top-add" wx:if="{{tab === 'cooling'}}" bindtap="goAdd">
+  <!-- 冷静中 tab 顶部加记录按钮（空列表时交给空状态按钮，避免重复入口） -->
+  <view class="top-add" wx:if="{{tab === 'cooling' && list.length > 0}}" bindtap="goAdd">
     ＋ 记录一个想买的
   </view>
 
   <!-- 清单 -->
   <view wx:if="{{list.length > 0}}">
     <view class="card item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
-      <view class="item-top">
-        <view class="item-name">{{item.name}}</view>
-        <view class="item-price" wx:if="{{item.price}}">¥{{item.price}}</view>
+      <view class="item-body">
+        <view class="item-top">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-price" wx:if="{{item.price}}">¥{{item.priceText}}<text wx:if="{{item.qtyText > 1}}" class="item-qty"> ×{{item.qtyText}}</text></view>
+        </view>
+        <view class="item-cat" wx:if="{{item.category}}">{{item.category}}</view>
+        <view class="item-remark" wx:if="{{item.remark}}">{{item.remark}}</view>
+        <view class="cd-bar cd-bar-{{item.phase}}" wx:if="{{tab === 'cooling'}}">
+          <view class="cd-value">{{item.countdownText}}</view>
+          <view class="cd-cta" wx:if="{{item.phase === 'expired'}}">去决定 ›</view>
+        </view>
+        <view class="item-date" wx:if="{{tab !== 'cooling'}}">
+          {{item.state === 'skipped' ? '忍住了' : '没忍住'}} · {{item.createDate}}
+        </view>
       </view>
-      <view class="item-remark" wx:if="{{item.remark}}">{{item.remark}}</view>
-      <view class="cd-bar cd-bar-{{item.phase}}" wx:if="{{tab === 'cooling'}}">
-        <view class="cd-value">{{item.countdownText}}</view>
-        <view class="cd-cta" wx:if="{{item.phase === 'expired'}}">去决定 ›</view>
-      </view>
-      <view class="item-date" wx:if="{{tab !== 'cooling'}}">
-        {{item.state === 'skipped' ? '忍住了' : '没忍住'}} · {{item.createDate}}
+      <view class="item-del" data-id="{{item.id}}" catchtap="moveToTrash" aria-role="button" aria-label="移入回收站">
+        <image class="item-del-icon" src="/images/trash_white.png" mode="aspectFit"></image>
       </view>
     </view>
   </view>
@@ -62,6 +80,28 @@
     <view class="btn btn-primary empty-btn" wx:if="{{tab === 'cooling'}}" bindtap="goAdd">+ 记录一个想买的</view>
   </view>
 
-  <!-- FAB 只在冷静中显示 -->
-  <view class="fab" bindtap="goAdd" wx:if="{{tab === 'cooling'}}">＋</view>
+  <!-- FAB 只在冷静中显示（空状态已有按钮，不再叠一个） -->
+  <view class="fab" bindtap="goAdd" wx:if="{{tab === 'cooling' && list.length > 0}}">＋</view>
+
+  <!-- 首次引导 -->
+  <view class="onboard-mask" wx:if="{{showOnboard}}" catchtap="closeOnboard">
+    <view class="onboard-card" catchtap="noop">
+      <image class="onboard-logo" src="/images/logo.png" mode="aspectFit"></image>
+      <view class="onboard-title">欢迎，先了解一下</view>
+      <view class="onboard-step">
+        <text class="onboard-num">1</text>
+        <text class="onboard-txt">想买什么，先记下来，选一段冷静期</text>
+      </view>
+      <view class="onboard-step">
+        <text class="onboard-num">2</text>
+        <text class="onboard-txt">冷静期里不买，到期会自动提醒你</text>
+      </view>
+      <view class="onboard-step">
+        <text class="onboard-num">3</text>
+        <text class="onboard-txt">到期后再决定：忍住了，还是买了</text>
+      </view>
+      <view class="onboard-note">不联网、不登录，记录只存在你手机里</view>
+      <view class="btn btn-primary onboard-btn" catchtap="closeOnboard">知道了</view>
+    </view>
+  </view>
 </view>

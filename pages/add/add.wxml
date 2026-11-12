@@ -8,15 +8,36 @@
 
     <view class="divider"></view>
 
-    <view class="field-label">价格 <text class="opt">（可选，用来算省了多少）</text></view>
-    <input class="field-input" type="digit" placeholder="0.00"
+    <view class="field-label">价格 <text class="opt">（可选）</text></view>
+    <input class="field-input" type="digit" maxlength="10" placeholder="最多 7 位整数，两位小数"
            value="{{price}}" bindinput="onPriceInput" />
+
+    <view class="qty-row">
+      <view class="qty-label">数量</view>
+      <view class="qty-ctrl">
+        <view class="qty-btn {{qty <= 1 ? 'qty-btn-off' : ''}}" bindtap="minusQty">−</view>
+        <view class="qty-num">{{qty}}</view>
+        <view class="qty-btn" bindtap="plusQty">＋</view>
+      </view>
+    </view>
 
     <view class="divider"></view>
 
-    <view class="field-label">备注 <text class="opt">（可选）</text></view>
+    <view class="field-label">备注</view>
     <textarea class="field-textarea" placeholder="在哪看到、为什么想买…"
               maxlength="100" value="{{remark}}" bindinput="onRemarkInput" auto-height />
+  </view>
+
+  <view class="card dur-card">
+    <view class="field-label">分类
+      <text class="cat-manage" bindtap="manageAll">管理</text>
+    </view>
+    <view class="dur-row">
+      <view wx:for="{{categories}}" wx:key="*this"
+            class="dur-pill {{category === item ? 'dur-active' : ''}}"
+            data-name="{{item}}" bindtap="pickCategory" bindlongpress="manageCategory">{{item}}</view>
+      <view class="dur-pill pill-add" bindtap="newCategory">＋ 自定义</view>
+    </view>
   </view>
 
   <view class="card dur-card">

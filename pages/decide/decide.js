@@ -25,6 +25,8 @@ Page({
     id: '',
     action: 'buy',       // buy | skip
     item: null,
+    qty: 1, totalText: '', hasTotal: false,
+    priceText: '',
     questions: QUESTIONS,
     answers: [null, null, null, null]
   },
@@ -32,7 +34,17 @@ Page({
   onLoad(q) {
     const item = store.getById(q.id);
     if (!item) { wx.navigateBack(); return; }
-    this.setData({ id: q.id, action: q.action || 'buy', item });
+    const qty = store.qtyOf(item);
+    const total = store.validPrice(item.price) * qty;
+    this.setData({
+      id: q.id,
+      action: q.action || 'buy',
+      item,
+      priceText: store.formatMoney(item.price),
+      qty,
+      totalText: total > 0 ? store.formatMoney(total) : '',
+      hasTotal: total > 0 && qty > 1
+    });
   },
 
   pick(e) {
@@ -48,7 +60,7 @@ Page({
   },
 
   confirm() {
-    store.update(this.data.id, { state: 'bought' });
+    store.update(this.data.id, { state: 'bought', decidedAt: Date.now() });
     wx.showToast({ title: '记下来了', icon: 'none' });
     setTimeout(() => {
       wx.switchTab({ url: '/pages/index/index' });

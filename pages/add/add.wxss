@@ -1,23 +1,20 @@
 /* pages/add/add.wxss */
 
-.card { margin-bottom: 24rpx; }
+.card { margin-bottom: 24rpx }
 
 .field-label {
-  font-size: 26rpx;
-  color: var(--ink-2);
-  margin-bottom: 16rpx;
+  font-size: 24rpx; color: var(--ink-2);
+  margin-bottom: 16rpx
 }
 .opt { color: var(--ink-3); font-size: 24rpx; }
 
 .field-input {
-  font-size: 32rpx;
-  color: var(--ink);
-  padding: 8rpx 0;
+  font-size: 32rpx; color: var(--ink);
+  padding: 8rpx 0
 }
 .field-textarea {
   width: 100%;
-  font-size: 28rpx;
-  color: var(--ink);
+  font-size: 28rpx; color: var(--ink);
   min-height: 120rpx;
   padding: 8rpx 0;
   box-sizing: border-box;
@@ -25,28 +22,52 @@
 .divider {
   height: 1rpx;
   background: var(--line);
-  margin: 24rpx 0;
+  margin: 24rpx 0
+}
+
+/* 数量 */
+.qty-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 16rpx
+}
+.qty-label { font-size: 24rpx; color: var(--ink-2); }
+.qty-ctrl { display: flex; align-items: center; }
+.qty-btn {
+  width: 52rpx; height: 52rpx; line-height: 48rpx; text-align: center;
+  border-radius: 50%; background: var(--n-25); color: var(--ink); font-size: 28rpx; }
+.qty-btn:active { background: var(--n-50); }
+.qty-btn-off { color: var(--n-200); }
+.qty-num {
+  min-width: 64rpx; text-align: center; font-size: 28rpx; font-weight: 600; color: var(--ink);
+}
+
+.cat-manage {
+  float: right; font-size: 24rpx; color: var(--accent-deep);
+  padding: 0 4rpx
 }
 
 .dur-row {
   display: flex;
   flex-wrap: wrap;
-  margin: -8rpx;
+  margin: -8rpx
 }
 .dur-pill {
   margin: 8rpx;
   padding: 16rpx 32rpx;
-  border-radius: 999rpx;
-  background: #F5F2EC;
+  border-radius: 999rpx; background: var(--n-25);
   color: var(--ink-2);
-  font-size: 28rpx;
-  border: 1rpx solid transparent;
+  font-size: 28rpx; border: 1rpx solid var(--n-100);
 }
 .dur-active {
   background: var(--accent-soft);
   color: var(--accent-deep);
-  border-color: var(--accent);
+  border-color: var(--a-100);
   font-weight: 600;
+}
+.pill-add {
+  background: transparent;
+  border: 1rpx dashed var(--n-100);
+  color: var(--ink-3);
 }
 
 .actions {

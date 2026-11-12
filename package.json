@@ -1,0 +1,14 @@
+{
+  "name": "nobuy-miniprogram",
+  "private": true,
+  "version": "1.0.0",
+  "description": "「是不是可以不买」小程序 —— 仅用于承载测试脚本，不参与小程序构建",
+  "scripts": {
+    "test": "node tools/test_storage.js",
+    "test:wxml": "node tools/check_wxml.js",
+    "e2e": "node tools/e2e.js"
+  },
+  "devDependencies": {
+    "miniprogram-automator": "^0.12.1"
+  }
+}

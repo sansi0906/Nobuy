@@ -7,26 +7,43 @@
     <image wx:else class="me-avatar me-avatar-default" src="/images/logo.png" mode="aspectFit"></image>
     <view class="me-info">
       <view class="me-name">{{profile.nickname || '点这里设置昵称和头像'}}</view>
-      <view class="me-sub">点这里修改</view>
+      <view class="me-sub" wx:if="{{profile.nickname}}">修改头像与昵称</view>
     </view>
     <view class="me-arrow">›</view>
   </view>
 
-  <!-- 战绩 -->
-  <view class="stats">
-    <view class="stat">
-      <view class="stat-num">{{stats.skipped}}</view>
-      <view class="stat-label">忍住了</view>
+  <!-- 我的记录：战绩、累计省下、省钱战绩入口，合成一张卡 -->
+  <view class="card record-card">
+    <view class="rec-title">我的记录</view>
+
+    <view class="stats">
+      <view class="stat">
+        <view class="stat-num">{{stats.skipped}}</view>
+        <view class="stat-label">忍住了</view>
+      </view>
+      <view class="stat-div"></view>
+      <view class="stat">
+        <view class="stat-num">{{stats.bought}}</view>
+        <view class="stat-label">我买了</view>
+      </view>
     </view>
-    <view class="stat-div"></view>
-    <view class="stat">
-      <view class="stat-num">{{stats.bought}}</view>
-      <view class="stat-label">我买了</view>
+
+    <view class="ach-head">
+      <view class="ach-metric">
+        <view class="ach-metric-num ach-metric-money">¥{{savedText}}</view>
+        <view class="ach-metric-label">累计省下</view>
+      </view>
+      <view class="ach-metric-div"></view>
+      <view class="ach-metric">
+        <view class="ach-metric-num">{{streak.longest}}<text class="ach-metric-unit"> 天</text></view>
+        <view class="ach-metric-label">最长连续忍住</view>
+      </view>
     </view>
-    <view class="stat-div"></view>
-    <view class="stat">
-      <view class="stat-num stat-money">¥{{stats.saved}}</view>
-      <view class="stat-label">省下</view>
+
+    <view class="ach-more" bindtap="goAchievements">
+      <view class="ach-more-text">我的战绩</view>
+      <view class="ach-more-count">已解锁 {{unlockedCount}}/{{totalAchievements}}</view>
+      <view class="ach-more-arrow">›</view>
     </view>
   </view>
 
@@ -41,10 +58,29 @@
   <!-- 其他 -->
   <view class="card">
     <view class="row" bindtap="goAbout">
-      <view class="row-label">关于与联系开发者</view>
+      <view class="row-label">关于</view>
       <view class="row-arrow">›</view>
+    </view>
+    <view class="row" bindtap="showQr">
+      <view class="row-label">小程序码</view>
+      <view class="row-arrow">›</view>
+    </view>
+    <view class="row row-tap">
+      <view class="row-label">联系客服</view>
+      <view class="row-arrow">›</view>
+      <button class="row-hit" open-type="contact" session-from="mine"></button>
     </view>
   </view>
 
-  <view class="footer">v1.0 · 本地存储版</view>
+  <view class="footer" bindlongpress="seedDemo">v1.0 · 本地存储版</view>
+
+  <!-- 小程序码弹层 -->
+  <view class="qr-mask" wx:if="{{qrVisible}}" bindtap="hideQr">
+    <view class="qr-card" catchtap="noop">
+      <image class="qr-img" src="/images/miniprogram_qr.png" mode="aspectFit" bindtap="previewQr"></image>
+      <view class="qr-title">是不是可以不买</view>
+      <view class="qr-sub">微信扫一扫，或保存图片分享给朋友</view>
+      <view class="qr-tip">只分享给需要的人，不换取任何奖励</view>
+    </view>
+  </view>
 </view>

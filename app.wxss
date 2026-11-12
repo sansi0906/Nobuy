@@ -1,74 +1,236 @@
 /**app.wxss**/
 page {
-  /* 暖米底 + 陶土橙强调（和水滴 Logo 同色系），克制、佛系 */
-  --bg: #F4F0E8;
-  --card: #FFFFFF;
-  --ink: #3A3530;
-  --ink-2: #9A9088;
-  --ink-3: #C4BCB0;
-  --line: #EAE2D4;
-  --cooling-bg: #E4EBEF;
-  --cooling-text: #5E7A8C;
-  --done-bg: #E8EDE0;
-  --done-text: #6E8A64;
-  --accent: #C97B4A;
-  --accent-deep: #A86238;
-  --accent-soft: #F6E8DC;
-  --danger: #B06A5E;
+  /* ============ 设计 token（见 UI设计\NoBuy-视觉设计规范.md） ============ */
 
-  background: var(--bg);
-  color: var(--ink);
+  /* 中性色阶：雾蓝灰，冷而低饱和 */
+  --n-0: #FFFFFF;
+  --n-25: #F6F8F9;
+  --n-50: #EFF1F2;
+  --n-100: #DFE5E9;
+  --n-200: #C9D3D9;
+  --n-400: #9FAAB2;
+  --n-600: #6B767E;
+  --n-900: #22282C;
+
+  /* 强调色：全站唯一一支雾蓝灰 */
+  --a-50: #E7EDF1;
+  --a-100: #CBD9E1;
+  --a-600: #5F7688;
+  --a-700: #475A69;
+
+  /* 状态色：各司其职，不串用 */
+  --s-cool-bg: #E7EDF1;
+  --s-cool: #5F7688;
+  --s-done-bg: #E6EEEA;
+  --s-done: #5E7A6E;
+  --s-done-line: #CFDDD5;
+  --s-danger: #C4382F;
+  --s-danger-soft: #FDF2F1;
+  --s-danger-line: #E9C6C1;
+  --s-danger-press: #A82A22;
+  --s-gold: #C29225;
+  --s-gold-light: #E3C069;
+  --s-gold-deep: #6A4A12;
+  --s-gold-bg: #FBF3E2;
+  --s-gold-line: #E8D3A6;
+
+  /* 字阶：只有 6 档 */
+  --t-display: 56rpx;
+  --t-h1: 40rpx;
+  --t-h2: 32rpx;
+  --t-body: 28rpx;
+  --t-meta: 24rpx;
+  --t-caption: 22rpx;
+
+  /* 间距：8 的倍数，7 档 */
+  --sp-1: 8rpx;
+  --sp-2: 12rpx;
+  --sp-3: 16rpx;
+  --sp-4: 24rpx;
+  --sp-5: 32rpx;
+  --sp-6: 48rpx;
+  --sp-7: 64rpx;
+
+  /* 圆角：3 档 + 胶囊 */
+  --r-1: 8rpx;
+  --r-2: 16rpx;
+  --r-3: 24rpx;
+  --r-full: 999rpx;
+
+  /* 阴影：2 档，只用中性色 */
+  --sh-1: 0 6rpx 20rpx rgba(34, 40, 44, 0.05);
+  --sh-2: 0 16rpx 48rpx rgba(34, 40, 44, 0.12);
+
+  /* 动效：一条曲线 + 三档时长，全站统一 */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-1: 160ms;
+  --dur-2: 240ms;
+  --dur-3: 320ms;
+
+  /* ============ 旧变量别名（逐页替换期间保持兼容） ============ */
+  --bg: var(--n-50);
+  --card: var(--n-0);
+  --ink: var(--n-900);
+  --ink-2: var(--n-600);
+  --ink-3: var(--n-400);
+  --line: var(--n-100);
+  --cooling-bg: var(--s-cool-bg);
+  --cooling-text: var(--s-cool);
+  --done-bg: var(--s-done-bg);
+  --done-text: var(--s-done);
+  --accent: var(--a-600);
+  --accent-deep: var(--a-700);
+  --accent-soft: var(--a-50);
+  --danger: var(--s-danger);
+
+  background: var(--n-50);
+  color: var(--n-900);
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
-  font-size: 28rpx;
+  font-size: var(--t-body);
   line-height: 1.6;
 }
 
 .page {
   min-height: 100vh;
-  padding: 32rpx 32rpx 60rpx;
+  padding: var(--sp-5) var(--sp-5) var(--sp-7);
   box-sizing: border-box;
+  animation: page-in var(--dur-3) var(--ease-out) forwards;
 }
 
+/* 页面入场：极轻的位移 + 淡入，只做一次 */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(12rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 卡片依次上浮：靠 --i 变量错开，最多错开 5 档 */
 .card {
-  background: var(--card);
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 2rpx 12rpx rgba(120, 90, 60, 0.05);
+  background: var(--n-0);
+  border-radius: var(--r-3);
+  padding: var(--sp-5);
+  box-shadow: var(--sh-1);
+  animation: card-in var(--dur-3) var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 60ms);
 }
 
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(16rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ 按钮 ============ */
 .btn {
-  border-radius: 16rpx;
-  padding: 22rpx 0;
-  text-align: center;
-  font-size: 30rpx;
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88rpx;
+  padding: 0 var(--sp-5);
+  box-sizing: border-box;
+  border-radius: var(--r-2);
+  font-size: var(--t-body);
   line-height: 1.4;
+  border: none;
+  transition: background-color var(--dur-1) ease,
+              transform var(--dur-1) var(--ease-out),
+              box-shadow var(--dur-2) var(--ease-out);
 }
 .btn::after { border: none; }
+.btn:active { transform: scale(0.97); }
 
+/* 主按钮：实心强调，一屏最多一个 */
 .btn-primary {
-  background: var(--accent);
+  background: var(--a-600);
   color: #fff;
+  font-weight: 600;
 }
-.btn-primary:active { background: var(--accent-deep); }
+.btn-primary:active { background: var(--a-700); }
 
+/* 次按钮：白底细边 */
 .btn-ghost {
-  background: transparent;
-  color: var(--ink-2);
+  background: var(--n-0);
+  color: var(--n-600);
+  border: 1rpx solid var(--n-100);
 }
+.btn-ghost:active { background: var(--a-50); }
 
+/* 弱按钮：浅蓝底，无边框 */
+.btn-soft {
+  background: var(--a-50);
+  color: var(--a-700);
+  font-weight: 600;
+}
+.btn-soft:active { background: var(--a-100); }
+
+/* 破坏按钮：浅红底 + 红字 + 细红边 */
 .btn-danger {
-  background: transparent;
-  color: var(--danger);
-  border: 1rpx solid #E3CFC7;
+  background: var(--s-danger-soft);
+  color: var(--s-danger);
+  font-weight: 600;
+  border: 1rpx solid var(--s-danger-line);
 }
+.btn-danger:active { background: #FBEAE8; }
 
+/* ============ 状态 tag ============ */
 .tag {
   display: inline-block;
-  padding: 4rpx 16rpx;
-  border-radius: 999rpx;
-  font-size: 22rpx;
-  line-height: 1.6;
+  padding: 2rpx 14rpx;
+  border-radius: var(--r-full);
+  font-size: var(--t-caption);
+  line-height: 1.8;
 }
-.tag-cooling { background: var(--cooling-bg); color: var(--cooling-text); }
-.tag-done    { background: var(--done-bg);    color: var(--done-text); }
+.tag-cooling { background: var(--s-cool-bg); color: var(--s-cool); }
+.tag-done    { background: var(--s-done-bg); color: var(--s-done); }
+
+/* ============ 按压反馈（行/条目） ============ */
+.row, .item, .entry {
+  transition: background-color var(--dur-1) ease;
+}
+.row:active, .item:active, .entry:active {
+  background: var(--n-25);
+}
+
+/* ============ 深色模式 ============ */
+/* 只换 token，页面样式一行不用改；tabBar 图标是静态文件无法跟着换，
+   所以 tabBar 在深色下仍保持浅底，当作"纸片"叠在深色页面上。 */
+@media (prefers-color-scheme: dark) {
+  page {
+    --n-0: #1B2227;
+    --n-25: #212A31;
+    --n-50: #141A1E;
+    --n-100: #2C373E;
+    --n-200: #3A464D;
+    --n-400: #7C8892;
+    --n-600: #AAB6BE;
+    --n-900: #E8EDF0;
+
+    --a-50: #22303A;
+    --a-100: #2E414F;
+    --a-600: #8FB0C6;
+    --a-700: #B7CEDD;
+
+    --s-cool-bg: #22303A;
+    --s-cool: #8FB0C6;
+    --s-done-bg: #23332B;
+    --s-done: #93B08F;
+    --s-done-line: #37493D;
+
+    --s-danger: #E4736A;
+    --s-danger-soft: #382422;
+    --s-danger-line: #5A3532;
+    --s-danger-press: #F0908A;
+
+    --s-gold: #D4A748;
+    --s-gold-light: #E8C87A;
+    --s-gold-deep: #F2DFB0;
+    --s-gold-bg: #2E2718;
+    --s-gold-line: #4B3F24;
+
+    --sh-1: 0 6rpx 20rpx rgba(0, 0, 0, 0.35);
+    --sh-2: 0 16rpx 48rpx rgba(0, 0, 0, 0.5);
+  }
+
+  /* 深色下按钮主色偏亮，白字换成深字 */
+  .btn-primary { color: #10161A; }
+  /* 遮罩在深色下更沉一点 */
+  .btn-ghost { border-color: var(--n-100); }
+}

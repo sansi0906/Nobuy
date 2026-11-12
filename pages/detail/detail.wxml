@@ -2,22 +2,70 @@
 <view class="page" wx:if="{{item}}">
 
   <view class="card main">
-    <view class="tag tag-{{item.state || 'cooling'}} tag-lg">
-      <block wx:if="{{(item.state || 'cooling') === 'cooling' && phase === 'counting'}}">冷静中</block>
-      <block wx:elif="{{(item.state || 'cooling') === 'cooling' && phase === 'expired'}}">待决定</block>
-      <block wx:elif="{{item.state === 'skipped'}}">我没买</block>
-      <block wx:elif="{{item.state === 'bought'}}">我买了</block>
+    <view class="main-head">
+      <view class="tag tag-{{item.state || 'cooling'}} tag-lg">
+        <block wx:if="{{(item.state || 'cooling') === 'cooling' && phase === 'counting'}}">冷静中</block>
+        <block wx:elif="{{(item.state || 'cooling') === 'cooling' && phase === 'expired'}}">待决定</block>
+        <block wx:elif="{{item.state === 'skipped'}}">我没买</block>
+        <block wx:elif="{{item.state === 'bought'}}">我买了</block>
+      </view>
+      <view class="edit-chip" wx:if="{{!editing}}" bindtap="startEdit">编辑</view>
     </view>
 
     <block wx:if="{{!editing}}">
       <view class="d-name">{{item.name}}</view>
-      <view class="d-price" wx:if="{{item.price}}">¥{{item.price}}</view>
+      <view class="d-price" wx:if="{{item.price}}">¥{{priceText}}<text class="d-qty" wx:if="{{item.qty > 1}}"> × {{item.qty}}</text></view>
       <view class="d-remark" wx:if="{{item.remark}}">{{item.remark}}</view>
     </block>
+
     <block wx:else>
-      <input class="d-edit-name" value="{{nameDraft}}" bindinput="onNameInput" maxlength="30" />
-      <textarea class="d-edit-remark" value="{{remarkDraft}}" bindinput="onRemarkInput"
-                maxlength="100" auto-height placeholder="备注（可选）" />
+      <view class="edit-block">
+        <view class="edit-label">名称</view>
+        <input class="d-edit-name" value="{{nameDraft}}" bindinput="onNameInput" maxlength="30" />
+      </view>
+
+      <view class="edit-block">
+        <view class="edit-label">价格（可选）</view>
+        <view class="edit-price-row">
+          <input class="edit-price" type="digit" maxlength="10" placeholder="最多 7 位整数，两位小数"
+                 value="{{priceDraft}}" bindinput="onPriceInput" />
+          <view class="qty-ctrl">
+            <view class="qty-btn" bindtap="minusQty">−</view>
+            <view class="qty-num">{{qtyDraft}}</view>
+            <view class="qty-btn" bindtap="plusQty">＋</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="edit-block" wx:if="{{(item.state || 'cooling') === 'cooling'}}">
+        <view class="edit-label">冷静截止</view>
+        <view class="edit-cats">
+          <view class="edit-cat {{extendDays === 0 ? 'edit-cat-active' : ''}}"
+                data-d="0" bindtap="pickExtend">不变</view>
+          <view class="edit-cat {{extendDays === 3 ? 'edit-cat-active' : ''}}"
+                data-d="3" bindtap="pickExtend">+3 天</view>
+          <view class="edit-cat {{extendDays === 7 ? 'edit-cat-active' : ''}}"
+                data-d="7" bindtap="pickExtend">+7 天</view>
+          <view class="edit-cat {{extendDays === 15 ? 'edit-cat-active' : ''}}"
+                data-d="15" bindtap="pickExtend">+15 天</view>
+        </view>
+        <view class="extend-tip" wx:if="{{extendDays > 0}}">保存后截止：{{extendPreview}}</view>
+      </view>
+
+      <view class="edit-block">
+        <view class="edit-label">分类</view>
+        <view class="edit-cats">
+          <view wx:for="{{categories}}" wx:key="*this"
+                class="edit-cat {{categoryDraft === item ? 'edit-cat-active' : ''}}"
+                data-name="{{item}}" bindtap="pickCategory">{{item}}</view>
+        </view>
+      </view>
+
+      <view class="edit-block">
+        <view class="edit-label">备注（可选）</view>
+        <textarea class="d-edit-remark" value="{{remarkDraft}}" bindinput="onRemarkInput"
+                  maxlength="100" auto-height placeholder="在哪看到、为什么想买…" />
+      </view>
     </block>
 
     <view class="cd-row cd-row-{{phase}}" wx:if="{{(item.state || 'cooling') === 'cooling'}}">
@@ -26,6 +74,7 @@
   </view>
 
   <view class="card meta">
+    <view class="meta-row"><text class="k">分类</text><text class="v">{{item.category}}</text></view>
     <view class="meta-row"><text class="k">记下时间</text><text class="v">{{createTimeText}}</text></view>
     <view class="meta-row"><text class="k">冷静截止</text><text class="v">{{endTimeText}}</text></view>
   </view>
@@ -38,22 +87,16 @@
     </view>
   </block>
 
-  <!-- 冷静中：始终给我买了/我没买 -->
+  <!-- 冷静中：主操作只剩两个决定 -->
   <block wx:elif="{{(item.state || 'cooling') === 'cooling'}}">
     <view class="decide-row">
       <view class="btn btn-nope" bindtap="decideNo">我没买</view>
       <view class="btn btn-buy" bindtap="decideBuy">我买了</view>
     </view>
-    <view class="btn btn-ghost sub" bindtap="extend">再冷静 3 天</view>
-    <view class="btn btn-ghost sub" bindtap="startEdit">编辑这条</view>
-    <view class="btn btn-danger sub" bindtap="onTrash">移到回收站</view>
   </block>
 
-  <!-- 已决定 -->
+  <!-- 已决定：只留一个回到冷静中的入口，编辑在右上角 -->
   <block wx:elif="{{item.state === 'skipped' || item.state === 'bought'}}">
-    <view class="btn btn-primary btn-block" bindtap="restoreToCooling">恢复到冷静中</view>
-    <view class="btn btn-danger sub" bindtap="onTrash">移到回收站</view>
+    <view class="btn btn-ghost btn-block" bindtap="restoreToCooling">恢复到冷静中</view>
   </block>
-
-  <view class="back-bar" bindtap="back">‹ 返回清单</view>
 </view>

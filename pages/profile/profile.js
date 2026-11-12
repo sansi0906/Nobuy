@@ -30,42 +30,43 @@ Page({
     });
   },
 
-  // 选微信头像
+  // 选微信头像（chooseAvatar 里本身就有「从相册选择」这一项）
   onChooseAvatar(e) {
     const tempPath = e.detail.avatarUrl;
     if (!tempPath) return;
-    // 临时文件路径会被微信清理，转存到本地持久目录
+    this.persistAvatar(tempPath);
+  },
+
+  // 临时路径会被清理，转存到本地持久目录；同时删掉上一张，避免文件越攒越多
+  persistAvatar(tempPath) {
+    const prev = this.data.avatar;
     wx.getFileSystemManager().saveFile({
       tempFilePath: tempPath,
       success: (res) => {
         this.setData({ avatar: res.savedFilePath });
+        this.removeOldAvatar(prev, res.savedFilePath);
       },
-      fail: () => {
-        // 兜底：直接用临时路径（至少本次会话能用）
-        this.setData({ avatar: tempPath });
-      }
+      fail: () => this.setData({ avatar: tempPath })
     });
   },
 
-  // 从相册选
-  chooseFromAlbum() {
-    wx.chooseMedia({
-      count: 1,
-      mediaType: ['image'],
-      sizeType: ['compressed'],
-      success: (res) => {
-        const tempPath = res.tempFiles[0].tempFilePath;
-        wx.getFileSystemManager().saveFile({
-          tempFilePath: tempPath,
-          success: (r) => this.setData({ avatar: r.savedFilePath }),
-          fail: () => this.setData({ avatar: tempPath })
-        });
-      }
-    });
+  removeOldAvatar(oldPath, newPath) {
+    if (!oldPath || oldPath === newPath) return;
+    // 只清理我们自己转存过的文件，临时路径不碰
+    try {
+      wx.getFileSystemManager().unlink({
+        filePath: oldPath,
+        fail: () => {}
+      });
+    } catch (e) { /* 文件不存在就算了 */ }
   },
 
   onNicknameInput(e) {
     this.setData({ nickname: e.detail.value });
+  },
+
+  onClearNickname() {
+    this.setData({ nickname: '' });
   },
 
   pickGender(e) {
@@ -78,30 +79,18 @@ Page({
   },
 
   onSave() {
+    // 昵称可以留空：首页会显示「暂无昵称」，只换头像的用户不该被挡住
     const nickname = (this.data.nickname || '').trim().slice(0, 20);
-    if (!nickname) {
-      wx.showToast({ title: '先选个昵称吧', icon: 'none' });
-      return;
-    }
-    store.saveProfile({
+    const saved = store.saveProfile({
       avatar: this.data.avatar,
       nickname,
       gender: this.data.gender
     });
+    if (!saved) {
+      wx.showToast({ title: '保存失败，手机本地空间可能不足', icon: 'none' });
+      return;
+    }
     wx.showToast({ title: '已保存', icon: 'success' });
     setTimeout(() => wx.navigateBack(), 600);
-  },
-
-  onClear() {
-    wx.showModal({
-      title: '清空头像和昵称？',
-      content: '会恢复成默认状态',
-      success: (res) => {
-        if (res.confirm) {
-          store.saveProfile({ avatar: '', nickname: '', gender: '' });
-          this.setData({ avatar: '', nickname: '', gender: '', presets: PRESETS.other });
-        }
-      }
-    });
   }
 });

@@ -6,29 +6,35 @@
     "pages/add/add",
     "pages/detail/detail",
     "pages/decide/decide",
+    "pages/achievements/achievements",
     "pages/profile/profile",
     "pages/about/about"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#F4F0E8",
+    "navigationBarBackgroundColor": "#EFF1F2",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "是不是可以不买",
-    "backgroundColor": "#F4F0E8",
+    "backgroundColor": "#EFF1F2",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
-    "color": "#9A9088",
-    "selectedColor": "#C97B4A",
+    "color": "#98A3AB",
+    "selectedColor": "#475A69",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/index/index",  "text": "首页" },
-      { "pagePath": "pages/trash/trash",   "text": "回收站" },
-      { "pagePath": "pages/mine/mine",     "text": "我的" }
+      { "pagePath": "pages/index/index",  "text": "首页",
+        "iconPath": "images/tab_home.png",  "selectedIconPath": "images/tab_home_on.png" },
+      { "pagePath": "pages/trash/trash",   "text": "回收站",
+        "iconPath": "images/tab_trash.png", "selectedIconPath": "images/tab_trash_on.png" },
+      { "pagePath": "pages/mine/mine",     "text": "我的",
+        "iconPath": "images/tab_mine.png",  "selectedIconPath": "images/tab_mine_on.png" }
     ]
   },
   "style": "v2",
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "darkmode": true,
+  "themeLocation": "theme.json"
 }

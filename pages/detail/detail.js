@@ -1,12 +1,19 @@
 // pages/detail/detail.js
 const store = require('../../utils/storage.js');
 
+const ADD_DAYS = 3;
+const DAY_MS = 86400000;
+
 Page({
   data: {
     id: '', item: null,
     phase: 'counting', countdownText: '',
     createTimeText: '', endTimeText: '',
     editing: false, nameDraft: '', remarkDraft: '',
+    priceDraft: '', qtyDraft: 1, categoryDraft: '',
+    extendDays: 0, extendPreview: '',
+    categories: [],
+    priceText: '', qtyText: '',
     timer: null
   },
 
@@ -28,75 +35,126 @@ Page({
       return;
     }
     const cd = store.formatCountdown(item.endTime);
+    const qty = store.qtyOf(item);
     this.setData({
-      item, phase: cd.phase, countdownText: cd.text,
+      item: Object.assign({}, item, { category: item.category || store.FALLBACK_CATEGORY }),
+      priceText: store.formatMoney(item.price),
+      qtyText: qty + ' 件',
+      phase: cd.phase, countdownText: cd.text,
       createTimeText: store.formatDateTime(item.createTime),
       endTimeText: store.formatDateTime(item.endTime)
     });
   },
 
+  // ---- 编辑态 ----
   startEdit() {
-    this.setData({ editing: true, nameDraft: this.data.item.name, remarkDraft: this.data.item.remark || '' });
+    const item = this.data.item;
+    this.setData({
+      editing: true,
+      nameDraft: item.name,
+      remarkDraft: item.remark || '',
+      priceDraft: item.price > 0 ? String(item.price) : '',
+      qtyDraft: store.qtyOf(item),
+      categoryDraft: item.category || store.FALLBACK_CATEGORY,
+      categories: store.getCategories(),
+      extendDays: 0,
+      extendPreview: ''
+    });
   },
   cancelEdit() { this.setData({ editing: false }); },
+
+  // 冷静期按天顺延：在「原截止时间」和「现在」里取较晚的那个作为基准
+  pickExtend(e) {
+    const days = Number(e.currentTarget.dataset.d) || 0;
+    if (!days) {
+      this.setData({ extendDays: 0, extendPreview: '' });
+      return;
+    }
+    const item = this.data.item;
+    const base = Math.max(item.endTime || 0, Date.now());
+    const next = base + days * DAY_MS;
+    this.setData({ extendDays: days, extendPreview: store.formatDateTime(next) });
+  },
   onNameInput(e) { this.setData({ nameDraft: e.detail.value }); },
   onRemarkInput(e) { this.setData({ remarkDraft: e.detail.value }); },
+  onPriceInput(e) {
+    const clean = store.cleanPriceInput(e.detail.value);
+    this.setData({ priceDraft: clean });
+    return clean;
+  },
+  pickCategory(e) { this.setData({ categoryDraft: e.currentTarget.dataset.name }); },
+  minusQty() {
+    const q = store.sanitizeQty(this.data.qtyDraft - 1);
+    this.setData({ qtyDraft: q });
+  },
+  plusQty() {
+    if (this.data.qtyDraft >= store.MAX_QTY) {
+      wx.showToast({ title: '一次最多 ' + store.MAX_QTY + ' 件', icon: 'none' });
+      return;
+    }
+    this.setData({ qtyDraft: store.sanitizeQty(this.data.qtyDraft + 1) });
+  },
+
   saveEdit() {
     const name = (this.data.nameDraft || '').trim();
     if (!name) { wx.showToast({ title: '名字不能为空', icon: 'none' }); return; }
-    store.update(this.data.id, { name, remark: (this.data.remarkDraft || '').trim().slice(0, 100) });
-    this.setData({ editing: false });
+    const patch = {
+      name,
+      remark: (this.data.remarkDraft || '').trim().slice(0, 100),
+      price: store.sanitizePrice(this.data.priceDraft),
+      qty: store.sanitizeQty(this.data.qtyDraft),
+      category: this.data.categoryDraft || store.FALLBACK_CATEGORY
+    };
+    if (this.data.extendDays > 0) {
+      const base = Math.max(this.data.item.endTime || 0, Date.now());
+      patch.endTime = base + this.data.extendDays * DAY_MS;
+    }
+    const ok = store.update(this.data.id, patch);
+    if (!ok) { wx.showToast({ title: '保存失败，本地空间可能不足', icon: 'none' }); return; }
+    this.setData({ editing: false, extendDays: 0, extendPreview: '' });
     this.load();
     wx.showToast({ title: '已保存', icon: 'none' });
   },
 
-  extend() {
-    wx.showModal({
-      title: '延长冷静期 3 天？', content: '在原截止时间上再加 3 天', confirmText: '延长',
-      success: (res) => {
-        if (res.confirm) {
-          store.update(this.data.id, { endTime: this.data.item.endTime + 3 * 86400000 });
-          this.load();
-        }
-      }
-    });
+  decideNo() {
+    const item = this.data.item;
+    const savedMoney = store.validPrice(item.price) * store.qtyOf(item);
+    store.update(item.id, { state: 'skipped', decidedAt: Date.now() });
+    const title = savedMoney > 0
+      ? '又忍住一件 · 省下 ¥' + store.formatMoney(savedMoney)
+      : '又忍住一件，好样的';
+    wx.showToast({ title, icon: 'none', duration: 1200 });
+    setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 900);
   },
 
-  decideNo() {
-    store.update(this.data.id, { state: 'skipped' });
-    wx.showToast({ title: '又忍住一件，好样的', icon: 'none' });
-    setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 800);
-  },
   decideBuy() {
-    wx.navigateTo({ url: '/pages/decide/decide?id=' + this.data.id + '&action=buy' });
+    const qty = store.qtyOf(this.data.item);
+    const total = store.validPrice(this.data.item.price) * qty;
+    const go = () => wx.navigateTo({ url: '/pages/decide/decide?id=' + this.data.id + '&action=buy' });
+    // 大额记录误点一次就记成「买了」，加一道确认
+    if (total >= 500) {
+      wx.showModal({
+        title: '这条 ¥' + store.formatMoney(total) + '，确定买了？',
+        content: '确认后会把你记成「我买了」，还可以点进去做 4 个反思问题',
+        confirmText: '确认买了',
+        success: (res) => { if (res.confirm) go(); }
+      });
+      return;
+    }
+    go();
   },
 
   restoreToCooling() {
     wx.showModal({
       title: '恢复到冷静中？',
-      content: '截止时间会从现在重新算 3 天',
+      content: '截止时间会从现在重新算 ' + ADD_DAYS + ' 天',
       success: (res) => {
         if (res.confirm) {
           const now = Date.now();
-          store.update(this.data.id, { state: 'cooling', endTime: now + 3 * 86400000 });
+          store.update(this.data.id, { state: 'cooling', endTime: now + ADD_DAYS * DAY_MS, decidedAt: 0 });
           this.load();
         }
       }
     });
-  },
-
-  onTrash() {
-    wx.showModal({
-      title: '移到回收站？', content: '之后还能在回收站里还原', confirmText: '移过去',
-      success: (res) => {
-        if (res.confirm) {
-          store.trash(this.data.id);
-          wx.showToast({ title: '已移到回收站', icon: 'none' });
-          setTimeout(() => wx.navigateBack(), 600);
-        }
-      }
-    });
-  },
-
-  back() { wx.navigateBack(); }
+  }
 });

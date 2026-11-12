@@ -1,17 +1,21 @@
 /* pages/trash/trash.wxss */
 
 .tip {
-  font-size: 24rpx;
-  color: var(--ink-2);
-  padding: 0 8rpx 20rpx;
+  font-size: 24rpx; color: var(--ink-2);
+  padding: 0 8rpx 24rpx
 }
 
-.item { margin-bottom: 20rpx; }
+.item { margin-bottom: 24rpx }
 .item-name {
-  font-size: 30rpx; font-weight: 600; color: var(--ink);
+  font-size: 28rpx; font-weight: 600; color: var(--ink);
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.item-price {
+  margin-top: 8rpx; font-size: 24rpx; font-weight: 600; color: var(--accent-deep);
+  white-space: nowrap;
 }
 .item-remark {
-  margin-top: 8rpx; font-size: 26rpx; color: var(--ink-2);
+  margin-top: 8rpx; font-size: 24rpx; color: var(--ink-2);
   overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 .item-time {
@@ -21,23 +25,31 @@
 .actions {
   margin-top: 24rpx;
   display: flex;
-  gap: 20rpx;
+  gap: 24rpx;
 }
-.actions .btn { flex: 1; padding: 16rpx 0; font-size: 26rpx; }
+.actions .btn { flex: 1; padding: 16rpx 0; font-size: 24rpx; }
 .btn-restore {
   background: var(--accent-soft);
   color: var(--accent-deep);
 }
 .btn-destroy {
-  background: transparent;
+  background: var(--s-danger-soft);
   color: var(--danger);
-  border: 1rpx solid #E3CFC7;
+  font-weight: 600;
+  border: 1rpx solid var(--s-danger-line);
 }
+
+.clear-all {
+  margin: 32rpx 0 24rpx; text-align: center;
+  font-size: 24rpx; font-weight: 600; color: var(--danger);
+  padding: 24rpx 0
+}
+.clear-all:active { opacity: 0.7; }
 
 .empty {
   margin-top: 160rpx;
   display: flex; flex-direction: column; align-items: center;
 }
 .empty-logo { width: 160rpx; height: 180rpx; opacity: 0.5; }
-.empty-title { margin-top: 24rpx; font-size: 30rpx; font-weight: 600; color: var(--ink); }
+.empty-title { margin-top: 24rpx; font-size: 28rpx; font-weight: 600; color: var(--ink); }
 .empty-sub { margin-top: 8rpx; font-size: 24rpx; color: var(--ink-2); }
