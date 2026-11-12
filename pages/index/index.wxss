@@ -19,7 +19,7 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 16rpx 24rpx;
   margin-bottom: 24rpx;
-  background: rgba(255,255,255,0.55);
+  background: var(--n-25);
   border-radius: 16rpx; }
 .result-text { font-size: 24rpx; color: var(--ink-2); }
 .result-strong { color: var(--accent-deep); font-weight: 600; }
@@ -52,7 +52,7 @@
 /* 三段切换 */
 .seg {
   display: flex;
-  background: rgba(255,255,255,0.6);
+  background: var(--n-25);
   border-radius: 999rpx; padding: 8rpx;
   margin-bottom: 24rpx
 }
@@ -187,3 +187,15 @@
   box-shadow: var(--sh-2);
 }
 .fab:active { background: var(--accent-deep); }
+
+
+/* ============ 深色模式补充 ============ */
+/* 浅色下选中项比轨道更白，深色下反过来：选中项要比轨道更亮才有"被选中"的感觉 */
+@media (prefers-color-scheme: dark) {
+  .seg-active {
+    background: var(--n-100);
+    color: var(--n-900);
+    box-shadow: none;
+  }
+  .seg-active .seg-count { color: var(--n-400); }
+}

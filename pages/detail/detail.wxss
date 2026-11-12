@@ -51,8 +51,8 @@
 
 .edit-cats { display: flex; flex-wrap: wrap; }
 .edit-cat {
-  margin: 0 12rpx 12rpx 0; padding: 8rpx 24rpx;
-  font-size: 24rpx; color: var(--ink-2); background: var(--n-25);
+  margin: 0 12rpx 12rpx 0; padding: 12rpx 28rpx;
+  font-size: 28rpx; color: var(--ink-2); background: var(--n-25);
   border-radius: 999rpx; }
 .edit-cat-active { background: var(--accent-soft); color: var(--accent-deep); font-weight: 600; }
 
@@ -85,3 +85,18 @@
 .actions .btn { flex: 1; }
 
 /* 返回 */
+
+
+/* ============ 深色模式补充 ============ */
+/* 选中分类、编辑胶囊同样要比卡片底更亮一档，否则看不出来 */
+@media (prefers-color-scheme: dark) {
+  .edit-cat-active {
+    background: var(--n-100);
+    color: var(--n-900);
+  }
+  .edit-chip {
+    background: var(--a-100);
+    border-color: var(--a-600);
+  }
+  .edit-chip:active { background: var(--n-100); }
+}

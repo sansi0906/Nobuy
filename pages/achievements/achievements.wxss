@@ -97,14 +97,14 @@
   position: relative;
   font-weight: 600;
   line-height: 1;
-  color: var(--n-600);
+  color: var(--seal-ink-off);
   z-index: 2;
   font-variant-numeric: tabular-nums;
 }
 .seal-num-2 { font-size: 32rpx; letter-spacing: 0.5rpx; }
 .seal-num-3 { font-size: 24rpx; letter-spacing: 0rpx; }
 .seal-num-4 { font-size: 22rpx; letter-spacing: 0rpx; }
-.seal-on .seal-num { color: var(--s-gold-deep); }
+.seal-on .seal-num { color: var(--seal-ink-on); }
 
 .seal-unit {
   margin-top: 12rpx;
@@ -116,4 +116,12 @@
   margin-top: 4rpx;
   font-size: 22rpx; color: var(--n-400);
   letter-spacing: 0.5rpx;
+}
+
+
+/* ============ 深色模式补充 ============ */
+/* 印章数字用 --seal-ink-*（不随主题变，见 app.wxss）；
+   图上这行小字在深色卡片上太暗，提亮一档 */
+@media (prefers-color-scheme: dark) {
+  .seal-state { color: var(--n-600); }
 }

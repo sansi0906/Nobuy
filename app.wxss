@@ -34,6 +34,11 @@ page {
   --s-gold-bg: #FBF3E2;
   --s-gold-line: #E8D3A6;
 
+  /* 印章上的数字：印章是静态 PNG，不跟主题换色，
+     所以这两支在深色下也保持不变，否则浅金/浅灰印坯上会糊成一片 */
+  --seal-ink-off: #6B767E;
+  --seal-ink-on: #6A4A12;
+
   /* 字阶：只有 6 档 */
   --t-display: 56rpx;
   --t-h1: 40rpx;
@@ -221,7 +226,6 @@ page {
 
     --s-gold: #D4A748;
     --s-gold-light: #E8C87A;
-    --s-gold-deep: #F2DFB0;
     --s-gold-bg: #2E2718;
     --s-gold-line: #4B3F24;
 

@@ -76,3 +76,13 @@
   gap: 24rpx;
 }
 .actions .btn { flex: 1; }
+
+/* ============ 深色模式补充 ============ */
+/* 深色下 --a-50 和未选中的 --n-25 几乎同色，选中态要用更亮一档的填充 */
+@media (prefers-color-scheme: dark) {
+  .dur-active {
+    background: var(--n-100);
+    color: var(--n-900);
+    border-color: var(--a-600);
+  }
+}
