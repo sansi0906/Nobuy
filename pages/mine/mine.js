@@ -72,50 +72,5 @@ Page({
   noop() {},
   previewQr() {
     wx.previewImage({ urls: ['/images/miniprogram_qr.png'] });
-  },
-
-  // ---- 临时调试入口：长按页脚版本号，写入/清除演示数据 ----
-  // 上线前删掉这个方法、footer 的 bindlongpress 和 tools/demo_wishlist.json
-  seedDemo() {
-    const list = wx.getStorageSync('wishList') || [];
-    const hasDemo = list.some((it) => String(it.id || '').indexOf('demo_') === 0);
-    wx.showActionSheet({
-      itemList: [hasDemo ? '清除演示数据' : '写入演示数据（1 条已过期）'],
-      success: (res) => {
-        if (res.tapIndex !== 0) return;
-        this.applyDemo(!hasDemo);
-      }
-    });
-  },
-
-  applyDemo(write) {
-    const now = Date.now();
-    const day = 86400000;
-    let list = wx.getStorageSync('wishList') || [];
-
-    if (!write) {
-      list = list.filter((it) => String(it.id || '').indexOf('demo_') !== 0);
-      wx.setStorageSync('wishList', list);
-      this.onShow();
-      wx.showToast({ title: '演示数据已清除', icon: 'none' });
-      return;
-    }
-
-    const demo = [
-      {
-        id: 'demo_expired_1', name: '双飞燕键鼠套装', price: 148.88, qty: 1,
-        remark: '京东，工作需要', category: '数码', state: 'cooling',
-        createTime: now - 3 * day, endTime: now - 3 * 3600000
-      },
-      {
-        id: 'demo_counting_2', name: '降噪耳机', price: 699, qty: 1,
-        remark: '通勤路上太吵', category: '数码', state: 'cooling',
-        createTime: now - day, endTime: now + 2 * day + 5 * 3600000
-      }
-    ];
-    list = list.concat(demo);
-    wx.setStorageSync('wishList', list);
-    this.onShow();
-    wx.showToast({ title: '已写入 2 条演示数据', icon: 'none' });
   }
 });

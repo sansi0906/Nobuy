@@ -72,7 +72,7 @@
     </view>
   </view>
 
-  <view class="footer" bindlongpress="seedDemo">v1.0 · 本地存储版</view>
+  <view class="footer">v1.1.0 · 本地存储版</view>
 
   <!-- 小程序码弹层 -->
   <view class="qr-mask" wx:if="{{qrVisible}}" bindtap="hideQr">

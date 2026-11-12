@@ -2,7 +2,14 @@
   "compileType": "miniprogram",
   "libVersion": "trial",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "node_modules" },
+      { "type": "folder", "value": "tools" },
+      { "type": "file", "value": "package.json" },
+      { "type": "file", "value": "package-lock.json" },
+      { "type": "file", "value": "CHANGELOG.md" },
+      { "type": "file", "value": "README.md" }
+    ],
     "include": []
   },
   "setting": {
