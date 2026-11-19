@@ -16,7 +16,7 @@ Page({
   restore(e) {
     const id = e.currentTarget.dataset.id;
     wx.showModal({
-      title: '还原这条想法？', content: '会回到冷静中，重新开始算 3 天',
+      title: '还原这条想法？', content: '会回到冷静中，重新算 3 天冷静期',
       success: (res) => {
         if (res.confirm) {
           const now = Date.now();

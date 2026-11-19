@@ -186,6 +186,11 @@ async function main() {
   ]);
   await mp.callWxMethod('setStorageSync', 'onboardDone', 1);
   await mp.callWxMethod('setStorageSync', 'userProfile', {});
+  // 种子数据写完后必须整页重载：mp.launch 时首页已经用「上一次跑完留下的数据」
+  // 渲染过一次，此时 currentPage 仍是 index，openPage 不会再导航 → 断言读到旧缓存
+  // （曾表现为「有 2 件冷静期过了」，而种子只有 1 件过期）
+  await mp.reLaunch('/pages/index/index');
+  await sleep(1200);
   await clearLogs(mp);
 
   // ---------------- 首页 ----------------
@@ -429,7 +434,7 @@ async function main() {
     await sleep(300);
     await (await detail.$('.btn-primary')).tap();
     await sleep(700);
-    record('详情-空名保存被拦', /名字不能为空/.test((await lastToast(mp)) || ''), await lastToast(mp));
+    record('详情-空名保存被拦', /先写个名字吧/.test((await lastToast(mp)) || ''), await lastToast(mp));
   } catch (e) {
     record('详情-空名保存被拦', false, e.message);
   }

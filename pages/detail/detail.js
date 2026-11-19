@@ -97,7 +97,7 @@ Page({
 
   saveEdit() {
     const name = (this.data.nameDraft || '').trim();
-    if (!name) { wx.showToast({ title: '名字不能为空', icon: 'none' }); return; }
+    if (!name) { wx.showToast({ title: '先写个名字吧', icon: 'none' }); return; }
     const patch = {
       name,
       remark: (this.data.remarkDraft || '').trim().slice(0, 100),
@@ -135,7 +135,7 @@ Page({
     if (total >= 500) {
       wx.showModal({
         title: '这条 ¥' + store.formatMoney(total) + '，确定买了？',
-        content: '确认后会把你记成「我买了」，还可以点进去做 4 个反思问题',
+        content: '确认后会记成「我买了」，之后还能补做 4 个反思问题',
         confirmText: '确认买了',
         success: (res) => { if (res.confirm) go(); }
       });

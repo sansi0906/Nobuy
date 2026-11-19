@@ -63,7 +63,7 @@
     </view>
   </view>
 
-  <view class="card-tip">备份包含清单、回收站、分类和个人资料，换手机用它带走；导入会覆盖当前数据。</view>
+  <view class="card-tip">备份里包括清单、回收站、分类、昵称和头像，换手机也能带走；导入会覆盖当前数据。</view>
 
   <!-- 其他 -->
   <view class="card">

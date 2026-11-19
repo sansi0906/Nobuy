@@ -87,7 +87,7 @@ Page({
       gender: this.data.gender
     });
     if (!saved) {
-      wx.showToast({ title: '保存失败，手机本地空间可能不足', icon: 'none' });
+      wx.showToast({ title: '保存失败，本地空间可能不足', icon: 'none' });
       return;
     }
     wx.showToast({ title: '已保存', icon: 'success' });

@@ -53,7 +53,7 @@ Page({
       return;
     }
     if (typeof wx.shareFileMessage !== 'function') {
-      wx.showToast({ title: '当前微信版本不支持转发文件', icon: 'none' });
+      wx.showToast({ title: '这个微信版本还不能转发文件，升级后可用', icon: 'none' });
       return;
     }
     wx.shareFileMessage({
@@ -89,7 +89,7 @@ Page({
           text = wx.getFileSystemManager().readFileSync(file.path, 'utf8');
         } catch (e) {
           console.error('[readFileSync]', e);
-          wx.showToast({ title: '读取文件失败', icon: 'none' });
+          wx.showToast({ title: '这份文件读不出来，换一份再试', icon: 'none' });
           return;
         }
         this.confirmImport(text);
@@ -164,8 +164,8 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.showModal({
-            title: '再确认一次', content: '真的要清空吗？',
-            confirmText: '清空', confirmColor: '#C4382F',
+            title: '真的清空？', content: '清空后没有任何办法找回，确定继续吗？',
+            confirmText: '清空', cancelText: '不清了', confirmColor: '#C4382F',
             success: (r2) => {
               if (r2.confirm) {
                 const ok = store.clearAll();

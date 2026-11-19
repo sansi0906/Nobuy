@@ -53,7 +53,7 @@ Page({
   // 新建分类
   newCategory() {
     if (this.data.categories.length >= store.MAX_CATEGORIES) {
-      wx.showToast({ title: '最多 ' + store.MAX_CATEGORIES + ' 个分类', icon: 'none' });
+      wx.showToast({ title: '分类最多 ' + store.MAX_CATEGORIES + ' 个', icon: 'none' });
       return;
     }
     wx.showModal({
