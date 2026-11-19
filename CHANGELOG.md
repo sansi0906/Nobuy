@@ -307,3 +307,12 @@
 - 解析后写 `wx.setStorageSync`，即本机 Storage。
 
 另：`v1.2.1` 已不再调用 `setClipboardData` / `getClipboardData`，后台那条「剪切板」声明实际上已是空声明，后续可撤掉，避免"声明与实际不符"。
+
+### 5. 「清空所有数据」改为真全清 + 清空后刷新（2026-11-19 补）
+
+用户实测发现两个问题：清空后「最长忍住」仍显示旧值；且疑问"备份全不全、能不能都清"。
+
+- **清空后不刷新的原因**：导入路径（`confirmImport`）调了 `this.onShow()` 全量重算，而清空路径只 `setData({stats, savedText})`，`streak` / `achievements` / `unlockedCount` 三个字段挂着旧值；底层数据其实已空，切 tab 触发 `onShow` 才变 0。已改为清空成功后同样调 `this.onShow()`。
+- **"最长忍住"数据属性**：`getStreak()` 不读独立字段，每次遍历 `wishList` 里 `state === 'skipped'` 的 `decidedAt` 按天聚合算连续段，所以清空即归 0、导入即还原，备份文件里不需要也不存在 `streak` 字段。勋章「坚持」组（7/14/21/28/60/90 天）用的是同一个 `longest`。
+- **备份范围核对**：全项目持久 key 只有 `wishList` / `categories` / `userProfile` / `onboardDone`，外加瞬时快照 `lastSkipUndo`；`exportBackup` 覆盖前四个，`lastSkipUndo` 属撤销态、导入时由 `importBackup` 清除，不需要入备份 —— 即备份是全的。
+- **`clearAll()` 改为全清**：原来只写空 `wishList`，分类与个人资料留在库里，与"清空所有数据"的语义不符。现改为清 `wishList` 并 `removeStorageSync` 掉 `categories` / `userProfile` / `lastSkipUndo` / `onboardDone`；分类回落 `DEFAULT`、资料回落空昵称头像、引导标记清掉后下次进首页重走引导，等价新装。确认框文案同步改为"包括冷静中、没买、已买、回收站，以及分类、昵称头像，全部删光，不可恢复"。

@@ -153,7 +153,7 @@ Page({
   clearAll() {
     wx.showModal({
       title: '清空所有数据？',
-      content: '包括冷静中、没买、已买、回收站，全部删光，不可恢复',
+      content: '包括冷静中、没买、已买、回收站，以及分类、昵称头像，全部删光，不可恢复',
       confirmText: '全部清空',
       confirmColor: '#C4382F',
       success: (res) => {

@@ -31,7 +31,16 @@ function trash(id) { update(id, { state: 'trashed', trashedAt: Date.now() }); }
 function destroy(id) {
   return write(KEY, getAll().filter(it => it.id !== id));
 }
-function clearAll() { return write(KEY, []); }
+// 清空所有数据：清单、分类、个人资料、引导标记，外加撤销快照。
+// 分类与资料被清掉后各自回落到默认值（DEFAULT 分类 / 空昵称头像），
+// 引导标记清掉后下次进首页会重新走一遍引导，等价于新装状态。
+function clearAll() {
+  const ok = write(KEY, []);
+  [CATEGORY_KEY, PROFILE_KEY, UNDO_KEY, ONBOARD_KEY].forEach(k => {
+    try { wx.removeStorageSync(k); } catch (e) { /* 忽略 */ }
+  });
+  return ok;
+}
 
 function getByState(state) {
   return getAll().filter(it => (it.state || 'cooling') === state);
