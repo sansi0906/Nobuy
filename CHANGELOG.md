@@ -265,3 +265,30 @@
 2. **微信认证是否办理**（后台通知要求 2026-12-12 前完成，逾期收回"被搜索"）：不影响已添加用户、体验版、小程序码/分享进入；自用小范围发码可暂不办，代价仅名字搜不到。个人这一档的入口与费用以后台「微信认证 → 详情」页为准。
 3. **v1.2.0 真机手测**：`E:\itsme\测试汇总\测试用例\手工测试清单-2026-11-12.md` N 节 11 步；文件转发、选文件、剪贴板三条自动化覆盖不到。前提是后台「剪切板」隐私声明已审核通过。
 4. **可选优化（第七节遗留第 6 条）**：强调色与"冷静中"状态同色导致识别模糊，按钮可降到 `#475A69`。
+
+---
+
+## 十三、v1.2.1 导入导出收口（2026-11-19）
+
+用户反馈两件事：① 导入导出不够清晰，"导出只留转发、导入只留聊天记录选择"；② 导入的"从聊天记录选择文件"点了没反应、也没有报错。
+
+### 1. 入口简化：去掉二选一抽屉，改为点击即触发
+
+- 删除页内抽屉 `.bk-mask` / `.bk-panel` 及其样式与 `sheetVisible` / `sheetMode` / `sheetTitle` / `sheetSub` / `sheetOptions` 数据与 `openSheet` / `hideSheet` / `onSheetTap` 方法。
+- 「导出备份」行 `bindtap` 直接调 `shareBackupFile()`；「导入备份」行直接调 `importFromFile()`。两者都在用户点击的同一调用栈里发起，仍满足 `shareFileMessage` / `chooseMessageFile` 的 tap 要求。
+- 移除剪贴板两条路径：`copyBackupCode()`、`importFromClipboard()` 删除，`shareFileMessage` 不支持时的回退也去掉，改成明确的失败提示。前端不再调用 `setClipboardData` / `getClipboardData`。
+- 备份码格式 `NOBUY1:` 与 `parseBackup` 仍保留在数据层（备份码只是不再出现在 UI 上），`tools/test_storage.js` 的 85 项用例不受影响。
+
+### 2. "从聊天记录选择文件"没反应的根因
+
+不是选文件本身坏了，是**两个问题叠在一起**：
+
+- **后台隐私声明缺 scope**：`wx.chooseMessageFile` 同属隐私接口，需要在《小程序用户隐私保护指引》里声明「选中的文件」（聊天中选择的文件）并审核通过；只声明过「剪切板」不够。未声明时调用返回 `errno 112: api scope is not declared in the privacy agreement`，社区里同类反馈还有一条混淆日志 `[wxapplib]] backgroundfetch privacy fail {"errno":101,...}`，看起来与选文件无关。<RichMediaReference>["https://developers.weixin.qq.com/community/develop/doc/00008409c101208119e24723262800"]</RichMediaReference>
+- **原代码没写 `fail` 回调**：`importFromFile` 只有 `success`，失败时既不弹窗也不打日志，所以真机上表现就是"点了没反应、没有 error"。已补 `fail` 回调：`console.error('[chooseMessageFile]', err)` + 弹窗显示原始 `errMsg`；识别到 scope 未声明（`errno === 112` 或文案含 `api scope is not declared`）时，弹窗直接告知"还差一步配置"及后台配置位置。
+- 顺带：去掉了 `extension: ['json','txt']` 过滤。该参数只在 `type: 'file'` 下生效且各端行为不一致，容易让列表看起来是空的；改为不限制扩展名，靠 `parseBackup` 校验内容。
+- `shareFileMessage` 的 `fail` 同样补了 `errMsg` 展示，便于区分"没登录/取消"与真实失败。
+
+### 3. 待用户确认的两件事
+
+1. mp 后台补声明「选中的文件」并通过审核，否则导入这条仍会弹"还差一步配置"。
+2. 页脚版本已改 `v1.2.1`，是否上传体验版 `1.2.1` 等用户发话。

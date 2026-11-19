@@ -10,12 +10,7 @@ Page({
     achievements: [],
     unlockedCount: 0,
     totalAchievements: 0,
-    qrVisible: false,
-    sheetVisible: false,
-    sheetMode: 'export',
-    sheetTitle: '',
-    sheetSub: '',
-    sheetOptions: []
+    qrVisible: false
   },
 
   onShow() {
@@ -40,47 +35,10 @@ Page({
   },
 
   // ---- 备份与恢复 ----
-  // 入口用页内自绘选择层，而不是 wx.showActionSheet：
-  // shareFileMessage / chooseMessageFile 要求「用户点击直接触发」，
-  // 经过 actionSheet 回调这一层有被判定为非 tap 的风险，这里每个选项都是真 bindtap。
-  exportBackup() { this.openSheet('export'); },
-  importBackup() { this.openSheet('import'); },
-
-  openSheet(mode) {
-    const isExport = mode === 'export';
-    this.setData({
-      sheetVisible: true,
-      sheetMode: mode,
-      sheetTitle: isExport ? '导出备份' : '导入备份',
-      sheetSub: isExport
-        ? '文件更正式，适合换手机；备份码更保险，转发失败时用它'
-        : '两份内容一样，文件是从聊天记录里挑，备份码是从剪贴板里读',
-      sheetOptions: isExport
-        ? [
-            { key: 'file', label: '转发备份文件', desc: '生成一份 JSON，发到微信聊天里存着' },
-            { key: 'code', label: '复制备份码', desc: '一段文本，粘到备忘录或文件传输助手' }
-          ]
-        : [
-            { key: 'file', label: '从聊天记录选择文件', desc: '选之前转发出去的那份 JSON' },
-            { key: 'code', label: '读取剪贴板里的备份码', desc: '先复制备份码，再点这里' }
-          ]
-    });
-  },
-
-  hideSheet() { this.setData({ sheetVisible: false }); },
-
-  onSheetTap(e) {
-    const key = e.currentTarget.dataset.key;
-    const mode = this.data.sheetMode;
-    this.setData({ sheetVisible: false });
-    if (mode === 'export') {
-      if (key === 'file') this.shareBackupFile();
-      else this.copyBackupCode();
-    } else {
-      if (key === 'file') this.importFromFile();
-      else this.importFromClipboard();
-    }
-  },
+  // 直接由这一行的点击触发：shareFileMessage / chooseMessageFile 都要求
+  // 「由用户点击直接触发」，中间不能再隔一层回调。
+  exportBackup() { this.shareBackupFile(); },
+  importBackup() { this.importFromFile(); },
 
   shareBackupFile() {
     // 文件里放纯 JSON（去掉 NOBUY1: 前缀），用别的工具打开也是一份合法 json
@@ -91,37 +49,22 @@ Page({
     try {
       wx.getFileSystemManager().writeFileSync(filePath, text, 'utf8');
     } catch (e) {
-      wx.showToast({ title: '生成文件失败，改用备份码', icon: 'none' });
-      this.copyBackupCode();
+      wx.showToast({ title: '生成文件失败，请重试', icon: 'none' });
       return;
     }
     if (typeof wx.shareFileMessage !== 'function') {
-      wx.showToast({ title: '当前微信版本不支持转发，改用备份码', icon: 'none' });
-      this.copyBackupCode();
+      wx.showToast({ title: '当前微信版本不支持转发文件', icon: 'none' });
       return;
     }
     wx.shareFileMessage({
       filePath,
       fileName,
       success: () => wx.showToast({ title: '已发送', icon: 'none' }),
-      fail: () => {
+      fail: (err) => {
+        console.error('[shareFileMessage]', err);
         wx.showModal({
-          title: '文件转发没有成功',
-          content: '可以改用备份码：复制后存到备忘录或发给自己，恢复时再粘回来。',
-          confirmText: '用备份码',
-          success: (r) => { if (r.confirm) this.copyBackupCode(); }
-        });
-      }
-    });
-  },
-
-  copyBackupCode() {
-    wx.setClipboardData({
-      data: store.exportBackup(),
-      success: () => {
-        wx.showModal({
-          title: '备份码已复制',
-          content: '粘到备忘录、微信文件传输助手或邮箱里存着。恢复时在「导入备份」里读取剪贴板即可。',
+          title: '转发没有成功',
+          content: (err && err.errMsg ? err.errMsg + '\n\n' : '') + '可以重试一次，或换网络后再试。',
           showCancel: false,
           confirmText: '知道了'
         });
@@ -129,13 +72,11 @@ Page({
     });
   },
 
-  // 导入：从聊天记录选文件，或直接读剪贴板里的备份码
-
+  // 导入：从聊天记录里选之前转发出去的那份 JSON
   importFromFile() {
     wx.chooseMessageFile({
       count: 1,
       type: 'file',
-      extension: ['json', 'txt'],
       success: (res) => {
         const file = res.tempFiles && res.tempFiles[0];
         if (!file) return;
@@ -143,18 +84,26 @@ Page({
         try {
           text = wx.getFileSystemManager().readFileSync(file.path, 'utf8');
         } catch (e) {
+          console.error('[readFileSync]', e);
           wx.showToast({ title: '读取文件失败', icon: 'none' });
           return;
         }
         this.confirmImport(text);
+      },
+      fail: (err) => {
+        // 静默失败会让用户以为点了没反应，这里把原始信息露出来
+        console.error('[chooseMessageFile]', err);
+        const raw = (err && err.errMsg) || '未知错误';
+        const declared = raw.indexOf('api scope is not declared') >= 0 || err.errno === 112;
+        wx.showModal({
+          title: declared ? '还差一步配置' : '没能打开聊天记录里的文件',
+          content: declared
+            ? '微信返回：' + raw + '\n\n需要在 mp 后台「设置 → 服务内容声明 → 用户隐私保护指引」里勾选并声明「选中的文件」，审核通过后再试。'
+            : raw,
+          showCancel: false,
+          confirmText: '知道了'
+        });
       }
-    });
-  },
-
-  importFromClipboard() {
-    wx.getClipboardData({
-      success: (res) => this.confirmImport(res.data),
-      fail: () => wx.showToast({ title: '读不到剪贴板，先复制备份码', icon: 'none' })
     });
   },
 
@@ -163,7 +112,7 @@ Page({
     const parsed = store.parseBackup(text);
     if (!parsed.ok) {
       const msg = parsed.reason === 'empty'
-        ? '剪贴板里没有内容。先用「导出备份」复制一份备份码，再回来恢复。'
+        ? '这个文件是空的，换一份之前导出的备份再试。'
         : parsed.reason === 'items'
           ? '这份数据里有记录缺字段，可能来自更早的版本，无法恢复。'
           : '这不是有效的备份内容，或文件已在传输中被改坏。';
