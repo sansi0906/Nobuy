@@ -36,9 +36,14 @@ function destroy(id) {
 // 引导标记清掉后下次进首页会重新走一遍引导，等价于新装状态。
 function clearAll() {
   const ok = write(KEY, []);
+  const oldAvatar = (getProfile() || {}).avatar;
   [CATEGORY_KEY, PROFILE_KEY, UNDO_KEY, ONBOARD_KEY].forEach(k => {
     try { wx.removeStorageSync(k); } catch (e) { /* 忽略 */ }
   });
+  // 资料记录被清掉了，头像图片文件也一并删掉，否则会留在本地目录里变垃圾
+  if (oldAvatar) {
+    try { wx.getFileSystemManager().unlinkSync(oldAvatar); } catch (e) { /* 忽略 */ }
+  }
   return ok;
 }
 
@@ -387,20 +392,55 @@ function clearSkipUndo() {
   try { wx.removeStorageSync(UNDO_KEY); } catch (e) { /* 忽略 */ }
 }
 
-// ---- 备份：纯本地文本（NOBUY1: 前缀），可转发成 .json 文件，也可复制粘贴 ----
+// ---- 备份：纯本地文本（NOBUY1: 前缀），可转发成 .json 文件 ----
 const BACKUP_PREFIX = 'NOBUY1:';
 const ONBOARD_KEY = 'onboardDone';
 const VALID_STATES = ['cooling', 'skipped', 'bought', 'trashed'];
 
+// 头像本地存的是文件路径（wxfile://usr/...），换设备就失效了，
+// 所以要连同图片本身 base64 打进备份；超过 1MB 的不塞（微信头像通常几十 KB）
+const AVATAR_MAX_BYTES = 1024 * 1024;
+
+function avatarToPayload(path) {
+  if (!path) return null;
+  try {
+    const fs = wx.getFileSystemManager();
+    const stat = fs.statSync(path);
+    if (!stat || stat.size > AVATAR_MAX_BYTES) return null;
+    const m = String(path).match(/\.(png|jpe?g|webp)$/i);
+    const ext = m ? m[1].toLowerCase().replace('jpeg', 'jpg') : 'png';
+    const data = fs.readFileSync(path, 'base64');
+    return data ? { ext, data } : null;
+  } catch (e) {
+    return null;   // 文件已不在了，导出时就不带头像，不影响其他数据
+  }
+}
+
+// 把备份里的头像写回本地文件，返回新的本地路径；失败返回 ''
+function payloadToAvatar(avatar) {
+  if (!avatar || typeof avatar !== 'object' || !avatar.data) return '';
+  try {
+    const fs = wx.getFileSystemManager();
+    const name = `avatar-${Date.now()}.${avatar.ext || 'png'}`;
+    const filePath = `${wx.env.USER_DATA_PATH}/${name}`;
+    fs.writeFileSync(filePath, avatar.data, 'base64');
+    return filePath;
+  } catch (e) {
+    return '';
+  }
+}
+
 function exportBackup() {
+  const profile = getProfile();
   const payload = {
     v: 1,
     at: Date.now(),
     app: 'nobuy',
     wishList: getAll(),
     categories: getCategories(),
-    profile: getProfile(),
-    onboardDone: !!wx.getStorageSync(ONBOARD_KEY)
+    profile,
+    onboardDone: !!wx.getStorageSync(ONBOARD_KEY),
+    avatar: avatarToPayload(profile.avatar)   // { ext, data(base64) } 或 null
   };
   return BACKUP_PREFIX + JSON.stringify(payload);
 }
@@ -431,7 +471,16 @@ function parseBackup(text) {
     trashed: list.filter(it => it.state === 'trashed').length,
     decided: list.filter(it => it.state === 'skipped' || it.state === 'bought').length,
     categoryCount: categories.length,
-    data: { wishList: list, categories, profile: data.profile, onboardDone: !!data.onboardDone }
+    data: {
+      wishList: list,
+      categories,
+      profile: data.profile,
+      onboardDone: !!data.onboardDone,
+      // 头像图片本身；老备份没有这个字段时返回 null，退回按路径处理
+      avatar: (data.avatar && typeof data.avatar === 'object' && data.avatar.data)
+        ? { ext: String(data.avatar.ext || 'png'), data: String(data.avatar.data) }
+        : null
+    }
   };
 }
 
@@ -442,7 +491,19 @@ function importBackup(text) {
   if (!write(KEY, data.wishList)) return { ok: false, reason: 'quota' };
   if (data.categories && data.categories.length > 0) write(CATEGORY_KEY, data.categories);
   if (data.profile && typeof data.profile === 'object') {
-    write(PROFILE_KEY, Object.assign({}, getProfile(), data.profile));
+    const merged = Object.assign({}, getProfile(), data.profile);
+    // 头像优先用备份里的图片还原成本地文件（换设备也能带回）；
+    // 老备份没有图片数据时，退回去校验原路径在本机还在不在，不在就清空，不留破路径
+    const restored = payloadToAvatar(data.avatar);
+    let avatar = restored || merged.avatar || '';
+    if (!restored && avatar && typeof wx.getFileSystemManager === 'function') {
+      try { wx.getFileSystemManager().accessSync(avatar); } catch (e) { avatar = ''; }
+    }
+    if (restored && merged.avatar && merged.avatar !== restored) {
+      try { wx.getFileSystemManager().unlinkSync(merged.avatar); } catch (e) { /* 忽略 */ }
+    }
+    merged.avatar = avatar;
+    write(PROFILE_KEY, merged);
   }
   if (data.onboardDone) write(ONBOARD_KEY, true);
   // 旧数据被整层替换，撤销快照指向的记录已经不存在了，必须一起清掉

@@ -315,4 +315,13 @@
 - **清空后不刷新的原因**：导入路径（`confirmImport`）调了 `this.onShow()` 全量重算，而清空路径只 `setData({stats, savedText})`，`streak` / `achievements` / `unlockedCount` 三个字段挂着旧值；底层数据其实已空，切 tab 触发 `onShow` 才变 0。已改为清空成功后同样调 `this.onShow()`。
 - **"最长忍住"数据属性**：`getStreak()` 不读独立字段，每次遍历 `wishList` 里 `state === 'skipped'` 的 `decidedAt` 按天聚合算连续段，所以清空即归 0、导入即还原，备份文件里不需要也不存在 `streak` 字段。勋章「坚持」组（7/14/21/28/60/90 天）用的是同一个 `longest`。
 - **备份范围核对**：全项目持久 key 只有 `wishList` / `categories` / `userProfile` / `onboardDone`，外加瞬时快照 `lastSkipUndo`；`exportBackup` 覆盖前四个，`lastSkipUndo` 属撤销态、导入时由 `importBackup` 清除，不需要入备份 —— 即备份是全的。
-- **`clearAll()` 改为全清**：原来只写空 `wishList`，分类与个人资料留在库里，与"清空所有数据"的语义不符。现改为清 `wishList` 并 `removeStorageSync` 掉 `categories` / `userProfile` / `lastSkipUndo` / `onboardDone`；分类回落 `DEFAULT`、资料回落空昵称头像、引导标记清掉后下次进首页重走引导，等价新装。确认框文案同步改为"包括冷静中、没买、已买、回收站，以及分类、昵称头像，全部删光，不可恢复"。
+- **`clearAll()` 改为全清**：原来只写空 `wishList`，分类与个人资料留在库里，与"清空所有数据"的语义不符。现改为清 `wishList` 并 `removeStorageSync` 掉 `categories` / `userProfile` / `lastSkipUndo` / `onboardDone`；分类回落 `DEFAULT`、资料回落空昵称头像、引导标记清掉后下次进首页重走引导，等价新装。确认框文案同步改为"包括冷静中、没买、已买、回收站，以及分类、昵称头像，全部删光，不可恢复"。清空时顺带 `unlinkSync` 删掉头像图片文件，避免文件留在本地目录变垃圾。
+
+### 6. 头像随备份一起带走（2026-11-19 补，选 C+B）
+
+问题：`userProfile.avatar` 存的是 `saveFile()` 返回的本地路径（`wxfile://usr/...`），不是图片本身。同一台设备导入时文件还在、头像能显示；**换设备/重装微信后路径失效，头像变空**。
+
+- **导出**：新增 `avatarToPayload()`，用 `statSync` 拿大小（超过 1MB 不塞，微信头像通常几十 KB）、按扩展名取 `png/jpg/webp`、`readFileSync(path, 'base64')` 读成 base64，写成 `payload.avatar = { ext, data }`；文件已不存在时返回 `null`，不影响其他数据导出。
+- **导入**：新增 `payloadToAvatar()`，把 base64 `writeFileSync` 到 `wx.env.USER_DATA_PATH/avatar-<时间戳>.<ext>`，返回新路径写回 `userProfile`；成功还原后 `unlinkSync` 掉旧头像文件。
+- **兜底（B）**：备份里没有 `avatar` 图片数据的老备份，导入后校验原路径是否还在（`accessSync`），不在就把 `avatar` 清空回默认，不留指向不存在文件的破路径。`typeof wx.getFileSystemManager === 'function'` 做了保护，`tools/test_storage.js` 的 mock 环境（无 FS 能力）仍走原逻辑，"头像恢复"用例不受影响。
+- 副作用：备份 JSON 体积随头像增大（base64 约为原图 1.33 倍）；在文件传输助手里直接预览会看到一坨长字符串，属预期。
