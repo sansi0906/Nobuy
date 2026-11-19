@@ -59,12 +59,16 @@ Page({
     wx.shareFileMessage({
       filePath,
       fileName,
-      success: () => wx.showToast({ title: '已发送', icon: 'none' }),
+      // 成功不弹提示：微信在部分机型上"调起转发面板"就回调 success，
+      // 用户此时取消也会先看到"已发送"，属于谎报，直接静默
+      success: () => {},
       fail: (err) => {
         console.error('[shareFileMessage]', err);
+        const raw = (err && err.errMsg) || '';
+        if (raw.indexOf('cancel') >= 0) return;   // 用户在转发面板/选择器里取消，不打扰
         wx.showModal({
           title: '转发没有成功',
-          content: (err && err.errMsg ? err.errMsg + '\n\n' : '') + '可以重试一次，或换网络后再试。',
+          content: '备份文件已经生成，但没能打开转发面板。可以重试一次，或换网络后再试。',
           showCancel: false,
           confirmText: '知道了'
         });
@@ -91,15 +95,16 @@ Page({
         this.confirmImport(text);
       },
       fail: (err) => {
-        // 静默失败会让用户以为点了没反应，这里把原始信息露出来
+        // 静默失败会让用户以为点了没反应，这里给中文说明；原始信息只进控制台
         console.error('[chooseMessageFile]', err);
-        const raw = (err && err.errMsg) || '未知错误';
+        const raw = (err && err.errMsg) || '';
+        if (raw.indexOf('cancel') >= 0) return;   // 用户主动取消，不打扰
         const declared = raw.indexOf('api scope is not declared') >= 0 || err.errno === 112;
         wx.showModal({
           title: declared ? '还差一步配置' : '没能打开聊天记录里的文件',
           content: declared
-            ? '微信返回：' + raw + '\n\n需要在 mp 后台「设置 → 服务内容声明 → 用户隐私保护指引」里勾选并声明「选中的文件」，审核通过后再试。'
-            : raw,
+            ? '微信还没允许这个小程序读取「选中的文件」。需要在 mp 后台「设置 → 服务内容声明 → 用户隐私保护指引」里声明「选中的文件」并通过审核后再试。'
+            : '文件没有被打开，可能是选择时取消了，或这份文件已经不在聊天记录里。可以退回去重新选一次。',
           showCancel: false,
           confirmText: '知道了'
         });
