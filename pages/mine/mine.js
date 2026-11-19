@@ -168,8 +168,8 @@ Page({
                   wx.showToast({ title: '清空失败，请重试', icon: 'none' });
                   return;
                 }
-                const stats = store.getStats();
-                this.setData({ stats, savedText: store.formatMoney(0) });
+                // 与导入同一套刷新口径：连续天数、勋章进度都依赖 wishList，必须整体重算
+                this.onShow();
                 wx.showToast({ title: '已清空', icon: 'none' });
               }
             }
