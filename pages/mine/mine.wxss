@@ -108,11 +108,12 @@
    这个绝对定位层的百分比高度可能算成 0，导致不滑动时点不动、滑一下才生效。
    这里直接把 button 当成行来用，不再依赖百分比高度。 */
 .row-hit {
-  display: flex; align-items: center; justify-content: space-between;
-  width: 100%; margin: 0; padding: 24rpx 0;
-  background: transparent; border-radius: 0; border: none;
-  font-size: 28rpx; font-weight: normal; line-height: normal;
-  text-align: left; color: var(--ink); box-sizing: border-box;
+  display: flex !important; align-items: center; justify-content: space-between;
+  width: 100% !important; margin: 0 !important; padding: 24rpx 0 !important;
+  background: transparent !important; border-radius: 0 !important; border: none !important;
+  font-size: 28rpx !important; font-weight: normal !important; line-height: inherit !important;
+  text-align: left !important; color: var(--ink) !important;
+  box-sizing: border-box !important; overflow: visible !important;
 }
 .row-hit::after { border: none; }
 .row-hit:active { background: transparent; }
