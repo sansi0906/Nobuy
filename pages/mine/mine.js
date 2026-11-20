@@ -164,8 +164,9 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.showModal({
-            title: '真的清空？', content: '清空后没有任何办法找回，确定继续吗？',
-            confirmText: '清空', cancelText: '不清了', confirmColor: '#C4382F',
+            title: '清空前先备份？',
+            content: '会删光清单、回收站、分类、昵称头像，删了找不回。想留一份，先点取消，回上一页点「导出备份」，导出完再回来清空。',
+            confirmText: '直接清空', cancelText: '先去备份', confirmColor: '#C4382F',
             success: (r2) => {
               if (r2.confirm) {
                 const ok = store.clearAll();
