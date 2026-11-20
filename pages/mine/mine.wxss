@@ -103,17 +103,19 @@
   color: var(--ink-3);
 }
 
-/* 客服入口：外观与其他行完全一致，用一层透明 button 承接 open-type */
-.row-tap { position: relative; }
+/* 客服入口：整行本身就是一个 button（open-type 必须挂在真实 button 上）。
+   早前用的是「外层 view + 绝对定位透明 button 铺满」的写法，首屏布局时
+   这个绝对定位层的百分比高度可能算成 0，导致不滑动时点不动、滑一下才生效。
+   这里直接把 button 当成行来用，不再依赖百分比高度。 */
 .row-hit {
-  position: absolute; left: 0; top: 0; right: 0; bottom: 0;
-  width: 100%; height: 100%;
-  margin: 0; padding: 0;
-  background: transparent;
-  opacity: 0;
-  border-radius: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; margin: 0; padding: 24rpx 0;
+  background: transparent; border-radius: 0; border: none;
+  font-size: 28rpx; font-weight: normal; line-height: normal;
+  text-align: left; color: var(--ink); box-sizing: border-box;
 }
 .row-hit::after { border: none; }
+.row-hit:active { background: transparent; }
 
 /* 小程序码弹层 */
 .qr-mask {

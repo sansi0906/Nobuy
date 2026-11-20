@@ -75,11 +75,10 @@
       <view class="row-label">小程序码</view>
       <view class="row-arrow">›</view>
     </view>
-    <view class="row row-tap">
+    <button class="row row-hit" open-type="contact" session-from="mine">
       <view class="row-label">联系客服</view>
       <view class="row-arrow">›</view>
-      <button class="row-hit" open-type="contact" session-from="mine"></button>
-    </view>
+    </button>
   </view>
 
   <view class="footer">v1.2.1 · 本地存储版</view>

@@ -365,3 +365,11 @@
 - **导入**：新增 `payloadToAvatar()`，把 base64 `writeFileSync` 到 `wx.env.USER_DATA_PATH/avatar-<时间戳>.<ext>`，返回新路径写回 `userProfile`；成功还原后 `unlinkSync` 掉旧头像文件。
 - **兜底（B）**：备份里没有 `avatar` 图片数据的老备份，导入后校验原路径是否还在（`accessSync`），不在就把 `avatar` 清空回默认，不留指向不存在文件的破路径。`typeof wx.getFileSystemManager === 'function'` 做了保护，`tools/test_storage.js` 的 mock 环境（无 FS 能力）仍走原逻辑，"头像恢复"用例不受影响。
 - 副作用：备份 JSON 体积随头像增大（base64 约为原图 1.33 倍）；在文件传输助手里直接预览会看到一坨长字符串，属预期。
+### 7. 「联系客服」首次点击无效（2026-11-20 修）
+
+真机反馈：首次进入「我的」页、页面不滑动时，点「联系客服」没反应；滑一下再点就正常。
+
+- **根因**：原写法是外层 `<view class="row row-tap">`（`position: relative`）+ 里面一个绝对定位的透明 `<button class="row-hit" open-type="contact">` 铺满整行（`inset: 0`、`width/height: 100%`、`opacity: 0`）。父容器高度是 auto，绝对定位层的百分比高度在首屏布局时可能算成 0，热区高度为零 → 点不到；滚动触发一次重排后高度才正确，于是"滑一下才能点"。
+- **修法**：不再用覆盖层，直接把整行做成真实 button —— `<button class="row row-hit" open-type="contact" session-from="mine">` 内含 `row-label` 与 `row-arrow`。`.row-hit` 改成 button 复位样式（flex 行、透明底、无边框、`::after{border:none}`、`:active` 透明），彻底不依赖百分比高度。WXSS 里删掉了 `.row-tap{position:relative}` 与旧的绝对定位/`opacity:0` 规则。
+- **测试同步**：`tools/e2e.js` 客服段选择器由 `.row-tap` 改为 `.row-hit`。复测 85（存储）+ 63（界面）全绿。
+- **说明**：automator 只能验证这行存在、文案正确、能取到元素，**不能真正唤起客服会话**；`open-type="contact"` 的实际效果仍需真机点一次确认。

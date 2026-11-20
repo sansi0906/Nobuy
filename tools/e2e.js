@@ -314,10 +314,10 @@ async function main() {
 
   // ---------------- 我的：客服与小程序码 ----------------
   try {
-    const mine2 = await openPage(mp, '/pages/mine/mine', '.row-tap');
-    const contactRow = await mine2.$('.row-tap');
+    const mine2 = await openPage(mp, '/pages/mine/mine', '.row-hit');
+    const contactRow = await mine2.$('.row-hit');
     const contactText = await textOf(contactRow);
-    const hitBtn = await mine2.$('.row-hit');
+    const hitBtn = contactRow;
     record('我的-联系客服入口', /联系客服/.test(contactText) && hitBtn !== null,
       contactText + ' / 热区=' + (hitBtn ? '有' : '无'));
 
