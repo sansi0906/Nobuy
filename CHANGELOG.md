@@ -374,3 +374,4 @@
 - **测试同步**：`tools/e2e.js` 客服段选择器由 `.row-tap` 改为 `.row-hit`。复测 85（存储）+ 63（界面）全绿。
 - **说明**：automator 只能验证这行存在、文案正确、能取到元素，**不能真正唤起客服会话**；`open-type="contact"` 的实际效果仍需真机点一次确认。
 - **第二轮（真机看「走样」后）**：button 自带的内部基础样式会盖过普通 class 规则 —— 行宽被压成 184px 并居中缩进、行高也短一截。`mine.wxss` 里 `.row-hit` 的 width/margin/padding/background/line-height 等改成 `!important` 显式复位，且 `line-height: inherit`（不能用 normal，会比相邻行矮 2rpx）。automator 量尺寸校对：联系客服行 326×49.6，与相邻行 326×50.3 一致，文字与箭头均垂直居中。
+- **版本号单一来源（用户选 B，2026-11-20）**：新增 `utils/version.js`（`VERSION = 1.2.1`），`pages/about/about.js` 初始值与 `getAccountInfoSync` 取空时的回落后都改用它（原来回落成 `1.0.0`，体验版会显示错）；`pages/mine/mine.js` 拼 `versionLine`，页脚由写死的 `v1.2.1 · 本地存储版` 改为 `{{versionLine}}`。后续发版只改 `utils/version.js` 一行。开发环境下实车值：关于页「1.2.1 / 开发版 / 仅本机」，我的页页脚「v1.2.1 · 本地存储版」；e2e 63/0。

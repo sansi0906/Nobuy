@@ -81,7 +81,7 @@
     </button>
   </view>
 
-  <view class="footer">v1.2.1 · 本地存储版</view>
+  <view class="footer">{{versionLine}}</view>
 
   <!-- 小程序码弹层 -->
   <view class="qr-mask" wx:if="{{qrVisible}}" bindtap="hideQr">

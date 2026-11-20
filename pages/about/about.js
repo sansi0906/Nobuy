@@ -1,7 +1,9 @@
 // pages/about/about.js
+const { VERSION } = require('../../utils/version.js');
+
 Page({
   data: {
-    versionText: '1.0.0',
+    versionText: VERSION,
     envText: '正式版'
   },
 
@@ -16,7 +18,7 @@ Page({
     } catch (e) {}
     const envMap = { develop: '开发版', trial: '体验版', release: '正式版' };
     this.setData({
-      versionText: version || '1.0.0',
+      versionText: version || VERSION,
       envText: envMap[env] || '正式版'
     });
   }

@@ -1,8 +1,10 @@
 // pages/mine/mine.js
 const store = require('../../utils/storage.js');
+const { VERSION } = require('../../utils/version.js');
 
 Page({
   data: {
+    versionLine: 'v' + VERSION + ' · 本地存储版',
     profile: { avatar: '', nickname: '', gender: '', defaultDuration: 1 },
     stats: { skipped: 0, bought: 0, saved: 0, total: 0 },
     savedText: '0',
