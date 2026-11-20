@@ -95,8 +95,26 @@
     </view>
   </block>
 
-  <!-- 已决定：只留一个回到冷静中的入口，编辑在右上角 -->
+  <!-- 已决定：回到冷静中；「我没买」的还能再发一次成果卡 -->
   <block wx:elif="{{item.state === 'skipped' || item.state === 'bought'}}">
-    <view class="btn btn-ghost btn-block" bindtap="restoreToCooling">恢复到冷静中</view>
+    <view class="btn-row">
+      <view class="btn btn-ghost" bindtap="restoreToCooling">恢复到冷静中</view>
+      <view class="btn btn-ghost" wx:if="{{item.state === 'skipped'}}" bindtap="makeCard">做成卡片</view>
+    </view>
   </block>
+
+  <!-- 成果卡画布：画在屏幕外，用户看不见 -->
+  <canvas type="2d" id="cardCanvas" class="card-canvas"></canvas>
+
+  <!-- 成果卡预览 -->
+  <view class="card-mask" wx:if="{{cardVisible}}" catchtap="closeCard">
+    <view class="card-box" catchtap="stopProp">
+      <view class="card-loading" wx:if="{{!cardReady}}">正在画…</view>
+      <image wx:else class="card-img" src="{{cardPath}}" mode="aspectFit" />
+      <view class="card-btns">
+        <view class="btn btn-ghost" bindtap="closeCard">算了</view>
+        <view class="btn btn-primary" bindtap="shareCard">发出去</view>
+      </view>
+    </view>
+  </view>
 </view>

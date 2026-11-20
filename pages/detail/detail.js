@@ -1,8 +1,15 @@
 // pages/detail/detail.js
 const store = require('../../utils/storage.js');
+const card = require('../../utils/card.js');
 
 const ADD_DAYS = 3;
 const DAY_MS = 86400000;
+
+function dateText(ts) {
+  const d = new Date(ts);
+  const pad = n => (n < 10 ? '0' + n : '' + n);
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+}
 
 Page({
   data: {
@@ -14,7 +21,8 @@ Page({
     extendDays: 0, extendPreview: '',
     categories: [],
     priceText: '', qtyText: '',
-    timer: null
+    timer: null,
+    cardVisible: false, cardPath: '', cardReady: false
   },
 
   onLoad(q) { this.setData({ id: q.id || '' }); },
@@ -119,12 +127,87 @@ Page({
   decideNo() {
     const item = this.data.item;
     const savedMoney = store.validPrice(item.price) * store.qtyOf(item);
-    store.update(item.id, { state: 'skipped', decidedAt: Date.now() });
+    const decidedAt = Date.now();
+    store.update(item.id, { state: 'skipped', decidedAt });
     const title = savedMoney > 0
       ? '又忍住一件 · 省下 ¥' + store.formatMoney(savedMoney)
       : '又忍住一件，好样的';
     wx.showToast({ title, icon: 'none', duration: 1200 });
-    setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 900);
+    this.load();
+    // 判定成功后弹成果卡：先给 toast 一点时间，再盖出预览
+    this.pendingCard = {
+      hasMoney: savedMoney > 0,
+      moneyText: store.formatMoney(savedMoney),
+      metaText: this.buildMeta(item.createTime, decidedAt)
+    };
+    this.fromDecide = true;
+    setTimeout(() => { this.openCard(); }, 600);
+  },
+
+  // ---- 成果卡 ----
+  buildMeta(createTime, decidedAt) {
+    const days = Math.max(1, Math.ceil((decidedAt - (createTime || decidedAt)) / DAY_MS));
+    return '冷静了 ' + days + ' 天 · ' + dateText(decidedAt);
+  },
+
+  cardOptsFromItem(item) {
+    const savedMoney = store.validPrice(item.price) * store.qtyOf(item);
+    const decidedAt = item.decidedAt || Date.now();
+    return {
+      hasMoney: savedMoney > 0,
+      moneyText: store.formatMoney(savedMoney),
+      metaText: this.buildMeta(item.createTime, decidedAt),
+      title: '又忍住一件',
+      logoPath: '/images/logo.png'
+    };
+  },
+
+  openCard() {
+    if (this.data.cardReady) {
+      this.setData({ cardVisible: true });
+      return;
+    }
+    const opt = this.pendingCard || (this.data.item ? this.cardOptsFromItem(this.data.item) : null);
+    if (!opt) return;
+    this.setData({ cardVisible: true, cardPath: '', cardReady: false });
+    card.renderCard(this, 'cardCanvas', opt)
+      .then(path => { this.setData({ cardPath: path, cardReady: true }); })
+      .catch(() => {
+        this.setData({ cardVisible: false, cardReady: false });
+        wx.showToast({ title: '卡片没画出来，稍后再试', icon: 'none' });
+      });
+  },
+
+  closeCard() {
+    this.setData({ cardVisible: false });
+    if (this.fromDecide) {
+      this.fromDecide = false;
+      wx.switchTab({ url: '/pages/index/index' });
+    }
+  },
+
+  shareCard() {
+    const path = this.data.cardPath;
+    if (!path) return;
+    if (typeof wx.showShareImageMenu !== 'function') {
+      wx.showToast({ title: '这个微信版本还不能分享图片', icon: 'none' });
+      return;
+    }
+    wx.showShareImageMenu({
+      path,
+      fail: err => {
+        const msg = (err && err.errMsg) || '';
+        if (/cancel/i.test(msg)) return;
+        wx.showToast({ title: '分享没有完成，稍后再试', icon: 'none' });
+      }
+    });
+  },
+
+  // 详情页常驻入口：已判定「我没买」的记录随时可以再发一次
+  makeCard() {
+    this.pendingCard = null;
+    this.setData({ cardReady: false, cardPath: '' });
+    this.openCard();
   },
 
   decideBuy() {
@@ -143,6 +226,9 @@ Page({
     }
     go();
   },
+
+  // 点卡片本身不关闭，只拦冒泡
+  stopProp() {},
 
   restoreToCooling() {
     wx.showModal({

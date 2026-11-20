@@ -375,3 +375,12 @@
 - **说明**：automator 只能验证这行存在、文案正确、能取到元素，**不能真正唤起客服会话**；`open-type="contact"` 的实际效果仍需真机点一次确认。
 - **第二轮（真机看「走样」后）**：button 自带的内部基础样式会盖过普通 class 规则 —— 行宽被压成 184px 并居中缩进、行高也短一截。`mine.wxss` 里 `.row-hit` 的 width/margin/padding/background/line-height 等改成 `!important` 显式复位，且 `line-height: inherit`（不能用 normal，会比相邻行矮 2rpx）。automator 量尺寸校对：联系客服行 326×49.6，与相邻行 326×50.3 一致，文字与箭头均垂直居中。
 - **版本号单一来源（用户选 B，2026-11-20）**：新增 `utils/version.js`（`VERSION = 1.2.1`），`pages/about/about.js` 初始值与 `getAccountInfoSync` 取空时的回落后都改用它（原来回落成 `1.0.0`，体验版会显示错）；`pages/mine/mine.js` 拼 `versionLine`，页脚由写死的 `v1.2.1 · 本地存储版` 改为 `{{versionLine}}`。后续发版只改 `utils/version.js` 一行。开发环境下实车值：关于页「1.2.1 / 开发版 / 仅本机」，我的页页脚「v1.2.1 · 本地存储版」；e2e 63/0。
+
+## 十四、v1.2.2 成果卡（2026-11-20，方向 1 落地）
+
+用户定的方向：把“忍住”做成能发出去的图（零成本、无后端、无新权限）。视觉选 A（大字克制动静风），入口选丙（判定后弹 + 详情页常驻）。
+
+- 新增 `utils/card.js`：`renderCard(page, canvasId, opt)` 用 canvas 2d 画 1080×1440 竖图，`canvasToTempFilePath` 出 png。版面：顶部 logo 132 + 品牌名；主标题 76px「又忍住一件」；「省下」34px + 金额 150px；一条细线；元信息「冷静了 N 天 · YYYY-MM-DD」；底部「想买的东西，先放 3 天再说」+ 「NoBuy · 本地存储版」。金额为 0 时不画金额块，标题下移。
+- `pages/detail/*`：新增屏幕外 `<canvas type="2d" id="cardCanvas">`（`left:-2000px`，宽 540px 高 720px，不参与布局）； `decideNo` 成功后 600ms 弹预览浮层；`makeCard` 作为详情页常驻入口（仅 `state === skipped` 时出现，和「恢复到冷静中」并排）；`shareCard` 走 `wx.showShareImageMenu`（不需要相册授权），取消静默、不支持提示“这个微信版本还不能分享图片”；关闭浮层后若来自判定流程则 `switchTab` 回首页。
+- `tools/e2e.js`：新增 3 项（预览出现 / 已出图 / 我没买后可再做卡片），并把已决定记录的按钮选择器由 `.btn-block` 换成 `.btn-row .btn`。66 通过 / 0 失败。
+- 未做的：卡片带二维码（二维码是带参场景码才归因，普通小程序码看不出渠道，暂不加）；分享到朋友圈（只能存图后手动发，`showShareImageMenu` 只到聊天）。

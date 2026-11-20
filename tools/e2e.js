@@ -476,6 +476,29 @@ async function main() {
     record('详情-我没买直接标记', false, e.message);
   }
 
+  // ---------------- 详情：成果卡 ----------------
+  try {
+    await sleep(2600); // 画布出图需要一点时间
+    const detail = await mp.currentPage();
+    const d = await detail.data();
+    record('详情-成果卡预览出现', d.cardVisible === true, '预览=' + (d.cardVisible ? '显示' : '无'));
+    record('详情-成果卡已出图', !!d.cardPath, '图片=' + (d.cardPath ? '有' : '无'));
+    // 收掉浮层，别影响后面的用例
+    const btns = await detail.$$('.card-btns .btn');
+    if (btns.length) await btns[0].tap();
+    await sleep(600);
+  } catch (e) {
+    record('详情-成果卡预览出现', false, e.message);
+  }
+
+  try {
+    const detail = await openPage(mp, '/pages/detail/detail?id=e2e_expired', '.btn-row .btn');
+    const n = (await detail.$$('.btn-row .btn')).length;
+    record('详情-我没买后可再做卡片', n === 2, '按钮=' + n);
+  } catch (e) {
+    record('详情-我没买后可再做卡片', false, e.message);
+  }
+
   try {
     const detail = await openPage(mp, '/pages/detail/detail?id=e2e_counting', '.btn-buy');
     await clearLogs(mp);
@@ -490,12 +513,14 @@ async function main() {
   }
 
   try {
-    const detail = await openPage(mp, '/pages/detail/detail?id=e2e_bought', '.btn-block');
+    // 已决定记录底部是两枚并排按钮（恢复到冷静中 / 做成卡片），取第一枚
+    const detail = await openPage(mp, '/pages/detail/detail?id=e2e_bought', '.btn-row .btn');
     await clearLogs(mp);
-    await (await detail.$('.btn-block')).tap();
+    await (await detail.$('.btn-row .btn')).tap();
     await sleep(700);
     record('详情-恢复冷静中确认框', /恢复到冷静中/.test((await lastModal(mp)) || ''), await lastModal(mp));
-    record('详情-已买只留一个主操作', (await detail.$$('.btn-block')).length === 1, '主按钮 1 个');
+    // 已买记录只有「恢复到冷静中」一枚，「做成卡片」只在「我没买」出现
+    record('详情-已买只留一个主操作', (await detail.$$('.btn-row .btn')).length === 1, '主按钮 1 个');
   } catch (e) {
     record('详情-恢复冷静中确认框', false, e.message);
   }
