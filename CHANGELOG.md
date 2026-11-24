@@ -413,3 +413,16 @@
 - **首页结果条右侧加「查看战绩 ›」**：原来右侧只有一个箭头，点了去「我的」还得再点一层；现在条上直接写「查看战绩」，点击 `goAchievements()` 直接进成就页（`wx.navigateTo('/pages/achievements/achievements')`）。新增 `.result-link` 样式（24rpx、`--accent-deep`、600 粗），`.result-right` 补 `margin-left: 16rpx` 防挤。
 - **测试**：界面级 66 通过 / 0 失败。
 
+
+## 十八、外观两态（跟随系统 / 始终浅色）+ 卡片底部署名精简（2026-11-24）
+
+- **卡片底部**：`NoBuy · 本地存储版` → 只留 `NoBuy`；「本地存储版」不再出现在分享图上（我的页页脚仍保留，那是应用内信息，不是对外物料）。
+- **外观只做两态**（用户拍板）：新增 `utils/theme.js`，存储 key `themeMode`，取值 `auto` / `light`，默认 `auto`。
+  - **实现方式（没有推翻原有深色）**：`@media (prefers-color-scheme: dark)` 原样保留；「始终浅色」靠页面根节点多挂一个 class —— `<view class="page {{themeClass}}">`，`app.wxss` 里 `.page.theme-light` 重定义整套浅色 token。class 选择器优先级高于 `page` 元素选择器，所以系统是深色也能把整页拉回浅色，页面样式一行都不用改。
+  - **配套两处**：`.page` 自己补 `background: var(--n-50)`（原来底色画在 `page` 元素上，浅色模式下会露出深色底）；`.page.theme-light .btn-primary { color: #fff }`（@media 里把主按钮字色改成了深色 `#10161A`，浅色下要改回来）。
+  - **导航栏**：`theme.json` 仍按系统切；`theme.applyNav()` 再用 `wx.setNavigationBarColor` + `wx.setBackgroundColor` 显式对齐解析结果，保证「始终浅色」时导航栏、下拉背景也是浅的。
+  - **9 个页面统一接入**：`Page(theme.mixin({...}))`，mixin 在 `onLoad` / `onShow` 里刷新 `themeClass` 与档位文案，`app.js` 的 `onLaunch` 里挂 `wx.onThemeChange` + `onShow` 调 `refreshPages()` 同步已打开的页面。
+  - **入口**：「我的」页「其他」卡新增一行「外观 / 当前档位」，点开 `wx.showActionSheet` 二选一（跟随系统 / 始终浅色），选完立刻重画当前页。
+- **测试**：新增断言「我的-外观档位行」，界面级 **67 通过 / 0 失败**。专项脚本验证：`themeMode=light` 时 我的/首页/关于/成就 四个页面根的 class 都是 `page theme-light`，档位文案正确。
+- **已知局限**：tabBar 是原生静态图标，深色下仍是浅白底（既有取舍，未变）；「始终浅色」只影响页面与导航栏，不影响系统其它 App。
+

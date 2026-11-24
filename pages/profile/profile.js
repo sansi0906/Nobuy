@@ -1,3 +1,4 @@
+const theme = require('../../utils/theme.js');
 // pages/profile/profile.js
 const store = require('../../utils/storage.js');
 
@@ -7,7 +8,7 @@ const PRESETS = {
   other:  ['冷静消费者', '攒钱达人', '极简主义者', '不买闲人', '佛系攒钱人']
 };
 
-Page({
+Page(theme.mixin({
   data: {
     avatar: '',
     nickname: '',
@@ -93,4 +94,4 @@ Page({
     wx.showToast({ title: '已保存', icon: 'success' });
     setTimeout(() => wx.navigateBack(), 600);
   }
-});
+}));

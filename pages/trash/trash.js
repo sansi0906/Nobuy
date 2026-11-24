@@ -1,7 +1,8 @@
+const theme = require('../../utils/theme.js');
 // pages/trash/trash.js
 const store = require('../../utils/storage.js');
 
-Page({
+Page(theme.mixin({
   data: { list: [] },
   onShow() { this.refresh(); },
   refresh() {
@@ -56,4 +57,4 @@ Page({
       }
     });
   }
-});
+}));

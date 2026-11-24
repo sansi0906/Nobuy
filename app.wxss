@@ -238,3 +238,48 @@ page {
   /* 遮罩在深色下更沉一点 */
   .btn-ghost { border-color: var(--n-100); }
 }
+
+/* ============ 外观：跟随系统 / 始终浅色 ============ */
+/* 页面根节点挂 theme-light 时，把整套浅色 token 重新盖一层。
+   优先级高于上面 @media 里的 page 选择器，所以系统是深色也能拉回浅色。 */
+.page.theme-light {
+  --n-0: #FFFFFF;
+  --n-25: #F6F8F9;
+  --n-50: #EFF1F2;
+  --n-100: #DFE5E9;
+  --n-200: #C9D3D9;
+  --n-400: #9FAAB2;
+  --n-600: #6B767E;
+  --n-900: #22282C;
+
+  --a-50: #E7EDF1;
+  --a-100: #CBD9E1;
+  --a-600: #5F7688;
+  --a-700: #475A69;
+
+  --s-cool-bg: #E7EDF1;
+  --s-cool: #5F7688;
+  --s-done-bg: #E6EEEA;
+  --s-done: #5E7A6E;
+  --s-done-line: #CFDDD5;
+
+  --s-danger: #C4382F;
+  --s-danger-soft: #FDF2F1;
+  --s-danger-line: #E9C6C1;
+  --s-danger-press: #A82A22;
+
+  --s-gold: #C29225;
+  --s-gold-light: #E3C069;
+  --s-gold-deep: #6A4A12;
+  --s-gold-bg: #FBF3E2;
+  --s-gold-line: #E8D3A6;
+
+  --sh-1: 0 6rpx 20rpx rgba(34, 40, 44, 0.05);
+  --sh-2: 0 16rpx 48rpx rgba(34, 40, 44, 0.12);
+}
+
+/* 上面 @media 里把主按钮字色改成了深色，浅色下要改回白字 */
+.page.theme-light .btn-primary { color: #fff; }
+
+/* 页面根节点自己铺底色：始终浅色时 page 元素仍是深底，靠这一层盖住 */
+.page { background: var(--n-50); }

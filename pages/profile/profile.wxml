@@ -1,5 +1,5 @@
 <!--pages/profile/profile.wxml-->
-<view class="page">
+<view class="page {{themeClass}}">
 
   <!-- 预览：头像 + 昵称 -->
   <view class="card hero">

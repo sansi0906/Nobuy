@@ -1,5 +1,5 @@
 <!--pages/mine/mine.wxml-->
-<view class="page">
+<view class="page {{themeClass}}">
 
   <!-- 头像昵称 -->
   <view class="card me" bindtap="goEditProfile">
@@ -67,6 +67,13 @@
 
   <!-- 其他 -->
   <view class="card">
+    <view class="row" bindtap="changeTheme">
+      <view class="row-label">外观</view>
+      <view class="row-right">
+        <view class="row-value">{{themeModeLabel}}</view>
+        <view class="row-arrow">›</view>
+      </view>
+    </view>
     <view class="row" bindtap="goAbout">
       <view class="row-label">关于</view>
       <view class="row-arrow">›</view>

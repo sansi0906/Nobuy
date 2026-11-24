@@ -321,6 +321,11 @@ async function main() {
     record('我的-联系客服入口', /联系客服/.test(contactText) && hitBtn !== null,
       contactText + ' / 热区=' + (hitBtn ? '有' : '无'));
 
+    const themeVal = await mine2.$('.row-value');
+    const themeValText = themeVal ? await textOf(themeVal) : '';
+    record('我的-外观档位行', themeVal !== null && /跟随系统|始终浅色/.test(themeValText),
+      '档位=' + themeValText);
+
     await clearLogs(mp);
     const qrRow = await waitEl(mine2, '.row-label');
     const qrRows = await mine2.$$('.row-label');

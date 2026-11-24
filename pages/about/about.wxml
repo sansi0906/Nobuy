@@ -1,5 +1,5 @@
 <!--pages/about/about.wxml-->
-<view class="page">
+<view class="page {{themeClass}}">
 
   <view class="card brand">
     <image class="logo" src="/images/logo.png" mode="aspectFit"></image>

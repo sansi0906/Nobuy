@@ -121,7 +121,7 @@ async function paint(canvas, ctx, opt) {
 
   ctx.fillStyle = COLORS.ink3;
   ctx.font = '400 26px ' + FONT;
-  ctx.fillText('NoBuy · 本地存储版', PAD, 1262);
+  ctx.fillText('NoBuy', PAD, 1262);
 
   const qr = await loadImage(canvas, opt.qrPath || '/images/miniprogram_qr_pad.png');
   if (qr) {

@@ -1,3 +1,4 @@
+const theme = require('../../utils/theme.js');
 // pages/index/index.js
 const store = require('../../utils/storage.js');
 
@@ -5,7 +6,7 @@ const ONBOARD_KEY = 'onboardDone';
 // 每次进入小程序只弹一次过期提示，避免反复打扰
 let expiredNoticeShown = false;
 
-Page({
+Page(theme.mixin({
   data: {
     tab: 'cooling',
     tabs: [
@@ -186,4 +187,4 @@ Page({
       }
     });
   }
-});
+}));

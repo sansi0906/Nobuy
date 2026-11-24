@@ -92,6 +92,9 @@
 }
 .row:last-child { border-bottom: none; }
 .row-label { font-size: 28rpx; color: var(--ink); }
+.row-right { display: flex; align-items: center; }
+/* 行的右侧附加值（外观当前档位）：比标签低一档的灰，跟在箭头前面 */
+.row-value { font-size: 26rpx; color: var(--ink-3); margin-right: 10rpx; }
 .row-danger .row-label { color: var(--danger); font-weight: 600; }
 .row-danger .row-arrow { color: var(--danger); }
 .row-arrow { font-size: 32rpx; color: var(--ink-3); }

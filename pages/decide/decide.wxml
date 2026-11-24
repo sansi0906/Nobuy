@@ -1,5 +1,5 @@
 <!--pages/decide/decide.wxml-->
-<view class="page">
+<view class="page {{themeClass}}">
 
   <view class="head">
     <view class="head-name">{{item.name}}</view>

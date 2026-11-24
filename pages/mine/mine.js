@@ -1,8 +1,9 @@
+const theme = require('../../utils/theme.js');
 // pages/mine/mine.js
 const store = require('../../utils/storage.js');
 const { VERSION } = require('../../utils/version.js');
 
-Page({
+Page(theme.mixin({
   data: {
     versionLine: 'v' + VERSION + ' · 本地存储版',
     profile: { avatar: '', nickname: '', gender: '', defaultDuration: 1 },
@@ -189,6 +190,24 @@ Page({
 
   goAbout() { wx.navigateTo({ url: '/pages/about/about' }); },
 
+  // 外观：只有两态。选完立刻重渲染当前页，其它页面在各自 onShow 里跟上
+  changeTheme() {
+    const cur = theme.getMode();
+    wx.showActionSheet({
+      itemList: ['跟随系统', '始终浅色'],
+      success: (res) => {
+        const mode = res.tapIndex === 1 ? 'light' : 'auto';
+        if (mode === cur) return;
+        theme.setMode(mode);
+        this.setData({
+          themeClass: theme.themeClass(),
+          themeModeLabel: theme.modeLabel()
+        });
+      },
+      fail: () => {}
+    });
+  },
+
   // ---- 小程序码弹层 ----
   showQr() { this.setData({ qrVisible: true }); },
   hideQr() { this.setData({ qrVisible: false }); },
@@ -196,4 +215,4 @@ Page({
   previewQr() {
     wx.previewImage({ urls: ['/images/miniprogram_qr.png'] });
   }
-});
+}));

@@ -1,7 +1,8 @@
+const theme = require('../../utils/theme.js');
 // pages/add/add.js
 const store = require('../../utils/storage.js');
 
-Page({
+Page(theme.mixin({
   data: {
     name: '',
     price: '',
@@ -190,4 +191,4 @@ Page({
     wx.showToast({ title: '已记下，冷静一下再决定', icon: 'none' });
     setTimeout(() => wx.navigateBack(), 600);
   }
-});
+}));

@@ -1,5 +1,5 @@
 <!--pages/detail/detail.wxml-->
-<view class="page" wx:if="{{item}}">
+<view class="page {{themeClass}}" wx:if="{{item}}">
 
   <view class="card main">
     <view class="main-head">

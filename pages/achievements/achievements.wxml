@@ -1,5 +1,5 @@
 <!--pages/achievements/achievements.wxml-->
-<view class="page">
+<view class="page {{themeClass}}">
 
   <!-- 顶部：点亮进度 -->
   <view class="head">

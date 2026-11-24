@@ -1,7 +1,8 @@
+const theme = require('../../utils/theme.js');
 // pages/achievements/achievements.js
 const store = require('../../utils/storage.js');
 
-Page({
+Page(theme.mixin({
   data: {
     groups: [],
     unlockedCount: 0,
@@ -24,4 +25,4 @@ Page({
       savedText: store.formatMoney(store.getStats().saved)
     });
   }
-});
+}));

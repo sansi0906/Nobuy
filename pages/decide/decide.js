@@ -1,3 +1,4 @@
+const theme = require('../../utils/theme.js');
 // pages/decide/decide.js
 const store = require('../../utils/storage.js');
 
@@ -20,7 +21,7 @@ const QUESTIONS = [
   }
 ];
 
-Page({
+Page(theme.mixin({
   data: {
     id: '',
     action: 'buy',       // buy | skip
@@ -68,4 +69,4 @@ Page({
   },
 
   cancel() { wx.navigateBack(); }
-});
+}));

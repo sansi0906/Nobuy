@@ -1,3 +1,4 @@
+const theme = require('../../utils/theme.js');
 // pages/detail/detail.js
 const store = require('../../utils/storage.js');
 const card = require('../../utils/card.js');
@@ -11,7 +12,7 @@ function dateText(ts) {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 }
 
-Page({
+Page(theme.mixin({
   data: {
     id: '', item: null,
     phase: 'counting', countdownText: '',
@@ -249,4 +250,4 @@ Page({
       }
     });
   }
-});
+}));
