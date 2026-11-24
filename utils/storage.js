@@ -398,8 +398,9 @@ const ONBOARD_KEY = 'onboardDone';
 const VALID_STATES = ['cooling', 'skipped', 'bought', 'trashed'];
 
 // 头像本地存的是文件路径（wxfile://usr/...），换设备就失效了，
-// 所以要连同图片本身 base64 打进备份；超过 1MB 的不塞（微信头像通常几十 KB）
-const AVATAR_MAX_BYTES = 1024 * 1024;
+// 所以要连同图片本身 base64 打进备份；超过 3MB 的不塞（微信头像通常几十 KB，
+// 留 3MB 是为了让用户自己裁的高清头像也能带走，base64 后约 4MB，仍在可传范围）
+const AVATAR_MAX_BYTES = 3 * 1024 * 1024;
 
 function avatarToPayload(path) {
   if (!path) return null;

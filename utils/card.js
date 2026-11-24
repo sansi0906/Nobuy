@@ -48,27 +48,19 @@ async function paint(canvas, ctx, opt) {
   ctx.fillStyle = COLORS.bg;
   ctx.fillRect(0, 0, W, H);
 
-  // 顶部：左小程序码（带静区，可被扫），右侧日期与一句提示
-  const qr = await loadImage(canvas, opt.qrPath || '/images/miniprogram_qr_pad.png');
-  if (qr) {
-    ctx.drawImage(qr, PAD, 84, 340, 340);
-  } else {
-    const logo = await loadImage(canvas, opt.logoPath || '/images/logo.png');
-    if (logo) ctx.drawImage(logo, PAD, 100, 96, 96);
-  }
+  // 顶部：左 logo，右日期
+  const logo = await loadImage(canvas, opt.logoPath || '/images/logo.png');
+  if (logo) ctx.drawImage(logo, PAD, 100, 96, 96);
   ctx.textAlign = 'right';
   ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = COLORS.ink3;
   ctx.font = '400 28px ' + FONT;
   ctx.fillText(opt.dateText || '', RIGHT, 150);
-  ctx.fillStyle = COLORS.ink3;
-  ctx.font = '400 24px ' + FONT;
-  ctx.fillText('微信扫码打开', RIGHT, 206);
 
   // 眉标
   ctx.fillStyle = COLORS.ink3;
   ctx.font = '400 34px ' + FONT;
-  drawSpaced(ctx, '忍住了', PAD, 496, 14);
+  drawSpaced(ctx, '忍住了', PAD, 434, 14);
 
   // 主数字：整数与小数分级（报价单式细节）
   ctx.textAlign = 'left';
@@ -77,24 +69,24 @@ async function paint(canvas, ctx, opt) {
     let x = PAD;
     ctx.fillStyle = COLORS.ink;
     ctx.font = '600 168px ' + FONT;
-    ctx.fillText('¥' + (opt.moneyWhole || '0'), x, 676);
+    ctx.fillText('¥' + (opt.moneyWhole || '0'), x, 616);
     x += ctx.measureText('¥' + (opt.moneyWhole || '0')).width;
     if (opt.moneyDec) {
       ctx.font = '600 96px ' + FONT;
-      ctx.fillText(opt.moneyDec, x - 4, 676);
+      ctx.fillText(opt.moneyDec, x - 4, 616);
     }
   } else {
     ctx.fillStyle = COLORS.ink;
     ctx.font = '600 120px ' + FONT;
-    ctx.fillText('没买 挺好', PAD, 658);
+    ctx.fillText('没买 挺好', PAD, 596);
   }
 
   // 细线
   ctx.strokeStyle = COLORS.line;
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(PAD, 810);
-  ctx.lineTo(RIGHT, 810);
+  ctx.moveTo(PAD, 752);
+  ctx.lineTo(RIGHT, 752);
   ctx.stroke();
 
   // 三列微信息：数值在上，标签在下（840 版心等分三列，列宽 280）
@@ -107,10 +99,10 @@ async function paint(canvas, ctx, opt) {
     ctx.textAlign = 'left';
     ctx.fillStyle = COLORS.ink;
     ctx.font = '500 44px ' + FONT;
-    ctx.fillText(c.value, c.x, 916);
+    ctx.fillText(c.value, c.x, 864);
     ctx.fillStyle = COLORS.ink3;
     ctx.font = '400 24px ' + FONT;
-    ctx.fillText(c.label, c.x, 964);
+    ctx.fillText(c.label, c.x, 912);
   });
 
   // 记录名（有才画）
@@ -119,17 +111,26 @@ async function paint(canvas, ctx, opt) {
     ctx.font = '400 32px ' + FONT;
     let name = opt.itemName;
     if (name.length > 16) name = name.slice(0, 15) + '…';
-    ctx.fillText('— ' + name, PAD, 1064);
+    ctx.fillText('— ' + name, PAD, 1010);
   }
 
-  // 底部：一句 + 品牌
+  // 底部：左边一句 + 品牌，右下角小程序码（带静区，扫得出来）
   ctx.fillStyle = COLORS.ink2;
   ctx.font = '400 30px ' + FONT;
-  ctx.fillText('想买的东西，先放 3 天再说', PAD, 1246);
+  ctx.fillText('想买的东西，先放 3 天再说', PAD, 1190);
 
   ctx.fillStyle = COLORS.ink3;
   ctx.font = '400 26px ' + FONT;
-  ctx.fillText('NoBuy · 本地存储版', PAD, 1314);
+  ctx.fillText('NoBuy · 本地存储版', PAD, 1262);
+
+  const qr = await loadImage(canvas, opt.qrPath || '/images/miniprogram_qr_pad.png');
+  if (qr) {
+    ctx.textAlign = 'right';
+    ctx.fillStyle = COLORS.ink3;
+    ctx.font = '400 22px ' + FONT;
+    ctx.fillText('微信扫码打开', RIGHT, 1054);
+    ctx.drawImage(qr, RIGHT - 288, 1078, 288, 288);
+  }
 }
 
 // 在页面里生成图片，resolve 出临时文件路径

@@ -25,7 +25,8 @@
 .result-strong { color: var(--accent-deep); font-weight: 600; }
 .result-dot { margin: 0 12rpx; color: var(--ink-3); }
 .result-arrow { font-size: 28rpx; color: var(--ink-3); }
-.result-right { display: flex; align-items: center; flex-shrink: 0; }
+.result-right { display: flex; align-items: center; flex-shrink: 0; margin-left: 16rpx; }
+.result-link { font-size: 24rpx; color: var(--accent-deep); font-weight: 600; margin-right: 4rpx; }
 
 /* 待决定 banner */
 .pending {

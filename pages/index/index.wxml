@@ -19,7 +19,7 @@
     <view class="pending-text">有 {{pendingCount}} 件冷静期过了，等你做决定</view>
     <view class="pending-arrow">›</view>
   </view>
-  <view class="result-bar" wx:elif="{{showResultBar}}" bindtap="goMine">
+  <view class="result-bar" wx:elif="{{showResultBar}}" bindtap="goAchievements">
     <view class="result-text">
       <text wx:if="{{streak > 0}}" class="result-strong">连续 {{streak}} 天</text>
       <text wx:if="{{streak > 0 && monthSkipped > 0}}" class="result-dot">·</text>
@@ -27,6 +27,7 @@
       <text wx:if="{{monthSavedText !== '0'}}">，省下 ¥{{monthSavedText}}</text>
     </view>
     <view class="result-right">
+      <text class="result-link">查看战绩</text>
       <view class="result-arrow">›</view>
     </view>
   </view>

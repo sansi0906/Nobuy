@@ -157,6 +157,8 @@ Page({
     this.setData({ showOnboard: false });
   },
 
+  // 结果条右侧「查看战绩」：直接进成就页，不用先到「我的」再点一层
+  goAchievements() { wx.navigateTo({ url: '/pages/achievements/achievements' }); },
   goMine() { wx.switchTab({ url: '/pages/mine/mine' }); },
   noop() {},
   goAdd() {
