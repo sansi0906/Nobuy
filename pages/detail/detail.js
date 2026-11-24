@@ -135,29 +135,34 @@ Page({
     wx.showToast({ title, icon: 'none', duration: 1200 });
     this.load();
     // 判定成功后弹成果卡：先给 toast 一点时间，再盖出预览
-    this.pendingCard = {
-      hasMoney: savedMoney > 0,
-      moneyText: store.formatMoney(savedMoney),
-      metaText: this.buildMeta(item.createTime, decidedAt)
-    };
+    this.pendingCard = this.cardOptsFromItem(Object.assign({}, item, { decidedAt }));
     this.fromDecide = true;
     setTimeout(() => { this.openCard(); }, 600);
   },
 
   // ---- 成果卡 ----
-  buildMeta(createTime, decidedAt) {
-    const days = Math.max(1, Math.ceil((decidedAt - (createTime || decidedAt)) / DAY_MS));
-    return '冷静了 ' + days + ' 天 · ' + dateText(decidedAt);
+  // 金额拆成整数与小数两段：整数 168 号字，小数 96 号字（报价单式排版）
+  moneyParts(v) {
+    const text = store.formatMoney(v);
+    if (/万|亿|—/.test(text)) return { whole: text, dec: '' };
+    const i = text.indexOf('.');
+    return i >= 0 ? { whole: text.slice(0, i), dec: text.slice(i) } : { whole: text, dec: '' };
   },
 
   cardOptsFromItem(item) {
     const savedMoney = store.validPrice(item.price) * store.qtyOf(item);
     const decidedAt = item.decidedAt || Date.now();
+    const days = Math.max(1, Math.ceil((decidedAt - (item.createTime || decidedAt)) / DAY_MS));
+    const parts = this.moneyParts(savedMoney);
     return {
       hasMoney: savedMoney > 0,
-      moneyText: store.formatMoney(savedMoney),
-      metaText: this.buildMeta(item.createTime, decidedAt),
-      title: '又忍住一件',
+      moneyWhole: parts.whole,
+      moneyDec: parts.dec,
+      dateText: dateText(decidedAt).replace(/-/g, '.'),
+      qtyText: store.qtyOf(item) + ' 件',
+      daysText: days + ' 天',
+      category: item.category || store.FALLBACK_CATEGORY,
+      itemName: item.name,
       logoPath: '/images/logo.png'
     };
   },

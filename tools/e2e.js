@@ -307,7 +307,7 @@ async function main() {
       '条款=' + bodyText.length);
 
     const rows = await about.$$('.row');
-    record('关于-版本与存储信息行', rows.length === 3, '行数=' + rows.length);
+    record('关于-版本与存储信息行', rows.length === 2, '行数=' + rows.length);
   } catch (e) {
     record('关于-渲染', false, e.message);
   }

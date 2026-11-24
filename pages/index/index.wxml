@@ -27,7 +27,6 @@
       <text wx:if="{{monthSavedText !== '0'}}">，省下 ¥{{monthSavedText}}</text>
     </view>
     <view class="result-right">
-      <text class="result-ach" wx:if="{{unlockedCount > 0}}">{{unlockedCount}}/{{totalAch}} 印</text>
       <view class="result-arrow">›</view>
     </view>
   </view>
@@ -76,7 +75,7 @@
     <image class="empty-logo" src="/images/logo.png" mode="aspectFit"></image>
     <view class="empty-title">{{emptyTitle}}</view>
     <view class="empty-sub" wx:if="{{tab === 'cooling'}}">把想买的先记下来，过段时间再看</view>
-    <view class="empty-sub" wx:else>暂无记录~</view>
+    <view class="empty-sub" wx:else>暂无记录</view>
     <view class="btn btn-primary empty-btn" wx:if="{{tab === 'cooling'}}" bindtap="goAdd">+ 记录一个想买的</view>
   </view>
 

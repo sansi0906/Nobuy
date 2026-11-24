@@ -384,3 +384,13 @@
 - `pages/detail/*`：新增屏幕外 `<canvas type="2d" id="cardCanvas">`（`left:-2000px`，宽 540px 高 720px，不参与布局）； `decideNo` 成功后 600ms 弹预览浮层；`makeCard` 作为详情页常驻入口（仅 `state === skipped` 时出现，和「恢复到冷静中」并排）；`shareCard` 走 `wx.showShareImageMenu`（不需要相册授权），取消静默、不支持提示“这个微信版本还不能分享图片”；关闭浮层后若来自判定流程则 `switchTab` 回首页。
 - `tools/e2e.js`：新增 3 项（预览出现 / 已出图 / 我没买后可再做卡片），并把已决定记录的按钮选择器由 `.btn-block` 换成 `.btn-row .btn`。66 通过 / 0 失败。
 - 未做的：卡片带二维码（二维码是带参场景码才归因，普通小程序码看不出渠道，暂不加）；分享到朋友圈（只能存图后手动发，`showShareImageMenu` 只到聊天）。
+
+## 十五、v1.2.2 成果卡改版 A + 首页/关于页文案清理（2026-11-24）
+
+- **成果卡改 A 杂志左对齐**：`utils/card.js` 全量重写。版心左右各 120（W=1080 / PAD=120 / RIGHT=960），顶部 logo 96 与右对齐日期 YYYY.MM.DD；眉标「忍住了」用 drawSpaced 逐字拉 14px 字距；金额整数 168 号、小数 96 号（¥1,488 与 .50 基线对齐），版心内 840 宽细线；线下一行三列微信息（列宽 280：件数 / 冷静了 / 分类），数值 44 号、标签 24 号；记录名「— xxx」（超 16 字截断）；底部一句 + 品牌。无金额时画 120 号「没买 挺好」（不用全角逗号，避免大字下出现大口子）。
+- **金额拆段**：`pages/detail/detail.js` 新增 moneyParts(v)，万/亿/— 整段不拆，其余按小数点拆成整数段与 .xx；cardOptsFromItem 改为返回 hasMoney / moneyWhole / moneyDec / dateText / qtyText / daysText / category / itemName / logoPath，decideNo 也改走同一个方法，删掉旧的 buildMeta。
+- **首页结果条去「印」**：X/18 印 删除（右侧只留 ›），同时清掉 index.js 里随之无用的 unlockedCount / totalAch 字段与 getAchievements() 调用、index.wxss 的 .result-ach 规则。
+- **首页空态**：暂无记录~ → 暂无记录（去飘号）。
+- **关于页三处清理**：删「运行环境 / 开发版」行（开发者语汇，用户不该看到）；「04 按分类汇总看板…」改成「按分类打标签、回收站、连续天数与勋章…」（应用内并无「看板」页，原描述与实际不符，有审核风险）；页脚「不构成任何消费、投资建议」去掉“投资”。
+- **测试同步**：`tools/e2e.js` 关于页信息行断言 3 → 2。复跑 66 通过 / 0 失败；`tools/check_wxml.js` 标签闭合正常。
+

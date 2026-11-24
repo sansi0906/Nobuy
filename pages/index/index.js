@@ -86,7 +86,6 @@ Page({
 
     const streak = store.getStreak();
     const month = store.getMonthStats(now);
-    const achievements = store.getAchievements();
 
     // 列表没变化时跳过 setData，30 秒一次的轮询不整表重绘
     const sig = this.data.tab + '|' + list.map(i => i.id + i.countdownText).join(',');
@@ -101,9 +100,7 @@ Page({
       streak: streak.current,
       monthSkipped: month.skipped,
       monthSavedText: store.formatMoney(month.saved),
-      showResultBar: streak.current > 0 || month.skipped > 0,
-      unlockedCount: achievements.filter(a => a.unlocked).length,
-      totalAch: achievements.length
+      showResultBar: streak.current > 0 || month.skipped > 0
     };
     if (sig !== this.data.listSig) {
       payload.list = list;
