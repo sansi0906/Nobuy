@@ -205,6 +205,10 @@ Page(theme.mixin({
       fail: err => {
         const msg = (err && err.errMsg) || '';
         if (/cancel/i.test(msg)) return;
+        if (/permission|deny|auth/i.test(msg)) {
+          wx.showToast({ title: '微信没有相册权限，开启后再试', icon: 'none' });
+          return;
+        }
         wx.showToast({ title: '分享没有完成，稍后再试', icon: 'none' });
       }
     });

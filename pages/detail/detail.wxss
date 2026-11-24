@@ -118,6 +118,7 @@
 }
 .card-btns { display: flex; gap: 24rpx; width: 100%; margin-top: 32rpx }
 .card-btns .btn { flex: 1 }
+.card-hint { margin-top: 20rpx; font-size: 22rpx; color: rgba(255, 255, 255, 0.82) }
 
 .actions { display: flex; gap: 24rpx; margin-bottom: 16rpx }
 .actions .btn { flex: 1; }

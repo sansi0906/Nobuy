@@ -110,11 +110,12 @@
   <view class="card-mask" wx:if="{{cardVisible}}" catchtap="closeCard">
     <view class="card-box" catchtap="stopProp">
       <view class="card-loading" wx:if="{{!cardReady}}">正在生成…</view>
-      <image wx:else class="card-img" src="{{cardPath}}" mode="aspectFit" />
+      <image wx:else class="card-img" src="{{cardPath}}" mode="aspectFit" show-menu-by-longpress />
       <view class="card-btns">
         <view class="btn btn-ghost" bindtap="closeCard">不用了</view>
         <view class="btn btn-primary" bindtap="shareCard">转发图片</view>
       </view>
+      <view wx:if="{{cardReady}}" class="card-hint">长按图片，也能保存或发给朋友</view>
     </view>
   </view>
 </view>
