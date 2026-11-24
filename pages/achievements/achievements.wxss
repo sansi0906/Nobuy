@@ -52,7 +52,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12rpx 8rpx
+  padding: 0 12rpx 16rpx
 }
 .group-title { display: flex; align-items: center; }
 .group-glyph {
@@ -66,7 +66,6 @@
 }
 .group-name { font-size: 28rpx; font-weight: 600; color: var(--ink); letter-spacing: 2rpx; }
 .group-count { font-size: 22rpx; color: var(--ink-3); letter-spacing: 1rpx; }
-.group-note { margin: 4rpx 0 24rpx; font-size: 22rpx; color: var(--ink-3); line-height: 1.5; }
 
 /* 印章网格 */
 .coin-grid { display: flex; flex-wrap: wrap; }

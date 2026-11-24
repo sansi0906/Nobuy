@@ -271,7 +271,7 @@ async function main() {
     record('成就-三组维度', groups.length === 3, '分组=' + groups.length);
 
     const notes = await ach.$$('.group-note');
-    record('成就-组说明文案', notes.length === 2, '说明=' + notes.length);
+    record('成就-无解释性组说明', notes.length === 0, '说明=' + notes.length);
 
     const lit = await ach.$$('.seal-on');
     record('成就-按数据点亮', lit.length >= 1, '点亮=' + lit.length);

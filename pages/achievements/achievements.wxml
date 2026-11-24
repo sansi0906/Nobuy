@@ -33,9 +33,6 @@
       </view>
       <view class="group-count">{{item.unlockedCount}}/{{item.total}}</view>
     </view>
-    <view class="group-note" wx:if="{{item.key === 'save'}}">只算填了价格的记录</view>
-    <view class="group-note" wx:if="{{item.key === 'streak'}}">按有「我没买」的日子计算</view>
-
     <view class="coin-grid">
       <view wx:for="{{item.display}}" wx:for-item="b" wx:key="id"
             class="seal {{b.unlocked ? 'seal-on' : 'seal-off'}}">

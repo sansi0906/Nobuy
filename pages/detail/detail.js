@@ -163,6 +163,7 @@ Page({
       daysText: days + ' 天',
       category: item.category || store.FALLBACK_CATEGORY,
       itemName: item.name,
+      qrPath: '/images/miniprogram_qr_pad.png',
       logoPath: '/images/logo.png'
     };
   },
