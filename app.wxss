@@ -276,6 +276,27 @@ page {
 
   --sh-1: 0 6rpx 20rpx rgba(34, 40, 44, 0.05);
   --sh-2: 0 16rpx 48rpx rgba(34, 40, 44, 0.12);
+
+  /* 别名必须跟着重声明：--ink 这类是 var(--n-900) 的「计算值」，
+     在 page 元素上已经按深色算死了，子节点继承的是结果而不是表达式。
+     只覆盖 --n-* 而不覆盖别名，页面里用 var(--ink) 的文字就会仍是深色模式的字色。 */
+  --bg: var(--n-50);
+  --card: var(--n-0);
+  --ink: var(--n-900);
+  --ink-2: var(--n-600);
+  --ink-3: var(--n-400);
+  --line: var(--n-100);
+  --cooling-bg: var(--s-cool-bg);
+  --cooling-text: var(--s-cool);
+  --done-bg: var(--s-done-bg);
+  --done-text: var(--s-done);
+  --accent: var(--a-600);
+  --accent-deep: var(--a-700);
+  --accent-soft: var(--a-50);
+  --danger: var(--s-danger);
+
+  background: var(--n-50);
+  color: var(--n-900);
 }
 
 /* 上面 @media 里把主按钮字色改成了深色，浅色下要改回白字 */
