@@ -181,7 +181,7 @@ Page(theme.mixin({
       .then(path => { this.setData({ cardPath: path, cardReady: true }); })
       .catch(() => {
         this.setData({ cardVisible: false, cardReady: false });
-        wx.showToast({ title: '卡片没画出来，稍后再试', icon: 'none' });
+        wx.showToast({ title: '卡片生成失败，稍后再试', icon: 'none' });
       });
   },
 
@@ -225,7 +225,7 @@ Page(theme.mixin({
     if (total >= 500) {
       wx.showModal({
         title: '这条 ¥' + store.formatMoney(total) + '，确定买了？',
-        content: '确认后会记成「我买了」，之后还能补做 4 个反思问题',
+        content: '确认后进四个问题，帮你看清这次购买',
         confirmText: '确认买了',
         success: (res) => { if (res.confirm) go(); }
       });

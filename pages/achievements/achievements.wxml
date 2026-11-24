@@ -4,7 +4,7 @@
   <!-- 顶部：点亮进度 -->
   <view class="head">
     <view class="head-num">{{unlockedCount}}<text class="head-slash">/{{total}}</text></view>
-    <view class="head-label">已点亮勋章</view>
+    <view class="head-label">已点亮印章</view>
   </view>
 
   <view class="head-bar">

@@ -6,7 +6,7 @@
     <view class="card item" wx:for="{{list}}" wx:key="id">
       <view class="item-name">{{item.name}}</view>
       <view class="item-price" wx:if="{{item.price}}">¥{{item.priceText}}</view>
-      <view class="item-time">移入于 {{item.trashedAtText}}</view>
+      <view class="item-time">{{item.trashedAtText}} 移入</view>
       <view class="actions">
         <view class="btn btn-restore" data-id="{{item.id}}" bindtap="restore">还原</view>
         <view class="btn btn-destroy" data-id="{{item.id}}" bindtap="destroy">彻底删除</view>

@@ -16,7 +16,7 @@
   <!-- 待决定 banner 优先，其余时候显示结果条，首屏只占一条 -->
   <view class="pending" wx:if="{{pendingCount > 0 && tab === 'cooling'}}" bindtap="goPending">
     <view class="pending-dot"></view>
-    <view class="pending-text">有 {{pendingCount}} 件冷静期过了，等你做决定</view>
+    <view class="pending-text">{{pendingCount}} 件到冷静期了，等你决定</view>
     <view class="pending-arrow">›</view>
   </view>
   <view class="result-bar" wx:elif="{{showResultBar}}" bindtap="goAchievements">
@@ -44,7 +44,7 @@
 
   <!-- 冷静中 tab 顶部加记录按钮（空列表时交给空状态按钮，避免重复入口） -->
   <view class="top-add" wx:if="{{tab === 'cooling' && list.length > 0}}" bindtap="goAdd">
-    ＋ 记录一个想买的
+    ＋ 记下想买的
   </view>
 
   <!-- 清单 -->
@@ -75,9 +75,10 @@
   <view class="empty" wx:else>
     <image class="empty-logo" src="/images/logo.png" mode="aspectFit"></image>
     <view class="empty-title">{{emptyTitle}}</view>
-    <view class="empty-sub" wx:if="{{tab === 'cooling'}}">把想买的先记下来，过段时间再看</view>
-    <view class="empty-sub" wx:else>暂无记录</view>
-    <view class="btn btn-primary empty-btn" wx:if="{{tab === 'cooling'}}" bindtap="goAdd">+ 记录一个想买的</view>
+    <view class="empty-sub" wx:if="{{tab === 'cooling'}}">把想买的先记下来，过几天再看还想不想要</view>
+    <view class="empty-sub" wx:elif="{{tab === 'skipped'}}">忍住的东西会收在这一栏</view>
+    <view class="empty-sub" wx:else>买过的会留在这里，方便回头看</view>
+    <view class="btn btn-primary empty-btn" wx:if="{{tab === 'cooling'}}" bindtap="goAdd">＋ 记下想买的</view>
   </view>
 
   <!-- FAB 只在冷静中显示（空状态已有按钮，不再叠一个） -->
@@ -87,21 +88,21 @@
   <view class="onboard-mask" wx:if="{{showOnboard}}" catchtap="closeOnboard">
     <view class="onboard-card" catchtap="noop">
       <image class="onboard-logo" src="/images/logo.png" mode="aspectFit"></image>
-      <view class="onboard-title">欢迎，先了解一下</view>
+      <view class="onboard-title">三步就够</view>
       <view class="onboard-step">
         <text class="onboard-num">1</text>
         <text class="onboard-txt">想买什么，先记下来，选一段冷静期</text>
       </view>
       <view class="onboard-step">
         <text class="onboard-num">2</text>
-        <text class="onboard-txt">冷静期里不买，到期会自动提醒你</text>
+        <text class="onboard-txt">冷静期内先不买，到期会提醒你</text>
       </view>
       <view class="onboard-step">
         <text class="onboard-num">3</text>
-        <text class="onboard-txt">到期后再决定：忍住了，还是买了</text>
+        <text class="onboard-txt">到期再决定：忍住了，还是买了</text>
       </view>
-      <view class="onboard-note">不联网、不登录，记录只存在你手机里</view>
-      <view class="btn btn-primary onboard-btn" catchtap="closeOnboard">知道了</view>
+      <view class="onboard-note">不联网、不登录，记录只存在本机</view>
+      <view class="btn btn-primary onboard-btn" catchtap="closeOnboard">开始用</view>
     </view>
   </view>
 </view>

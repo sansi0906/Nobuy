@@ -197,7 +197,7 @@ async function main() {
   try {
     const page = await openPage(mp, '/pages/index/index', '.pending');
     const pendingText = await textOf(await page.$('.pending-text'));
-    record('首页-过期提醒条', /有 1 件/.test(pendingText), pendingText);
+    record('首页-过期提醒条', /1 件到冷静期了/.test(pendingText), pendingText);
 
     const items = await page.$$('.item');
     record('首页-冷静中列表条数', items.length === 2, '条数=' + items.length);
@@ -671,7 +671,7 @@ async function main() {
   try {
     const page = await openPage(mp, '/pages/index/index', '.empty');
     const emptyTitle = await textOf(await page.$('.empty-title'));
-    record('首页-空态标题', /还没有在冷静中的东西/.test(emptyTitle), emptyTitle);
+    record('首页-空态标题', /还没有在冷静的东西/.test(emptyTitle), emptyTitle);
     record('首页-空态只留一个新增入口',
       (await page.$$('.empty-btn')).length === 1 && (await page.$$('.fab')).length === 0,
       '空态按钮 1 / FAB 0');

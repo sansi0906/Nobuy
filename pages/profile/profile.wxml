@@ -12,7 +12,7 @@
     <view class="hero-tip">「我的」页会这样显示你</view>
 
     <view class="hero-actions">
-      <button class="mini-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">编辑</button>
+      <button class="mini-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">换头像</button>
     </view>
   </view>
 

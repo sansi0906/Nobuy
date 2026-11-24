@@ -5,7 +5,7 @@ const { VERSION } = require('../../utils/version.js');
 
 Page(theme.mixin({
   data: {
-    versionLine: 'v' + VERSION + ' · 本地存储版',
+    versionLine: 'v' + VERSION,
     profile: { avatar: '', nickname: '', gender: '', defaultDuration: 1 },
     stats: { skipped: 0, bought: 0, saved: 0, total: 0 },
     savedText: '0',
@@ -104,9 +104,9 @@ Page(theme.mixin({
         if (raw.indexOf('cancel') >= 0) return;   // 用户主动取消，不打扰
         const declared = raw.indexOf('api scope is not declared') >= 0 || err.errno === 112;
         wx.showModal({
-          title: declared ? '还差一步配置' : '没能打开聊天记录里的文件',
+          title: declared ? '还差一步设置' : '没能打开聊天记录里的文件',
           content: declared
-            ? '微信还没允许这个小程序读取「选中的文件」。需要在 mp 后台「设置 → 服务内容声明 → 用户隐私保护指引」里声明「选中的文件」并通过审核后再试。'
+            ? '微信还没允许这个小程序读取「选中的文件」。需要开发者在微信公众平台「设置 → 服务内容声明 → 用户隐私保护指引」里声明并通过审核，之后才能导入。'
             : '文件没有被打开，可能是选择时取消了，或这份文件已经不在聊天记录里。可以退回去重新选一次。',
           showCancel: false,
           confirmText: '知道了'

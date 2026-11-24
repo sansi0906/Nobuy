@@ -17,7 +17,7 @@ Page(theme.mixin({
   restore(e) {
     const id = e.currentTarget.dataset.id;
     wx.showModal({
-      title: '还原这条想法？', content: '会回到冷静中，重新算 3 天冷静期',
+      title: '还原这条想法？', content: '会回到冷静中，冷静期重新算 3 天',
       success: (res) => {
         if (res.confirm) {
           const now = Date.now();
@@ -31,7 +31,7 @@ Page(theme.mixin({
   destroy(e) {
     const id = e.currentTarget.dataset.id;
     wx.showModal({
-      title: '彻底删除？', content: '删了就找不回来了',
+      title: '彻底删除？', content: '删掉后无法恢复',
       confirmText: '彻底删除', confirmColor: '#C4382F',
       success: (res) => {
         if (res.confirm) { store.destroy(id); this.refresh(); }
@@ -43,7 +43,7 @@ Page(theme.mixin({
     if (this.data.list.length === 0) return;
     wx.showModal({
       title: '清空回收站？',
-      content: '这 ' + this.data.list.length + ' 条记录会全部彻底删除，不能恢复',
+      content: this.data.list.length + ' 条记录将彻底删除，无法恢复',
       confirmText: '全部删除',
       confirmColor: '#C4382F',
       success: (res) => {

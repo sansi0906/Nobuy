@@ -14,10 +14,10 @@
 
   <view class="card">
     <view class="sec-title">主要功能</view>
-    <view class="item"><text class="item-no">01</text><text class="item-text">记录想买的东西，填写名称、价格、数量、分类和备注</text></view>
-    <view class="item"><text class="item-no">02</text><text class="item-text">为每条记录设置冷静期，24 小时至 15 天可选，到期提醒你做决定</text></view>
-    <view class="item"><text class="item-no">03</text><text class="item-text">记录「我没买」或「我买了」，买了的可选填一段复盘问答</text></view>
-    <view class="item"><text class="item-no">04</text><text class="item-text">按分类打标签、回收站、连续天数与勋章，全部基于本地记录统计</text></view>
+    <view class="item"><text class="item-no">01</text><text class="item-text">想买的东西记一条：名称、价格、数量、分类、备注都行</text></view>
+    <view class="item"><text class="item-no">02</text><text class="item-text">每条记录可选 24 小时到 15 天的冷静期，到期提醒你做个决定</text></view>
+    <view class="item"><text class="item-no">03</text><text class="item-text">到期选「我没买」或「我买了」；选买了会先过四个问题</text></view>
+    <view class="item"><text class="item-no">04</text><text class="item-text">分类打标签、回收站、连续天数与印章，均来自本机记录</text></view>
   </view>
 
   <view class="card">
@@ -33,7 +33,7 @@
 
   <view class="card">
     <view class="row"><view class="row-label">版本</view><view class="row-value">{{versionText}}</view></view>
-    <view class="row"><view class="row-label">数据存储</view><view class="row-value">仅本机</view></view>
+    <view class="row"><view class="row-label">数据存储</view><view class="row-value">仅存在本机</view></view>
   </view>
 
   <view class="footer">本工具仅辅助你记录与延后决策，不构成任何消费建议。</view>

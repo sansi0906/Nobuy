@@ -4,20 +4,20 @@ const store = require('../../utils/storage.js');
 
 const QUESTIONS = [
   {
-    q: '我现在是不是必须要用？家里有没有同类？有没有替代品？',
-    options: ['现在就需要', '不急，能用别的代替']
+    q: '现在就必须用吗？家里有没有同类或替代？',
+    options: ['现在就要用', '不急，能用别的代替']
   },
   {
-    q: '如果不打折、不搞活动，原价我还愿意买吗？',
-    options: ['原价也想买', '就是为了优惠才动心']
+    q: '不打折、没活动，原价还愿意买吗？',
+    options: ['原价也愿意', '只为优惠心动']
   },
   {
-    q: '未来半年，我大概会用它几次？',
-    options: ['每周都用', '偶尔用用', '买了大概率吃灰']
+    q: '接下来半年，大概会用几次？',
+    options: ['经常用', '偶尔用', '多半吃灰']
   },
   {
-    q: '这笔钱拿去别的地方，会不会价值更高？',
-    options: ['花在这最值', '存起来或花别处更好']
+    q: '这笔钱花在别处，是不是更值？',
+    options: ['花在这更值', '存着或花别处更好']
   }
 ];
 
@@ -62,7 +62,7 @@ Page(theme.mixin({
 
   confirm() {
     store.update(this.data.id, { state: 'bought', decidedAt: Date.now() });
-    wx.showToast({ title: '记下来了', icon: 'none' });
+    wx.showToast({ title: '已记下这次购买', icon: 'none' });
     setTimeout(() => {
       wx.switchTab({ url: '/pages/index/index' });
     }, 800);

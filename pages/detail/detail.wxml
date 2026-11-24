@@ -20,14 +20,14 @@
 
     <block wx:else>
       <view class="edit-block">
-        <view class="edit-label">名称</view>
+        <view class="edit-label">想买什么</view>
         <input class="d-edit-name" value="{{nameDraft}}" bindinput="onNameInput" maxlength="30" />
       </view>
 
       <view class="edit-block">
-        <view class="edit-label">价格（可选）</view>
+        <view class="edit-label">价格（选填）</view>
         <view class="edit-price-row">
-          <input class="edit-price" type="digit" maxlength="10" placeholder="最多 7 位整数，两位小数"
+          <input class="edit-price" type="digit" maxlength="10" placeholder="单位元，可留空"
                  value="{{priceDraft}}" bindinput="onPriceInput" />
           <view class="qty-ctrl">
             <view class="qty-btn" bindtap="minusQty">−</view>
@@ -38,7 +38,7 @@
       </view>
 
       <view class="edit-block" wx:if="{{(item.state || 'cooling') === 'cooling'}}">
-        <view class="edit-label">冷静截止</view>
+        <view class="edit-label">冷静期至</view>
         <view class="edit-cats">
           <view class="edit-cat {{extendDays === 0 ? 'edit-cat-active' : ''}}"
                 data-d="0" bindtap="pickExtend">不变</view>
@@ -62,7 +62,7 @@
       </view>
 
       <view class="edit-block">
-        <view class="edit-label">备注（可选）</view>
+        <view class="edit-label">备注（选填）</view>
         <textarea class="d-edit-remark" value="{{remarkDraft}}" bindinput="onRemarkInput"
                   maxlength="100" auto-height placeholder="在哪看到、为什么想买…" />
       </view>
@@ -75,8 +75,8 @@
 
   <view class="card meta">
     <view class="meta-row"><text class="k">分类</text><text class="v">{{item.category}}</text></view>
-    <view class="meta-row"><text class="k">记下时间</text><text class="v">{{createTimeText}}</text></view>
-    <view class="meta-row"><text class="k">冷静截止</text><text class="v">{{endTimeText}}</text></view>
+    <view class="meta-row"><text class="k">记录于</text><text class="v">{{createTimeText}}</text></view>
+    <view class="meta-row"><text class="k">冷静期至</text><text class="v">{{endTimeText}}</text></view>
   </view>
 
   <!-- 编辑态 -->
@@ -99,7 +99,7 @@
   <block wx:elif="{{item.state === 'skipped' || item.state === 'bought'}}">
     <view class="btn-row">
       <view class="btn btn-ghost" bindtap="restoreToCooling">恢复到冷静中</view>
-      <view class="btn btn-ghost" wx:if="{{item.state === 'skipped'}}" bindtap="makeCard">做成卡片</view>
+      <view class="btn btn-ghost" wx:if="{{item.state === 'skipped'}}" bindtap="makeCard">生成分享图</view>
     </view>
   </block>
 
@@ -109,11 +109,11 @@
   <!-- 成果卡预览 -->
   <view class="card-mask" wx:if="{{cardVisible}}" catchtap="closeCard">
     <view class="card-box" catchtap="stopProp">
-      <view class="card-loading" wx:if="{{!cardReady}}">正在画…</view>
+      <view class="card-loading" wx:if="{{!cardReady}}">正在生成…</view>
       <image wx:else class="card-img" src="{{cardPath}}" mode="aspectFit" />
       <view class="card-btns">
-        <view class="btn btn-ghost" bindtap="closeCard">算了</view>
-        <view class="btn btn-primary" bindtap="shareCard">发出去</view>
+        <view class="btn btn-ghost" bindtap="closeCard">不用了</view>
+        <view class="btn btn-primary" bindtap="shareCard">转发图片</view>
       </view>
     </view>
   </view>

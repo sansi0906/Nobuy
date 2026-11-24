@@ -80,9 +80,9 @@ Page(theme.mixin({
     }
 
     const emptyTitles = {
-      cooling: '还没有在冷静中的东西',
-      skipped: '还没有忍住的东西',
-      bought:  '还没有买过的东西'
+      cooling: '还没有在冷静的东西',
+      skipped: '还没忍住过一件',
+      bought:  '还没买过东西'
     };
 
     const streak = store.getStreak();
@@ -128,8 +128,8 @@ Page(theme.mixin({
     if (this.data.showOnboard) return;   // 引导层还在的时候不要叠弹窗
     expiredNoticeShown = true;
     wx.showModal({
-      title: '有 ' + pendingCount + ' 件冷静期过了',
-      content: '当时想买的东西，现在还想买吗？点开做决定就好。',
+      title: pendingCount + ' 件到冷静期了',
+      content: '当时想买的，现在还想要吗？点开做个决定就好。',
       confirmText: '去看看',
       cancelText: '待会儿',
       success: (res) => {
@@ -175,14 +175,14 @@ Page(theme.mixin({
     const id = e.currentTarget.dataset.id;
     const item = (this.data.list || []).filter((x) => x.id === id)[0];
     wx.showModal({
-      title: '移到回收站？',
-      content: (item ? '「' + item.name + '」' : '这条记录') + '会移到回收站，之后还能还原',
-      confirmText: '移过去',
+      title: '移入回收站？',
+      content: (item ? '「' + item.name + '」' : '这条记录') + '会移入回收站，之后还能还原',
+      confirmText: '移入',
       confirmColor: '#C4382F',
       success: (res) => {
         if (!res.confirm) return;
         store.trash(id);
-        wx.showToast({ title: '已移到回收站', icon: 'none' });
+        wx.showToast({ title: '已移入回收站', icon: 'none' });
         this.refresh();
       }
     });
