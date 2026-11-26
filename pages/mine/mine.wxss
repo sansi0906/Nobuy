@@ -18,8 +18,9 @@
 /* 我的记录：一张卡里三段 */
 .record-card { padding: 24rpx 32rpx 24rpx; margin-bottom: 24rpx }
 .rec-title {
-  font-size: 24rpx; color: var(--ink-2); font-weight: 600;
-  padding-bottom: 24rpx
+  font-size: 26rpx; color: var(--ink); font-weight: 700;
+  padding: 0 0 20rpx 16rpx; border-left: 6rpx solid var(--accent);
+  line-height: 1.2; margin-left: 0; letter-spacing: 1rpx;
 }
 
 /* 战绩 */
@@ -49,7 +50,8 @@
 .ach-metric { flex: 1; min-width: 0; text-align: center; }
 .ach-metric-div { width: 1rpx; height: 72rpx; background: var(--line); flex-shrink: 0; }
 .ach-metric-num {
-  font-size: 40rpx; font-weight: 700; color: var(--ink); line-height: 1.2;
+  font-size: 48rpx; font-weight: 600; color: var(--ink); line-height: 1.2;
+  font-family: "Songti SC", "Noto Serif CJK SC", "Times New Roman", serif;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .ach-metric-money { color: var(--accent-deep); }
@@ -66,7 +68,7 @@
   padding: 24rpx 0 8rpx;
   border-top: 1rpx solid var(--line);
 }
-.ach-more-text { flex: 1; font-size: 28rpx; color: var(--accent-deep); font-weight: 600; }
+.ach-more-text { flex: 1; font-size: 28rpx; color: var(--ink); font-weight: 600; }
 .ach-more-count { font-size: 24rpx; color: var(--ink-3); margin-right: 12rpx }
 .ach-more-arrow { font-size: 32rpx; color: var(--ink-3); }
 .ach {
