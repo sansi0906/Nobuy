@@ -73,7 +73,6 @@
 .actions {
   margin-top: 48rpx;
   display: flex;
-  gap: 24rpx;
 }
 .actions .btn { flex: 1; }
 
@@ -86,3 +85,6 @@
     border-color: var(--a-600);
   }
 }
+
+/* 兼容老客户端：不用 flex 的 gap，改用相邻按钮外边距 */
+.btn + .btn { margin-left: 24rpx; }

@@ -79,7 +79,7 @@
 
 /* 决定按钮 */
 .decide-row {
-  display: flex; gap: 24rpx; margin-bottom: 16rpx
+  display: flex; margin-bottom: 16rpx
 }
 .decide-row .btn { flex: 1; padding: 24rpx 0; font-size: 28rpx; }
 .btn-nope {
@@ -95,7 +95,7 @@
 
 /* 次级按钮 */
 .btn-block { margin-bottom: 16rpx }
-.btn-row { display: flex; gap: 24rpx; margin-bottom: 16rpx }
+.btn-row { display: flex; margin-bottom: 16rpx }
 .btn-row .btn { flex: 1 }
 .sub { margin-bottom: 16rpx }
 
@@ -132,11 +132,11 @@
   background: var(--n-0);
   box-shadow: 0 24rpx 64rpx rgba(0, 0, 0, 0.18);
 }
-.card-btns { display: flex; gap: 24rpx; width: 100%; margin-top: 32rpx }
+.card-btns { display: flex; width: 100%; margin-top: 32rpx }
 .card-btns .btn { flex: 1 }
 .card-hint { margin-top: 20rpx; font-size: 22rpx; color: rgba(255, 255, 255, 0.82) }
 
-.actions { display: flex; gap: 24rpx; margin-bottom: 16rpx }
+.actions { display: flex; margin-bottom: 16rpx }
 .actions .btn { flex: 1; }
 
 /* 返回 */
@@ -155,3 +155,6 @@
   }
   .edit-chip:active { background: var(--n-100); }
 }
+
+/* 兼容老客户端：不用 flex 的 gap，改用相邻按钮外边距 */
+.btn + .btn { margin-left: 24rpx; }

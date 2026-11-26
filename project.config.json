@@ -1,6 +1,6 @@
 {
   "compileType": "miniprogram",
-  "libVersion": "trial",
+  "libVersion": "2.32.3",
   "packOptions": {
     "ignore": [
       { "type": "folder", "value": "node_modules" },

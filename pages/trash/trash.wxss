@@ -26,7 +26,6 @@
 .actions {
   margin-top: 24rpx;
   display: flex;
-  gap: 24rpx;
 }
 .actions .btn { flex: 1; padding: 18rpx 0; font-size: 24rpx; }
 .btn-restore {
@@ -55,3 +54,6 @@
 .empty-logo { width: 152rpx; height: 152rpx; opacity: 0.45; }
 .empty-title { margin-top: 28rpx; font-size: 30rpx; font-weight: 700; color: var(--ink); }
 .empty-sub { margin-top: 8rpx; font-size: 24rpx; color: var(--ink-2); }
+
+/* 兼容老客户端：不用 flex 的 gap，改用相邻按钮外边距 */
+.btn + .btn { margin-left: 24rpx; }

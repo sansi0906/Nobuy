@@ -37,9 +37,12 @@
 
 .actions {
   margin-top: 32rpx;
-  display: flex; gap: 24rpx;
+  display: flex;
 }
 .actions .btn { flex: 1; padding: 24rpx 0 }
 .btn-buy  { background: var(--card); color: var(--ink); font-weight: 600; border: 2rpx solid var(--n-200); }
 .btn-nope { background: var(--accent); color: var(--on-accent); font-weight: 700; border: none; }
 .btn-nope:active { background: var(--accent-deep); }
+
+/* 兼容老客户端：不用 flex 的 gap，改用相邻按钮外边距 */
+.btn + .btn { margin-left: 24rpx; }
