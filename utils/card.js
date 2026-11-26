@@ -11,11 +11,12 @@ const PAD = 120;
 const RIGHT = W - PAD; // 960
 
 const COLORS = {
-  ink: '#22282C',
-  ink2: '#6B767E',
-  ink3: '#9FAAB2',
-  line: '#DFE5E9',
-  bg: '#FFFFFF'
+  ink: '#1B2329',
+  ink2: '#5D6B74',
+  ink3: '#93A1AA',
+  line: '#DDE4E9',
+  bg: '#F4F7F9',
+  brand: '#CC5E3A'
 };
 
 const FONT = '-apple-system, "PingFang SC", "Helvetica Neue", sans-serif';
@@ -67,7 +68,7 @@ async function paint(canvas, ctx, opt) {
   ctx.textBaseline = 'alphabetic';
   if (opt.hasMoney) {
     let x = PAD;
-    ctx.fillStyle = COLORS.ink;
+    ctx.fillStyle = COLORS.brand;
     ctx.font = '600 168px ' + FONT;
     ctx.fillText('¥' + (opt.moneyWhole || '0'), x, 616);
     x += ctx.measureText('¥' + (opt.moneyWhole || '0')).width;

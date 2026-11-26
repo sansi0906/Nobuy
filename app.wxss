@@ -4,23 +4,23 @@ page {
 
   /* 中性色阶：雾蓝灰，冷而低饱和 */
   --n-0: #FFFFFF;
-  --n-25: #F6F8F9;
-  --n-50: #EFF1F2;
-  --n-100: #DFE5E9;
-  --n-200: #C9D3D9;
-  --n-400: #9FAAB2;
-  --n-600: #6B767E;
-  --n-900: #22282C;
+  --n-25: #F4F7F9;
+  --n-50: #EEF1F3;
+  --n-100: #DDE4E9;
+  --n-200: #C6D2DA;
+  --n-400: #93A1AA;
+  --n-600: #5D6B74;
+  --n-900: #1B2329;
 
   /* 强调色：全站唯一一支雾蓝灰 */
-  --a-50: #E7EDF1;
-  --a-100: #CBD9E1;
-  --a-600: #5F7688;
-  --a-700: #475A69;
+  --a-50: #F7E5DA;
+  --a-100: #F1D2C1;
+  --a-600: #CC5E3A;
+  --a-700: #A0462D;
 
   /* 状态色：各司其职，不串用 */
   --s-cool-bg: #E7EDF1;
-  --s-cool: #5F7688;
+  --s-cool: #586E7E;
   --s-done-bg: #E6EEEA;
   --s-done: #5E7A6E;
   --s-done-line: #CFDDD5;
@@ -131,7 +131,7 @@ page {
   min-height: 88rpx;
   padding: 0 var(--sp-5);
   box-sizing: border-box;
-  border-radius: var(--r-2);
+  border-radius: 12rpx;
   font-size: var(--t-body);
   line-height: 1.4;
   border: none;
@@ -194,24 +194,31 @@ page {
   background: var(--n-25);
 }
 
+/* 大数字与日期：衬线，做「账本/杂志」对比 */
+.num-serif {
+  font-family: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "Times New Roman", serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
 /* ============ 深色模式 ============ */
 /* 只换 token，页面样式一行不用改；tabBar 图标是静态文件无法跟着换，
    所以 tabBar 在深色下仍保持浅底，当作"纸片"叠在深色页面上。 */
 @media (prefers-color-scheme: dark) {
   page {
-    --n-0: #1B2227;
-    --n-25: #212A31;
-    --n-50: #141A1E;
-    --n-100: #2C373E;
-    --n-200: #3A464D;
-    --n-400: #7C8892;
-    --n-600: #AAB6BE;
-    --n-900: #E8EDF0;
+    --n-0: #1A2126;
+    --n-25: #202931;
+    --n-50: #12181C;
+    --n-100: #2A353C;
+    --n-200: #38454E;
+    --n-400: #78868F;
+    --n-600: #A6B3BC;
+    --n-900: #E6EEF2;
 
-    --a-50: #22303A;
-    --a-100: #2E414F;
-    --a-600: #8FB0C6;
-    --a-700: #B7CEDD;
+    --a-50: #3A2A22;
+    --a-100: #52362A;
+    --a-600: #DE7B4F;
+    --a-700: #EC9A73;
 
     --s-cool-bg: #22303A;
     --s-cool: #8FB0C6;
@@ -244,21 +251,21 @@ page {
    优先级高于上面 @media 里的 page 选择器，所以系统是深色也能拉回浅色。 */
 .page.theme-light {
   --n-0: #FFFFFF;
-  --n-25: #F6F8F9;
-  --n-50: #EFF1F2;
-  --n-100: #DFE5E9;
-  --n-200: #C9D3D9;
-  --n-400: #9FAAB2;
-  --n-600: #6B767E;
-  --n-900: #22282C;
+  --n-25: #F4F7F9;
+  --n-50: #EEF1F3;
+  --n-100: #DDE4E9;
+  --n-200: #C6D2DA;
+  --n-400: #93A1AA;
+  --n-600: #5D6B74;
+  --n-900: #1B2329;
 
-  --a-50: #E7EDF1;
-  --a-100: #CBD9E1;
-  --a-600: #5F7688;
-  --a-700: #475A69;
+  --a-50: #F7E5DA;
+  --a-100: #F1D2C1;
+  --a-600: #CC5E3A;
+  --a-700: #A0462D;
 
   --s-cool-bg: #E7EDF1;
-  --s-cool: #5F7688;
+  --s-cool: #586E7E;
   --s-done-bg: #E6EEEA;
   --s-done: #5E7A6E;
   --s-done-line: #CFDDD5;

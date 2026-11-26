@@ -21,8 +21,11 @@
 .tag-skipped   { background: var(--n-25); color: var(--n-600); }
 .tag-bought    { background: var(--done-bg); color: var(--done-text); }
 
-.d-name { margin-top: 24rpx; font-size: 40rpx; font-weight: 700; color: var(--ink); line-height: 1.3; }
-.d-price { margin-top: 8rpx; font-size: 32rpx; font-weight: 600; color: var(--accent-deep); }
+.d-name { margin-top: 24rpx; font-size: 44rpx; font-weight: 700; color: var(--ink); line-height: 1.3; letter-spacing: 0.5rpx; }
+.d-price {
+  margin-top: 10rpx; font-size: 44rpx; font-weight: 600; color: var(--ink);
+  font-family: "Songti SC", "Noto Serif CJK SC", "Times New Roman", serif;
+}
 .d-remark { margin-top: 16rpx; font-size: 28rpx; color: var(--ink-2); line-height: 1.6; }
 .d-qty { font-size: 24rpx; font-weight: 400; color: var(--ink-2); }
 
@@ -56,12 +59,17 @@
   border-radius: 999rpx; }
 .edit-cat-active { background: var(--accent-soft); color: var(--accent-deep); font-weight: 600; }
 
-.cd-row { margin-top: 32rpx; padding: 24rpx 24rpx; border-radius: 16rpx; }
-.cd-row-counting { background: var(--cooling-bg); }
-.cd-row-expired  { background: var(--accent-soft); }
-.cd-text { font-size: 28rpx; font-weight: 600; }
-.cd-row-counting .cd-text { color: var(--cooling-text); }
-.cd-row-expired  .cd-text { color: var(--accent-deep); }
+.cd-row {
+  margin-top: 32rpx; padding: 20rpx 0 8rpx 24rpx;
+  border-left: 6rpx solid var(--accent); border-radius: 0 12rpx 12rpx 0;
+  background: var(--n-25);
+}
+.cd-row-expired { border-left-color: var(--accent-deep); }
+.cd-text {
+  font-size: 44rpx; font-weight: 700; color: var(--accent);
+  font-family: "Songti SC", "Noto Serif CJK SC", "Times New Roman", serif;
+}
+.cd-row-expired .cd-text { color: var(--accent-deep); }
 
 .meta { margin-bottom: 32rpx; padding: 12rpx 32rpx }
 .meta-row { display: flex; justify-content: space-between; padding: 24rpx 0; border-bottom: 1rpx solid var(--line); }
@@ -74,8 +82,16 @@
   display: flex; gap: 24rpx; margin-bottom: 16rpx
 }
 .decide-row .btn { flex: 1; padding: 24rpx 0; font-size: 28rpx; }
-.btn-buy  { background: var(--s-done-bg); color: var(--s-done); font-weight: 600; border: 1rpx solid var(--s-done-line); }
-.btn-nope { background: var(--a-50); color: var(--a-700); font-weight: 600; border: 1rpx solid var(--a-100); }
+.btn-nope {
+  background: var(--accent); color: #FFFFFF; font-weight: 700;
+  border: none;
+}
+.btn-nope:active { background: var(--accent-deep); }
+.btn-buy {
+  background: var(--card); color: var(--ink); font-weight: 600;
+  border: 2rpx solid var(--n-200);
+}
+.btn-buy:active { background: var(--n-25); }
 
 /* 次级按钮 */
 .btn-block { margin-bottom: 16rpx }
@@ -94,7 +110,7 @@
 }
 .card-mask {
   position: fixed; left: 0; right: 0; top: 0; bottom: 0;
-  background: rgba(34, 40, 44, 0.42);
+  background: rgba(16, 24, 29, 0.55);
   display: flex; align-items: center; justify-content: center;
   z-index: 100;
   animation: card-fade var(--dur-2, .22s) var(--ease-out, ease-out) both;

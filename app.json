@@ -11,15 +11,15 @@
     "pages/about/about"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#EFF1F2",
+    "navigationBarBackgroundColor": "#EEF1F3",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "是不是可以不买",
-    "backgroundColor": "#EFF1F2",
+    "backgroundColor": "#EEF1F3",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
-    "color": "#98A3AB",
-    "selectedColor": "#475A69",
+    "color": "#5D6B74",
+    "selectedColor": "#CC5E3A",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [

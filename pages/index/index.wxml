@@ -49,7 +49,7 @@
 
   <!-- 清单 -->
   <view wx:if="{{list.length > 0}}">
-    <view class="card item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
+    <view class="card item item-{{item.phase}}" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="goDetail">
       <view class="item-body">
         <view class="item-top">
           <view class="item-name">{{item.name}}</view>
@@ -82,7 +82,7 @@
   </view>
 
   <!-- FAB 只在冷静中显示（空状态已有按钮，不再叠一个） -->
-  <view class="fab" bindtap="goAdd" wx:if="{{tab === 'cooling' && list.length > 0}}">＋</view>
+  <view class="fab" bindtap="goAdd" wx:if="{{tab === 'cooling' && list.length > 0}}">＋ 记一条</view>
 
   <!-- 首次引导 -->
   <view class="onboard-mask" wx:if="{{showOnboard}}" catchtap="closeOnboard">
@@ -106,3 +106,4 @@
     </view>
   </view>
 </view>
+

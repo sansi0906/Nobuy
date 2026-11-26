@@ -25,13 +25,16 @@
 /* 战绩 */
 .stats {
   display: flex; align-items: center;
-  padding: 12rpx 0 24rpx
+  padding: 20rpx 0 28rpx
 }
 .stat { flex: 1; text-align: center; }
 .stat-num {
-  font-size: 40rpx; font-weight: 700; color: var(--ink);
+  font-size: 52rpx; font-weight: 600; color: var(--ink);
+  font-family: "Songti SC", "Noto Serif CJK SC", "Times New Roman", serif;
+  line-height: 1.2;
 }
 .stat-money { color: var(--accent-deep); }
+.stat-unit { font-size: 22rpx; color: var(--ink-3); margin-left: 6rpx; }
 .stat-label { margin-top: 8rpx; font-size: 22rpx; color: var(--ink-2); }
 .stat-div {
   width: 1rpx; height: 60rpx; background: var(--line);
