@@ -67,53 +67,36 @@
 .group-name { font-size: 28rpx; font-weight: 600; color: var(--ink); letter-spacing: 2rpx; }
 .group-count { font-size: 22rpx; color: var(--ink-3); letter-spacing: 1rpx; }
 
-/* 印章网格 */
-.coin-grid { display: flex; flex-wrap: wrap; }
+/* 成就格：一枚图 + 一行标签 */
+.coin-grid { display: flex; flex-wrap: wrap; padding-top: 8rpx }
 .seal {
   width: 33.333%;
   box-sizing: border-box;
-  padding: 24rpx 8rpx 16rpx;
+  padding: 20rpx 8rpx 24rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-.seal-body {
-  position: relative;
-  width: 116rpx;
-  height: 116rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .seal-img {
-  position: absolute;
-  left: 0; top: 0;
-  width: 116rpx;
-  height: 116rpx;
+  width: 128rpx;
+  height: 128rpx;
 }
-.seal-num {
-  position: relative;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--seal-ink-off);
-  z-index: 2;
+.seal-off .seal-img { opacity: 0.4 }
+
+.seal-label {
+  margin-top: 12rpx;
+  font-size: 26rpx; font-weight: 600; color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
-.seal-num-2 { font-size: 32rpx; letter-spacing: 0.5rpx; }
-.seal-num-3 { font-size: 24rpx; letter-spacing: 0rpx; }
-.seal-num-4 { font-size: 22rpx; letter-spacing: 0rpx; }
-.seal-on .seal-num { color: var(--seal-ink-on); }
-
+.seal-off .seal-label { color: var(--ink-3); font-weight: 400 }
 .seal-unit {
-  margin-top: 12rpx;
-  font-size: 22rpx; color: var(--ink-2);
+  font-size: 20rpx; font-weight: 400; color: var(--ink-2);
+  margin-left: 4rpx;
 }
-.seal-off .seal-unit { color: var(--ink-3); }
-
+.seal-off .seal-unit { color: var(--ink-3) }
 .seal-state {
   margin-top: 4rpx;
-  font-size: 22rpx; color: var(--n-400);
+  font-size: 20rpx; color: var(--n-400);
   letter-spacing: 0.5rpx;
 }
 

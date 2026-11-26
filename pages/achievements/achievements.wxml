@@ -36,11 +36,9 @@
     <view class="coin-grid">
       <view wx:for="{{item.display}}" wx:for-item="b" wx:key="id"
             class="seal {{b.unlocked ? 'seal-on' : 'seal-off'}}">
-        <view class="seal-body">
-          <image class="seal-img" src="{{b.unlocked ? '/images/seal_on.png' : '/images/seal_off.png'}}" mode="aspectFit"></image>
-          <text class="seal-num {{b.numClass}}">{{b.coinText}}</text>
-        </view>
-        <text class="seal-unit">{{b.unitText}}</text>
+        <!-- 插画位：18 枚手绘补齐后把这行 src 换成 badge 图（id 即 b.id） -->
+        <image class="seal-img" src="{{b.unlocked ? '/images/seal_on.png' : '/images/seal_off.png'}}" mode="aspectFit"></image>
+        <text class="seal-label">{{b.coinText}}<text class="seal-unit">{{b.unitText}}</text></text>
         <text class="seal-state" wx:if="{{b.progressText}}">{{b.progressText}}</text>
       </view>
     </view>
