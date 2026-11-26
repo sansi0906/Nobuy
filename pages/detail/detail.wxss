@@ -83,7 +83,7 @@
 }
 .decide-row .btn { flex: 1; padding: 24rpx 0; font-size: 28rpx; }
 .btn-nope {
-  background: var(--accent); color: #FFFFFF; font-weight: 700;
+  background: var(--accent); color: var(--on-accent); font-weight: 700;
   border: none;
 }
 .btn-nope:active { background: var(--accent-deep); }

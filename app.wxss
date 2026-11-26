@@ -36,7 +36,8 @@ page {
 
   /* 印章上的数字：印章是静态 PNG，不跟主题换色，
      所以这两支在深色下也保持不变，否则浅金/浅灰印坯上会糊成一片 */
-  --seal-ink-off: #6B767E;
+  --on-accent: #FFFFFF;
+    --seal-ink-off: #6B767E;
   --seal-ink-on: #6A4A12;
 
   /* 字阶：只有 6 档 */
@@ -236,12 +237,15 @@ page {
     --s-gold-bg: #2E2718;
     --s-gold-line: #4B3F24;
 
+    --on-accent: #10161A;
+
     --sh-1: 0 6rpx 20rpx rgba(0, 0, 0, 0.35);
     --sh-2: 0 16rpx 48rpx rgba(0, 0, 0, 0.5);
   }
 
   /* 深色下按钮主色偏亮，白字换成深字 */
   .btn-primary { color: #10161A; }
+  .btn-nope, .fab, .btn-buy-solid { color: var(--on-accent); }
   /* 遮罩在深色下更沉一点 */
   .btn-ghost { border-color: var(--n-100); }
 }

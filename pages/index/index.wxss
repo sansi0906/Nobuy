@@ -211,7 +211,7 @@
   display: flex; align-items: center; justify-content: center;
   height: 96rpx; padding: 0 36rpx;
   border-radius: 999rpx;
-  background: var(--accent); color: #FFFFFF;
+  background: var(--accent); color: var(--on-accent);
   font-size: 28rpx; font-weight: 700;
   box-shadow: 0 12rpx 28rpx rgba(204, 94, 58, 0.28);
 }

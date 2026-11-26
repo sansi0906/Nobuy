@@ -41,5 +41,5 @@
 }
 .actions .btn { flex: 1; padding: 24rpx 0 }
 .btn-buy  { background: var(--card); color: var(--ink); font-weight: 600; border: 2rpx solid var(--n-200); }
-.btn-nope { background: var(--accent); color: #FFFFFF; font-weight: 700; border: none; }
+.btn-nope { background: var(--accent); color: var(--on-accent); font-weight: 700; border: none; }
 .btn-nope:active { background: var(--accent-deep); }
